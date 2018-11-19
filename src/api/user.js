@@ -1,0 +1,333 @@
+import * as http from '../util/http.js';
+
+export const login = (userInfo) => {
+	// console.log(userInfo);
+	return http.post('auth/login', userInfo);
+}
+
+export const signup = (userInfo) => {
+	return http.post('auth/register', userInfo);
+}
+export const getUserInfo = () =>{
+	return http.get('auth/user');
+}
+
+export const logout = () => {
+	return http.post('auth/logout');
+}
+
+export const initNavigation = () => {
+	return http.post('user/get/navigation');
+}
+
+export const addGroup = (info) => {
+	return http.post('permission/add/group', info);
+}
+export const getGroups = () => {
+	return http.post('permission/get/groups');
+}
+
+export const updatePermission = (info) => {
+	return http.post('permission/put/one', info);
+}
+
+export const updateIconCssFile = (info) => {
+	return http.post('base/put/url', info);
+}
+export const loadIconUrl = () => {
+	return http.post('base/get/icon');
+}
+export const addRole = (roleData) => {
+	return http.post('role/add', roleData);
+}
+export const getRoleList = () => {
+	return http.post('role/list');
+}
+export const getRoleTree = () => {
+	return http.post('role/get/permission');
+}
+export const getFunctionTable = (pageSize) => {
+	return http.post('permission/get/all');
+}
+export const getRoleTreeSelectNode = (id) => {
+	return http.post('role/get/NodeSelect', {id:id});
+}
+export const updateRole = (userInfo) => {
+	return http.post('role/update/user', userInfo);
+}
+export const getRoleOne = (id) => {
+	return http.post('role/get/one', {id:id});
+}
+export const putRole = (role) => {
+	return http.post('role/put/one', role);
+}
+export const getUserList = () => {
+	return http.post('user/get/list');
+}
+export const updateUserAuthorize = (info) => {
+	return http.post('user/update/authorize', info);
+}
+export const getUserRole = (id) => {
+	return http.post('user/get/role', {id: id});
+}
+export const putUserRole = (roleInfo) => {
+	return http.post('user/put/role', roleInfo);
+}
+export const postBrand = (info) => {
+	return http.post('brand/post/one', info);
+}
+export const brandList = () => {
+	return http.post('brand/get/all');
+}
+export const updateBrand = (info) => {
+	return http.post('brand/put/one', info);
+}
+
+export const updateBrandStatus = (info) => {
+	return http.post('brand/put/status', info);
+}
+
+export const getRegion = (info) => {
+	return http.post('customer/get/region', info);
+}
+
+export const customerCreate = (info) => {
+	return http.post('customer/post/create', info);
+}
+export const customerUpdate = (info) => {
+	return http.post('customer/post/update', info);
+}
+export const getCustomer = (info) => {
+	return http.post('customer/public/list', info);
+}
+export const receiveCustomer = (info) => {
+	return http.post('customer/receive/one', info);
+}
+export const getPersonalCustomer = (info) => {
+	return http.post('customer/personal/list', info);
+}
+export const appendComments = (info) => {
+	return http.post('customer/post/comments', info);
+}	
+export const getComments = (info) => {
+
+	return http.post('customer/get/comments', info);
+}
+export const freeCustomer = (info) => {
+	return http.post('customer/free/one', info);
+}
+export const acceptCustomer = (info) => {
+	return http.post('customer/accept/one', info);
+}
+export const customerManagerList = (info) => {
+	return http.post('customer/manager/list', info);
+}
+export const customerPublish = (info) => {
+	return http.post('customer/publish', info);
+}
+export const departmentList = () => {
+	return http.post('department/get/list');
+}
+export const departmentModify = (info) => {
+	return http.post('department/put/one', info);
+}
+export const departmentCreate = (info) => {
+	return http.post('department/post/create', info);
+}
+export const departmentStaff = (info) => {
+	return http.post('department/get/users', info);
+}
+export const departmentSetStaff = (info) => {
+	return http.post('department/put/users', info);
+}
+export const departmentSetManager = (info) => {
+	return http.post('department/put/manager', info);
+}
+export const initCustomer = (info) => {
+	return http.post('customer/get/init', info);
+}
+export const syncUser = () => {
+	return http.post('user/update/workwx');
+}
+export const initUserList = () => {
+	return http.post('user/get/init');
+}
+export const joinWorkWx = (info) => {
+	return http.post('user/put/workwx', info);
+}
+export const InitMobileData = () => {
+	return http.post('m/get/basedata');
+}
+export const createChat = (info) => {
+	return http.post('wechat/post/chat', info);
+}
+export const ArticlePost = (article) => {
+	return http.post('article/post', article);
+}
+export const ArticleShow = (info) => {
+	return http.post('article/get', info);
+}
+export const ArticleCategory = () => {
+	return http.post('article/category/get');
+}
+export const ArticleCategoryPost = (info) => {
+	return http.post('article/category/post', info);
+}
+export const ArticleOne = (info) => {
+	return http.post('article/get/'+info.id, info);
+}
+export const AddArticleAnswer = (info) => {
+	return http.post('article/answer/post', info);
+}
+export const ArticleAnswer = (info) => {
+	return http.post('article/answer/get', info);
+}
+export const AricleAgreeClick = (info) => {
+	return http.post('article/agree/click', info);
+}
+export const ArticleAgree = (info) => {
+	return http.post('article/agree', info);
+}
+export const ForumMenu = () => {
+	return http.post('forumenu/get');
+}
+export const ArticleDraft = (info) => {
+	return http.post('article/draft', info);
+}
+export const ArticlePublish = (info) => {
+	return http.post('article/publish', info);
+}
+export const ArticleEdit = (info) => {
+	return http.post('article/edit/one', info);
+}
+
+export const ArticlePut = (info) => {
+	return http.post('article/update', info);
+}
+export const ArticlePublishList = () => {
+	return http.post('article/publish/get');
+}
+export const ArticleCategoryPut = (info) => {
+	return http.post('article/category/put', info);
+}
+export const ArticleSetFine = (info) => {
+
+	return http.post('article/fine/set', info);
+}
+export const ArticleDelete = (info) => {
+	return http.post('article/delete', info);
+}
+export const ArticleAgreeNotify = () => {
+	return http.post('article/notify/agree');
+}
+export const ArticleAnswerNotify = () => {
+	return http.post('article/notify/answer');
+}
+export const ArticleAgreeList = () => {
+	return http.post('article/agree/get');
+}
+export const AgreeEveryMonth = (info) => {
+	return http.post('article/agree/count', info);
+}
+export const MyArticleNotify = () => {
+	return http.post('article/mine/notify');
+}
+export const DeletePermission = (info) => {
+	return http.post('permission/delete', info);
+}
+export const AddMyCustomer = (info) => {
+	return http.post('realcustomer/store', info);
+}
+export const SearchCust = (info) => {
+
+	return http.post('realcustomer/query', info);
+}
+export const AddReceivable = (info) => {
+	return http.post('receivable/store',info);
+}
+export const AddReceivebill = (info) => {
+	return http.post('receivebill/store', info);
+}
+export const ARSum = (query) => {
+	return http.post('arsum/query', query)
+}
+export const UpdateReceivable = (info) => {
+	return http.post('receivable/update',info);
+}
+export const UpdateReceivebill = (info) => {
+	return http.post('receivebill/update', info);
+}
+export const AddARType = (info) => {
+	return http.post('artype/store', info);
+}
+export const ARType = () => {
+	return http.post('artype/index');
+}
+export const ARUploadUrl = () => {
+	let obj = {};
+	let url = http.appURL;
+	let token = http.token;
+
+	obj.url = url;
+	obj.token = token;
+
+	return obj;
+}
+
+export const AddProject = (info) => {
+	return http.post('project/store', info);
+}
+export const SearchProject = (info) => {
+	return http.post('project/query', info);
+}
+export const ARSumUserRole = () => {
+	return http.post('arsum/role');
+}
+export const InitPagination = () => {
+	return http.post('base/pagination');
+}
+export const AddReceivablePlan = (info) => {
+	return http.post('ReceivablePlan/add', info);
+}
+export const RefundAdd = (info) => {
+	return http.post('refund/add', info);
+}
+export const UpdateRefund = (info) => {
+	return http.post('refund/update', info);
+}
+export const GetArsetFieldType = (info) => {
+	return http.post('arset/fieldtype');
+}
+export const AddEnumberate = (info) => {
+	return http.post('enumberate/store', info);
+}
+export const UpdateEnumberate = (info) => {
+	return http.post('enumberate/update', info);
+}
+export const GetEnumberate = () => {
+	return http.post('enumberate/all');
+}
+export const AddBindAttr = (info) => {
+	return http.post('bindattr/store', info);
+}
+export const UpdateBindAttr = (info) => {
+	return http.post('bindattr/update', info);
+}
+export const getBindAttrList = () => {
+	return http.post('bindattr/all');
+}
+
+export const getBindAttrFromPath = (info) => {
+	return http.post('bindattr/one', info);
+}
+
+export const GetSaleOrderList = (info) => {
+	return http.post('receivable/all', info);
+}
+export const DeleteReceivable = (info) => {
+	return http.post('receivable/delete', info);
+}
+export const GetReceiveBillList = (info) => {
+	
+	return http.post('receivebill/all', info);
+}

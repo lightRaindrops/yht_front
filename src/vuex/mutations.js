@@ -1,0 +1,495 @@
+import * as types from './mutation-type.js';
+
+const mutations = {
+	[types.LOGIN] (state, data) {
+		state.login = data;
+	},
+
+	[types.SET_ERROR_INFO] (state, data) {
+
+		state.loginResult = data;
+	},
+	[types.USER_INFO] (state, data) {
+
+		state.userInfo = data.data;
+
+	},
+	[types.USER_SIGNUP] (state, data) {
+		state.userSignup = data;
+	},
+	[types.NAVIGATION] ( state, data) {
+		//console.log(data);
+		state.navigation = data.data;
+	},
+
+	[types.ADD_GROUP] (state, data) {
+		//console.log(data);
+		state.add_group = data;
+	},
+	[types.GET_GROUP_LIST] (state, data) {
+		state.groups = data; 
+	},
+
+	[types.UPDATE_PERMISSION_STATUS] (state,data) {
+		//console.log(data);
+		state.add_group = data;
+	},
+
+	[types.UPDATE_ICON_CSS_FILE] (state, data) {
+		state.updateIconCssFile = data;
+	},
+	[types.ICON_URL] (state, data) {
+
+		state.iconUrl = data.data;
+	},
+
+	[types.GET_FUNCTION_TABLE_DATA] (state, data) {
+		
+		state.functionTableData = data.list;
+		state.functionTablePageCount = data.count;
+	},
+
+	[types.ROLE_ADD] (state, data) {
+		state.roleAdd = data.status;
+	},
+	[types.ROLE_TREE_DATA] (state, data) {
+		state.roleTreeData = data.data;
+	},
+	[types.ROLE_TABLE_DATA] (state, data) {
+		state.role_table_data = data.data;
+	},
+
+	[types.TREE_SELECT] ( state, data) {
+		////console.log(data);
+		state.tree_select = data.data;
+	},
+
+	[types.UPDATE_ROLE_STATUS] (state, data) {
+		state.updateRoleStatus = data.status;
+	},
+	[types.ROLE_INFO] (state, data) {
+		state.role_info = data.data;
+	},
+	[types.PUT_ROLE_STATUS] (state, data) {
+		state.role_put_status = data;
+	},
+	[types.USER_LIST] (state, data) {
+		state.userList = data.data;
+	} ,
+	[types.USER_ROLE] (state, data) {
+		state.userRole = data.data;
+	},
+	[types.PUT_USER_ROLE_STATUS] (state, data) {
+		state.user_put_role_status = data;
+	},
+	[types.UPDATE_USER_AUTHORIZE] (state, data) {
+		state.updateUserAuthorize = data;
+	},
+	[types.POST_BRAND_STATUS] (state, data) {
+		state.createBrandStatus = data.status;
+	},
+	[types.BRAND_LIST] (state, data) {
+		state.brandList = data.data;
+	},
+	[types.UPDATE_BRAND] (state, data) {
+		state.updateBrandStatus = data;
+	},
+	[types.UPDATE_BRAND_STATUS] (state, data) {
+		state.updateBrandEnableStatus = data.status;
+	},
+	[types.REGION_LIST] (state, data) {
+
+		let list = data.data;
+
+		let pid = list[0].pid;
+
+		if (state.region.length < 1) {
+
+			state.region  = list;
+
+		} else {
+
+			for(let i in state.region) {
+
+				if (state.region[i].id == pid) {
+
+					state.region[i].children = list;
+				}
+			}
+		}
+	},
+
+	[types.CUSTOMER_CREATE] (state,data) {
+
+		state.customerCreate = data;
+	},
+	[types.CUSTOMER_UPDATE] (state, response) {
+		console.log(response)
+		state.customerCreate = response;
+	} ,
+	[types.CUSTOMER_LIST] (state, data) {
+
+		state.customerList = '';
+		//console.log(data);
+		state.customerList = data;
+	},
+	[types.RECEIVE_CUSTOMER] (state, data) {
+
+		//console.log(data);
+		state.receiveStatus = data;
+	},
+	[types.PERSONAL_CUSTOMER] (state, data) {
+		//console.log(data);
+		state.personal_customer_list = data
+	},
+	[types.APPENT_COMMENTS] (state, data) {
+		//console.log(data);
+		state.append_comments = data;
+	},
+	[types.COMMENT_LIST] (state, data) {
+		//console.log(data);
+		state.comments = data;
+	},
+	[types.FREE_CUSTOMER] (state, data) {
+		//console.log(data);
+		state.freeCustomer = data;
+	},
+	[types.ACCEPT_CUSTOMER] (state, data) {
+		//console.log(data);
+		state.acceptCustomer = data;
+	},
+	[types.CUSTOMER_MANAGER_LIST] (state,data) {
+		console.log(data)
+		//console.log(data);
+		state.customerManagerList = data;
+	},
+	[types.CUSTOMER_PUBLISH] (state, data) {
+		//console.log(data);
+		state.customerPublish = data;
+	},
+	[types.DEPARTMENT_LIST] (state, data) {
+		//console.log(data);
+		state.department_list = data.data;
+	},
+	[types.DEPARTMENT_MODIFY] (state, data) {
+		//console.log(data);
+		state.departmentModify = data;
+	},
+	[types.DEPARTMENT_CREATE] (state, data) {
+		//console.log(data);
+		state.departmentCreate = data;
+	},
+	[types.DEPARTMENT_STAFF] (state, data) {
+		//console.log(data);
+		state.departmentStaff = data;
+	},
+	[types.DEPARTMENT_SET_STAFF] (state, data) {
+		//console.log(data);
+		state.departmentSetStaff = data;
+	},
+	[types.DEPARTMENT_SET_MANAGER] (state, data) {
+		//console.log(data);
+		state.departmentSetManager = data;
+	},
+	[types.INIT_CUSTOMER] (state, data) {
+		//console.log(data);
+		state.customerInit = data;
+	},
+	[types.SYNC_USER] (state, data) {
+		//console.log(data);
+		state.syncUser = data;
+	},
+	[types.INIT_USER_LIST] (state, data) {
+		//console.log(data);
+		state.initUserList = data;
+	},
+	[types.JOIN_WORKWX] (state, data) {
+		//console.log(data);
+		state.joinWorkWx = data;
+	},
+	[types.INIT_MOBILE_DATA] (state, data) {
+		//console.log(data);
+		state.baseMobileData = data;
+	},
+	[types.CREATE_CHAT] (state, data) {
+		//console.log(data);
+		state.createChat = data;
+	},
+	[types.SET_CURRENT_CUSTOMER] (state, data) {
+		//console.log(data);
+		state.CurrentCustomer = data;
+	},
+	[types.ARTICLE_POST] (state, data) {
+		//console.log(data);
+		state.ArticlePost = data;
+	},
+	[types.ARTICLE_GET] (state, data) {
+		// console.log(data);
+		state.article = data;
+	},
+	[types.ARTICLE_CATEGORY] (state, data) {
+		//console.log(data);
+		state.ArticleCategory = data;
+	},
+	[types.ARTICLE_CATEGORY_POST] (state, data) {
+		//console.log(data);
+		state.ArticleCategoryPost = data;
+	},
+	[types.ARTICLE_GET_ONE] (state, data) {
+		// console.log(data);
+		state.ArticleOne = data;
+	},
+	[types.ADD_ARTICLE_ANSWER] (state, data) {
+		//console.log(data);
+		state.AddArticleAnswer = data;
+	},
+	[types.ARTICLE_ANSWER] (state, data) {
+		//console.log(data);
+		state.ArticleAnswer = data;
+	},
+	[types.ARTICLE_AGREE_CLICK] (state, data) {
+		//console.log(data);
+		state.ArticleAgree = data;
+	},
+	[types.ARTICLE_AGREE] (state, data) {
+		//console.log(data);
+		state.ArticleAgree = data;
+	},
+	[types.FORUM_MENU] (state, data) {
+		//console.log(data);
+		state.ForumMenu = data;
+	},
+	[types.ARTICLE_DRAFT] (state, data) {
+		//console.log(data);
+		state.ArticleDraft = data;
+	},
+	[types.ARTICLE_PUBLISH] (state, data) {
+		//console.log(data);
+		state.ArticlePublish = data;
+	},
+	[types.ARTICLE_EDIT] (state, data) {
+		// console.log(data);
+		state.ArticleEditOne = data;
+	},
+	[types.ARTICLE_PUT] (state, data) {
+		// console.log(data);
+		state.ArticleUpdate = data;
+	},
+	[types.ARTICLE_PUBLISH_LIST] (state, data) {
+		// console.log(data);
+		state.ArticlePublishList = data;
+	},
+	[types.ARTICLE_CATEGORY_PUT] (state, data) {
+		// console.log(data);
+		state.ArticleCategoryPut = data;
+	},
+	[types.ARTICLE_SET_FINE] (state, data) {
+		state.ArticleSetFine = data;
+	},
+	[types.ARTICLE_DELETE] (state, data) {
+		console.log(data);
+		state.ArticleDelete = data;
+	},
+	[types.ARTICLE_AGREE_NOTIFY] (state, data) {
+		// console.log(data);
+		state.ArticleAgreeNotify = data;
+	},
+	[types.ARTICLE_ANSWER_NOTIFY] (state, data) {
+		// console.log(data);
+		state.ArticleAnswerNotify = data;
+	},
+	[types.ARTICLE_AGREE_LIST] (state, data) {
+		 
+		state.ArticleAgreeList = data;
+	},
+	[types.AGREE_EVERY_MONTH] (state, data) {
+		 
+		state.AgreeEveryMonth = data;
+	},
+	[types.MY_ARTICLE_NOTIFY] (state, data) {
+		 
+		state.MyArticleNotify = data;
+	},
+	[types.SET_HISTORY] (state, history) {
+
+		let status = state.historyMenu.some((item) => {
+			
+			return item.path == history.path;
+		})
+
+		if (!status) {
+
+			state.historyMenu.push(history);
+		}
+
+
+	},
+	[types.REMOVE_HISTORY] (state,historyPath) {
+		let tmp = state.historyMenu;
+
+		for( let i in tmp) {
+			if (tmp[i].path == historyPath) {
+
+				tmp.splice(i,1);
+				break;
+			}
+		}
+
+		state.historyMenu = tmp;
+	},
+	[types.SHRINK_STATUS] (state) {
+		state.ShrinkStatus = !state.ShrinkStatus;
+	},
+	[types.INIT_SHRINK_STATUS] (state, status) {
+		state.ShrinkStatus = status;
+	},
+	[types.DELETE_PERMISSION] (state, data) {
+		state.DeletePermission = data;
+	},
+
+	[types.BREAD_PATH] (state, path) {
+		//console.log(path)
+		let navigation = state.navigation;
+		
+		state.Breadcrumb = [];
+
+		for (var i in navigation) {
+        
+	        let children = navigation[i].children;
+
+	        if (navigation[i].front_path == path) { 
+	        	state.Breadcrumb.push(navigation[i].name);
+	        }
+
+	        for (var ii in children) {
+
+	          	if (children[ii].front_path == path) {
+	          		state.Breadcrumb.push(navigation[i].name);
+	            	state.Breadcrumb.push(children[ii].name);
+	          	}
+	        }
+	    }
+	},
+	[types.ADD_MY_CUSTOMER] (state, data) {
+		state.AddMyCustomer = data;
+	},
+	[types.SEARCH_CUST] (state, response) {
+		// console.log(response)
+		state.SearchCust = response.data;
+	},
+	[types.SEARCH_PROJECT] (state, response) {
+
+		state.SearchProject = response.data;
+	},
+	[types.ADD_RECEIVABLE] (state, response) {
+		 
+		state.AddReceivable = response;
+	},
+	[types.ADD_RECEIVEBILL] (state, response) {
+		state.AddReceivebill = response;
+	},
+	[types.AR_SUM_TABLE] (state, response) {
+		
+		state.ARSumTotal = response.total;
+		state.ARSum = response.data;
+		state.ARSummaries = response.summaries;
+		state.ARSumLoading = false;
+
+	},
+	[types.AR_SUM_TABLE_LOADING] (state) {
+		state.ARSumLoading = true;
+	},
+
+	[types.UPDATE_RECEIVEBILL] (state, response) {
+		state.UpdateReceivebill = response;
+	},
+	[types.ADD_AR_TYPE] (state, response) {
+		state.AddARType = response;
+	},
+	[types.AR_TYPE] (state, response) {
+		state.ARType = response.data;
+	},
+	[types.ADD_PROJECT] (state, response) {
+		state.AddProject = response;
+	},
+	[types.ARSUM_USER_ROLE] (state, response) {
+		state.ARSumUserRole = response;
+	},
+	[types.BASE_PAGINATION] (state, response) {
+		 
+		state.BasePagination = response.data;
+	},
+	[types.ADD_RECEIVABLE_PLAN] (state,response) {
+		state.AddReceivablePlan = response;
+	},
+	[types.REFUND_ADD] (state, response) {
+		state.RefundAdd = response;
+	},
+	[types.REFUND_UPDATE] (state, response) {
+		console.log(response)
+		state.UpdateRefund = response;
+	},
+	[types.SET_AR_TAB] (state, tab) {
+		state.ARCurrentTable = tab;
+	},
+	[types.ARTABLE_CONFIG_CHANGE] (state, obj) {
+
+		for (let i in obj) {
+			state.ARTableConfig[i] = obj[i];
+		}
+	},
+	[types.GET_ARSET_FIELD_TYPE] (state, response) {
+		state.ARSetFieldType = response;
+	},
+	[types.ADD_ENUMBERATE] (state, response) {
+		console.log(response)
+		state.AddEnumberate = response;
+	},
+	[types.GET_ENUMBERATE] (state, response) {
+		// console.log(response)
+		state.Enumberate = response;
+	},
+	[types.ADD_BIND_ATTR] (state, response) {
+		state.AddBindAttr = response;
+	},
+	[types.BIND_ATTR_LIST] (state, response) {
+		state.BindAttrList = response;
+	},
+	[types.STATIC_FIELDS] (state, response) {
+		state.FIELDS = response;
+		// console.log(response)
+	},
+	[types.UPDATE_FILTER_QUERY] (state, response) {
+		state.filterQuery = response;
+	},
+	[types.UPDATE_FILTER_QUERY_PARAM] (state, response) {
+		for (let i in response) {
+			state.filterQuery[i] = response[i];
+		}
+	},
+	[types.ARSUM_SET_CURRENT_ROW] (state, response) {
+		state.ARSumCurrentRow = response;
+	},
+	[types.GET_SALE_ORDER_LIST] (state, response) {
+		state.SaleOrderList.data = response.row;
+		state.SaleOrderList.pagination.total = response.total;
+		// console.log(response)
+	},
+	[types.SET_SALE_ORDER_LIST] (state, response) {
+		for (let i in response) {
+			state.SaleOrderList[i] = response[i];
+		}
+	},
+	[types.SET_RECEIVEBILL_LIST] (state, response) {
+		for (let i in response) {
+			state.ReceiveBillList[i] = response[i];
+		}
+	},
+	[types.GET_RECEIVEBILL_LIST] (state, response) {
+		state.ReceiveBillList.data = response.row;
+		state.ReceiveBillList.pagination.total = response.total;
+		 
+	}
+}
+
+export default mutations;
