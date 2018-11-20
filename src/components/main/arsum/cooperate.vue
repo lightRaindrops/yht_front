@@ -20,7 +20,7 @@
 						<el-button-group>
 							<el-button type="info" size="mini" icon="el-icon-sold-out" @click.native="OpenSaleOrderDialog" v-if="Role.hasRole">添加销售</el-button>
 							<el-button type="info" size="mini" icon="el-icon-check" @click.native="OpenReceivebillOrderDialog" v-if="Role.hasRole">添加收款</el-button>
-							<el-button type="info" size="mini" icon="el-icon-sort" v-if="Role.hasRole">添加退货</el-button>
+							<el-button type="info" size="mini" icon="el-icon-sort" @click.native="OpenRefundOrderDialog" v-if="Role.hasRole">添加退货</el-button>
 							<el-button type="info" size="mini" icon="el-icon-service" v-if="user.id == scope.row.user_id">设置状态</el-button>
 							<el-button type="info" size="mini" icon="el-icon-star-on" v-if="user.id == scope.row.user_id">收款计划</el-button>
 						</el-button-group>
@@ -158,7 +158,7 @@ export default{
 				{name: '销售明细', component: SaleOrderList,moduleName: "SaleOrderList"},
 				{name: '收款明细', component: ReceivebillList, moduleName: "ReceiveBillList"},
 				// {name: '优惠明细', component: DiscountList, moduleName: ""},
-				// {name: '退货明细', component: RefundList, moduleName: "RefundList"},
+				{name: '退货明细', component: RefundList, moduleName: "RefundList"},
 				// {name: '收款计划', component: RecePlanList,moduleName: "RecePlanList"}
 			],
 			CurrentRow: {},
@@ -219,12 +219,13 @@ export default{
 			});
 		},
 		OpenSaleOrderDialog() {
-			
 			this.$store.dispatch('AlterTableConfig', {SaleOrderVisible: true});
 		},
 		OpenReceivebillOrderDialog() {
-			
 			this.$store.dispatch('AlterTableConfig', { ReceivebillVisible: true});
+		},
+		OpenRefundOrderDialog() {
+			this.$store.dispatch('AlterTableConfig', { RefundVisible: true});
 		},
 		//tab切换时的事件函数
 		tabClick(tab) {

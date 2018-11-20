@@ -50,6 +50,7 @@ export default {
 			return ++index;
 		},
 		update(row) {
+			
 			this.$store.dispatch(this.setActionName, {CurrentRow: row, update: true}).then(() => {
 				this.$store.dispatch('AlterTableConfig', {ReceivebillVisible: true});
 			});

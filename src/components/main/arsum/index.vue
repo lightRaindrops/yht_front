@@ -10,6 +10,7 @@
 		</keep-alive>
 		<v-sale-order />
 		<v-receivebill />
+		<v-refund />
 	</div>
 </template>
 <script>
@@ -23,6 +24,7 @@ import CreatePro from './dialog/CreatePro.vue';
 import Import from './dialog/import.vue';
 import SaleOrder from './dialog/CreateSaleOrder.vue';
 import Receivebill from './dialog/CreateReceivebill.vue';
+import Refund from './dialog/CreateRefund.vue';
 
 export default{
 	data() {
@@ -51,6 +53,7 @@ export default{
 		'v-import-dialog': Import,
 		'v-sale-order': SaleOrder,
 		'v-receivebill': Receivebill,
+		'v-refund': Refund,
 		Cooperate,
 		Target,
 

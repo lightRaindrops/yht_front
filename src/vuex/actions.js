@@ -588,9 +588,9 @@ export const RefundAdd = ({commit}, info) => {
 	})
 }
 /**修改退货**/
-export const UpdateRefund = ({commit}, info) => {
-	return api.UpdateRefund(info).then((response) => {
-		return commit('REFUND_UPDATE', response);
+export const RefundUpdate = ({commit}, info) => {
+	return api.RefundUpdate(info).then((response) => {
+		return commit('REFUND_ADD', response);
 	})
 }
 /**切换表格**/
@@ -652,6 +652,7 @@ export const updateFilterQueryParam = ({commit}, info) => {
 export const ARSumCurrentRow = ({commit}, info) => {
 	return commit('ARSUM_SET_CURRENT_ROW', info);
 }
+//销售明细
 export const GetSaleOrderList = ({commit}, info) => {
 	 
 	return api.GetSaleOrderList(info).then((response) => {
@@ -661,6 +662,7 @@ export const GetSaleOrderList = ({commit}, info) => {
 export const SetSaleOrderList = ({commit}, info) => {
 	return commit('SET_SALE_ORDER_LIST', info);
 }
+//收款明细
 export const GetReceiveBillList = ({commit}, info) => {
 	return api.GetReceiveBillList(info).then((response) => {
 		return commit('GET_RECEIVEBILL_LIST', response);
@@ -668,6 +670,15 @@ export const GetReceiveBillList = ({commit}, info) => {
 }
 export const SetReceiveBillList = ({commit}, info) => {
 	return commit('SET_RECEIVEBILL_LIST', info);
+}
+//退货明细
+export const GetRefundList = ({commit}, info) => {
+	return api.GetRefundList(info).then((response) => {
+		return commit('GET_REFUND_LIST', response);
+	});
+}
+export const SetRefundList = ({commit}, info) => {
+	return commit('SET_REFUND_LIST', info);
 }
 
 

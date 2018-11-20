@@ -108,7 +108,8 @@ const state = {
     CreateProVisible: false,
     ImportVisible: false,
     SaleOrderVisible: false,
-    ReceivebillVisible: false
+    ReceivebillVisible: false,
+    RefundVisible: false
   },
   ARSetFieldType: [],
   ARSumCurrentRow: {},
@@ -145,6 +146,7 @@ const state = {
     pagination: {
       total: 0
     },
+    update: false,
     ready: false, //是否已经加载过
   }, //退货列表
   RecePlanList: {

@@ -290,9 +290,9 @@ export const AddReceivablePlan = (info) => {
 	return http.post('ReceivablePlan/add', info);
 }
 export const RefundAdd = (info) => {
-	return http.post('refund/add', info);
+	return http.post('refund/store', info);
 }
-export const UpdateRefund = (info) => {
+export const RefundUpdate = (info) => {
 	return http.post('refund/update', info);
 }
 export const GetArsetFieldType = (info) => {
@@ -330,4 +330,7 @@ export const DeleteReceivable = (info) => {
 export const GetReceiveBillList = (info) => {
 	
 	return http.post('receivebill/all', info);
+}
+export const GetRefundList = (info) => {
+	return http.post('refund/all', info);
 }
