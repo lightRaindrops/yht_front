@@ -56,7 +56,27 @@ export default {
 			});
 		},
 		remove(row) {
+			this.$confirm('删除金额<'+row.amountfor+'>的记录, 是否继续?', '提示', {
+	          	confirmButtonText: '确定',
+	          	cancelButtonText: '取消',
+	          	type: 'warning'
+	        }).then(() => {
+	         		
+	         	this.$store.dispatch('DeleteReceivebill', {id:row.id}).then(() => {
+	         		let response = this.$store.state.user.AddReceivebill;
 
+	         		if (response.status == 'success') {
+	         			this.$notify.success('操作成功');
+	         		}
+	         		else {
+	         			this.$notify.error('操作失败! ' + response.errmsg);
+	         		}
+	         		this.$store.dispatch(this.getActionName, {pid: this.pid});
+	         	});
+
+	        }).catch(() => {
+	            
+	        });
 		}
 	},
 	computed: {
@@ -71,9 +91,12 @@ export default {
 		},
 		setActionName: function() {
 			return 'Set'+this.moduleName;
-		}
+		},
+		pid: function() {
+			return this.$store.state.user.ARSumCurrentRow.pid;
+		},
 	},
-	components: {
+ 	components: {
 		'v-pagination': Pagination
 	}
 }

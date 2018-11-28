@@ -15,6 +15,11 @@ export const signup  = ( {commit}, userInfo) => {
 	});
 }
 
+export const AuthUpdatePasswd = ({commit}, info) => {
+	return api.AuthUpdatePasswd(info).then((response) => {
+		commit('AUTH_UPDATE_PASSWD', response);
+	})
+}
 export const getUserInfo = ({commit}) => {
 	return api.getUserInfo().then((response) => {
 		commit('USER_INFO', response);
@@ -522,6 +527,12 @@ export const AddReceivebill = ({commit}, info) => {
 		return commit('ADD_RECEIVEBILL', response);
 	})
 }
+/**删除退款 */
+export const DeleteReceivebill = ({commit}, info) => {
+	return api.DeleteReceivebill(info).then((response) => {
+		return commit('ADD_RECEIVEBILL', response);
+	});
+}
 export const ARSum = ({commit}, query) => {
 	//状态开始
 	commit('AR_SUM_TABLE_LOADING');
@@ -581,6 +592,17 @@ export const AddReceivablePlan = ({commit}, info) => {
 		return commit('ADD_RECEIVABLE_PLAN', response);
 	})
 }
+/**修改收款计划 */
+export const updateReceivablePlan = ({commit}, info) => {
+	return api.updateReceivablePlan(info).then((response) => {
+		return commit('ADD_RECEIVABLE_PLAN', response);
+	})
+}
+export const deleteReceivablePlan = ({commit}, info) => {
+	return api.deleteReceivablePlan(info).then((response) => {
+		return commit('ADD_RECEIVABLE_PLAN', response);
+	})
+}
 /**提交退款**/
 export const RefundAdd = ({commit}, info) => {
 	return api.RefundAdd(info).then((response) => {
@@ -590,6 +612,12 @@ export const RefundAdd = ({commit}, info) => {
 /**修改退货**/
 export const RefundUpdate = ({commit}, info) => {
 	return api.RefundUpdate(info).then((response) => {
+		return commit('REFUND_ADD', response);
+	})
+}
+/**删除退货 */
+export const RefundDelete = ({commit}, info) => {
+	return api.RefundDelete(info).then((response) => {
 		return commit('REFUND_ADD', response);
 	})
 }
@@ -679,6 +707,52 @@ export const GetRefundList = ({commit}, info) => {
 }
 export const SetRefundList = ({commit}, info) => {
 	return commit('SET_REFUND_LIST', info);
+}
+/**收款计划 */
+export const GetRecePlanList = ({commit}, info) => {
+	return api.GetRecePlanList(info).then((response) => {
+		return commit('GET_RECEPLAN_LIST', response);
+	});
+}
+export const SetRecePlanList = ({commit}, info) => {
+	return commit('SET_RECEPLAN_LIST', info);
+}
+/**设置客户状态 */
+export const UpdateCustStatus = ({commit}, info) => {
+	return api.UpdateCustStatus(info).then((response) => {
+		return commit('UPDATE_CUST_STATUS', response);
+	});
+	
+}
+export const GetARSumFilterTable = ({commit}) => {
+	return api.GetARSumFilterTable().then((response) => {
+		return commit('GET_ARSUM_FILTER_TABLE', response);
+	})
+}
+export const FindARSumFilterValue  = ({commit},info) => {
+	return api.FindARSumFilterValue(info).then((response) => {
+		return commit('FIND_ARSUM_FILTER_VALUE', response);
+	});
+}
+export const CreateProgram = ({commit}, info) => {
+	return api.CreateProgram(info).then((response) => {
+		return commit('CREATE_PROGRAM', response);
+	})
+}
+export const UpdateProgram = ({commit}, info) => {
+	return api. UpdateProgram(info).then((response) => {
+		return commit('CREATE_PROGRAM', response);
+	})
+}
+export const FilterProgram = ({commit}) => {
+	return api.FilterProgram().then((response) => {
+		return commit('GET_FILTER_PROGRAM', response);
+	})
+}
+export const DeleteProgram = ({commit}, info) => {
+	return api.DeleteProgram(info).then((response) => {
+		return commit('CREATE_PROGRAM', response);
+	})
 }
 
 

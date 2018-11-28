@@ -9,6 +9,7 @@
 		:height="height"
 		:expand-row-keys="expands"
 		:row-key="getRowKeys"
+		highlight-current-row
 		@row-click="rowClick"
 		@expand-change="expandChange"
 	>
@@ -21,8 +22,8 @@
 							<el-button type="info" size="mini" icon="el-icon-sold-out" @click.native="OpenSaleOrderDialog" v-if="Role.hasRole">添加销售</el-button>
 							<el-button type="info" size="mini" icon="el-icon-check" @click.native="OpenReceivebillOrderDialog" v-if="Role.hasRole">添加收款</el-button>
 							<el-button type="info" size="mini" icon="el-icon-sort" @click.native="OpenRefundOrderDialog" v-if="Role.hasRole">添加退货</el-button>
-							<el-button type="info" size="mini" icon="el-icon-service" v-if="user.id == scope.row.user_id">设置状态</el-button>
-							<el-button type="info" size="mini" icon="el-icon-star-on" v-if="user.id == scope.row.user_id">收款计划</el-button>
+							<el-button type="info" size="mini" icon="el-icon-star-on" @click.native="OpenRecePlanDialog" v-if="user.id == scope.row.user_id">收款计划</el-button>
+							<el-button type="info" size="mini" icon="el-icon-service" @click.native="OpenChangeCusDialog" v-if="user.id == scope.row.user_id">设置状态</el-button>
 						</el-button-group>
 					</div>
 				
@@ -39,12 +40,19 @@
 		<el-table-column prop="rowkey" label="rowKey" v-if="false">
 			<template slot-scope="scope" ></template>
 		</el-table-column>
-		<el-table-column prop="status" label="状态" fixed="left" width="80"></el-table-column>
+		<el-table-column prop="status_name" label="状态" fixed="left" width="80">
+			<template slot-scope="scope">
+				<el-tag type="success" v-if="scope.row.nameshow == true && scope.row.status_name == '平稳'">平稳</el-tag>
+				<el-tag type="warning" v-if="scope.row.nameshow == true && scope.row.status_name == '衰减'">衰减</el-tag>
+				<el-tag type="info" v-if="scope.row.nameshow == true && scope.row.status_name == '流失'">流失</el-tag>
+			</template>	
+		</el-table-column>
 		<el-table-column prop="name" label="序号" fixed="left" width="50">
 			<template slot-scope="scope"  >
 				{{scope.row.index}}
 			</template>
 		</el-table-column>
+		<el-table-column prop="department" label="部门名称" fixed="left" width="80"></el-table-column>
 		<el-table-column prop="name" label="客户名称" fixed="left" min-width="200">
 			<template slot-scope="scope" v-if="scope.row.nameshow==true">
 				<el-tooltip effect="dark" :content="scope.row.name" placement="top">
@@ -74,7 +82,7 @@
 				<el-tag type="success">同行</el-tag>
 			</template>
 		</el-table-column>
-		<el-table-column prop="" label="合作金额" fixed="left"  ></el-table-column>
+		<el-table-column prop="cooperation_amountfor" label="合作金额" fixed="left"  ></el-table-column>
 		<el-table-column prop="estimate" label="预计金额" ></el-table-column>
 		<el-table-column prop="agreement" label="合同"   width="100">
 			<template slot-scope="scope">
@@ -110,20 +118,24 @@
 		<el-table-column prop="tax" label="税率"   width="80"></el-table-column>
 		<el-table-column prop="payment_days" label="账期"     width="100"></el-table-column>
 		
-		<el-table-column prop="" label="期初"></el-table-column>
+		<el-table-column prop="init_data" label="期初"></el-table-column>
 		<el-table-column prop="id" label="">
 			<template slot-scope="scope">
-				<div class="sub-table" v-if="sale  ">销售</div>
-				<div class="sub-table" v-if="receive  ">回款</div>
-				<div class="sub-table" v-if="balance  ">欠款</div>
+				<div class="month-td" v-if="initAmount">期初</div>
+				<div class="month-td" v-if="sale">销售</div>
+				<div class="month-td" v-if="receive">回款</div>
+				<div class="month-td" v-if="balance">欠款</div>
 			</template>
 		</el-table-column>
-		<el-table-column prop="" label="每月销量">
-			<el-table-column prop="id" v-for="(item, key) in month" :key="key" :label="item">
+		<el-table-column label="每月销量" >
+			<el-table-column  v-for="(item, key) in month" :key="key" :label="item" width="120">
 				<template slot-scope="scope">
-					<div class="sub-table" :class="{stripe: scope.row.id % 2 == 0 && key < 5}" v-if="sale   ">1000</div>
-					<div class="sub-table" :class="{stripe: scope.row.id % 2 == 0 && key < 6}" v-if="receive  ">22000</div>
-					<div class="sub-table" :class="{stripe: scope.row.id % 2 == 0 && key <3}" v-if="balance  ">33000</div>
+					<span v-for="(it, mk) in scope.row.monthly_sales" :key="mk" v-if="item == it.name">
+						<div class="month-td" :class="{stripe: scope.row.id % 2 == 0 && key <3}" v-if="initAmount">{{it.initAmount}}</div>
+						<div class="month-td" :class="{stripe: scope.row.id % 2 == 0 && key < 5}" v-if="sale">{{it.amountfor}}</div>
+						<div class="month-td" :class="{stripe: scope.row.id % 2 == 0 && key < 5}" v-if="receive">{{it.real_amountfor}}</div>
+						<div class="month-td" :class="{stripe: scope.row.id % 2 == 0 && key <3}" v-if="balance">{{it.arrears}}</div>	
+					</span>
 				</template>
 			</el-table-column>
 		</el-table-column>
@@ -159,7 +171,7 @@ export default{
 				{name: '收款明细', component: ReceivebillList, moduleName: "ReceiveBillList"},
 				// {name: '优惠明细', component: DiscountList, moduleName: ""},
 				{name: '退货明细', component: RefundList, moduleName: "RefundList"},
-				// {name: '收款计划', component: RecePlanList,moduleName: "RecePlanList"}
+				{name: '收款计划', component: RecePlanList,moduleName: "RecePlanList"}
 			],
 			CurrentRow: {},
 		}
@@ -175,16 +187,16 @@ export default{
 		},
 		rowClick(row, event, column) {
 
-			if (column.label != '操作' && column.label != '收款计划') {
-				let temp = this.expands;
-				this.expands = [];
-				if ( temp[0] != row.rowkey ) {
-					this.expands.push(row.rowkey);
-					this.activeRow(row);
-				}
-			} 
+			// if (column.label != '操作' && column.label != '收款计划') {
+			// 	let temp = this.expands;
+			// 	this.expands = [];
+			// 	if ( temp[0] != row.rowkey ) {
+			// 		this.expands.push(row.rowkey);
+			// 		this.activeRow(row);
+			// 	}
+			// } 
 
-			this.CurrentRow = row;
+			// this.CurrentRow = row;
 		},
 		getRowKeys(row) {
 
@@ -227,6 +239,12 @@ export default{
 		OpenRefundOrderDialog() {
 			this.$store.dispatch('AlterTableConfig', { RefundVisible: true});
 		},
+		OpenRecePlanDialog() {
+			this.$store.dispatch('AlterTableConfig', { RecePlanVisible: true});
+		},
+		OpenChangeCusDialog() {
+			this.$store.dispatch('AlterTableConfig', { ChangeCustVisible: true});
+		},
 		//tab切换时的事件函数
 		tabClick(tab) {
 			this.Tabs.forEach((item) => {
@@ -247,7 +265,7 @@ export default{
 	},
 	computed: {
 		tableData: function() {
-			// console.log(this.$store.state.user.ARSum)
+			
 			return this.$store.state.user.ARSum;
 		},
 		tableLoading: function() {
@@ -261,6 +279,9 @@ export default{
 		},
 		balance: function() {
 			return this.$store.state.user.ARTableConfig.balance;
+		},
+		initAmount: function() {
+			return this.$store.state.user.ARTableConfig.init;
 		},
 		Role: function() {
 			return this.$store.state.user.ARSumUserRole;
@@ -277,13 +298,13 @@ export default{
 	width: 100%;
 	height: 100%;
 	position: relative;
-	.sub-table
+	.month-td
 		width: 100%;
 		box-sizing: border-box;
 		border-bottom: 1px solid #ddd;
-	td .sub-table:nth-child(2) 
+	td .month-td:nth-child(2) 
 		padding: 2px 0px;
-	td .sub-table:nth-last-child(1)
+	td .month-td:nth-last-child(1)
 		border: 0px; 
 	td .stripe
 		background: #ccc;

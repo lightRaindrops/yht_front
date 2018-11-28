@@ -16,6 +16,7 @@
 				<el-checkbox v-model="config.sale" @change="checkBoxHandle">销售额</el-checkbox>
 				<el-checkbox v-model="config.receive" @change="checkBoxHandle">回款</el-checkbox>
 				<el-checkbox v-model="config.balance" @change="checkBoxHandle">欠款</el-checkbox>
+				<el-checkbox v-model="config.init" @change="checkBoxHandle">期初</el-checkbox>
 			</div>
 		</section>
 	</div>
@@ -28,7 +29,8 @@ export default{
 			config: {
 				sale: true,
 				receive: false,
-				balance: false
+				balance: false,
+				init: false
 			}
 		}
 	},

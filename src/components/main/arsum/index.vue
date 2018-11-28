@@ -11,6 +11,8 @@
 		<v-sale-order />
 		<v-receivebill />
 		<v-refund />
+		<v-rece-plan />
+		<v-set-cus />
 	</div>
 </template>
 <script>
@@ -25,6 +27,8 @@ import Import from './dialog/import.vue';
 import SaleOrder from './dialog/CreateSaleOrder.vue';
 import Receivebill from './dialog/CreateReceivebill.vue';
 import Refund from './dialog/CreateRefund.vue';
+import RecePlan from './dialog/CreateRecePlan.vue';
+import SetCustomer from './dialog/SetCustomerStatus.vue';
 
 export default{
 	data() {
@@ -54,6 +58,8 @@ export default{
 		'v-sale-order': SaleOrder,
 		'v-receivebill': Receivebill,
 		'v-refund': Refund,
+		'v-rece-plan': RecePlan,
+		'v-set-cus': SetCustomer,
 		Cooperate,
 		Target,
 

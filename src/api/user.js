@@ -15,6 +15,9 @@ export const getUserInfo = () =>{
 export const logout = () => {
 	return http.post('auth/logout');
 }
+export const AuthUpdatePasswd = (info) => {
+	return http.post('auth/put/resetpass', info);
+}
 
 export const initNavigation = () => {
 	return http.post('user/get/navigation');
@@ -248,6 +251,9 @@ export const AddReceivable = (info) => {
 export const AddReceivebill = (info) => {
 	return http.post('receivebill/store', info);
 }
+export const DeleteReceivebill = (info) => {
+	return http.post('receivebill/delete', info);
+}
 export const ARSum = (query) => {
 	return http.post('arsum/query', query)
 }
@@ -289,11 +295,20 @@ export const InitPagination = () => {
 export const AddReceivablePlan = (info) => {
 	return http.post('ReceivablePlan/add', info);
 }
+export const updateReceivablePlan = (info) => {
+	return http.post('ReceivablePlan/update', info);
+}
+export const deleteReceivablePlan = (info) => {
+	return http.post('ReceivablePlan/delete', info);
+}
 export const RefundAdd = (info) => {
 	return http.post('refund/store', info);
 }
 export const RefundUpdate = (info) => {
 	return http.post('refund/update', info);
+}
+export const RefundDelete = (info) => {
+	return http.post('refund/delete', info);
 }
 export const GetArsetFieldType = (info) => {
 	return http.post('arset/fieldtype');
@@ -333,4 +348,28 @@ export const GetReceiveBillList = (info) => {
 }
 export const GetRefundList = (info) => {
 	return http.post('refund/all', info);
+}
+export const GetRecePlanList = (info) => {
+	return http.post('ReceivablePlan/all', info);
+}
+export const UpdateCustStatus = (info) => {
+	return http.post('realcustomer/update/status', info);
+}
+export const GetARSumFilterTable = () => {
+	return http.post('arsum/filter');
+}
+export const FindARSumFilterValue = (info) => {
+	return http.post('arsum/filter/query', info);
+}
+export const CreateProgram = (info) => {
+	return http.post('arsum/filter/create/program', info);
+}
+export const UpdateProgram = (info) => {
+	return http.post('arsum/filter/update/program', info);
+}
+export const FilterProgram = () => {
+	return http.post('arsum/filter/get/program');
+}
+export const DeleteProgram = (info) => {
+	return http.post('arsum/filter/delete/program', info);
 }

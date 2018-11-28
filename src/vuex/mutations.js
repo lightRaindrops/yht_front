@@ -17,6 +17,9 @@ const mutations = {
 	[types.USER_SIGNUP] (state, data) {
 		state.userSignup = data;
 	},
+	[types.AUTH_UPDATE_PASSWD] (state, response) {
+		state.AuthUpdatePasswd = response;
+	},
 	[types.NAVIGATION] ( state, data) {
 		//console.log(data);
 		state.navigation = data.data;
@@ -426,7 +429,7 @@ const mutations = {
 		state.RefundAdd = response;
 	},
 	[types.REFUND_UPDATE] (state, response) {
-		console.log(response)
+		 
 		state.UpdateRefund = response;
 	},
 	[types.SET_AR_TAB] (state, tab) {
@@ -498,6 +501,31 @@ const mutations = {
 		for (let i in response) {
 			state.RefundList[i] = response[i];
 		}
+	},
+	[types.GET_RECEPLAN_LIST] (state, response) {
+		state.RecePlanList.data = response.row;
+		state.RecePlanList.pagination.total = response.total;
+	},
+	[types.SET_RECEPLAN_LIST] (state, response) {
+		for (let i in response) {
+			state.RecePlanList[i] = response[i];
+		}
+	},
+	[types.UPDATE_CUST_STATUS] (state, response) {
+		state.CustStatus = response;
+	},
+	[types.GET_ARSUM_FILTER_TABLE] (state, response) {
+		state.ARSumFilterTable = response;
+		state.FilterProgram = response.program;
+	},
+	[types.FIND_ARSUM_FILTER_VALUE] (state, response) {
+		state.FindARSumFilterValue = response;
+	},
+	[types.CREATE_PROGRAM] (state, response) {
+		state.CreateProgram = response;
+	},
+	[types.GET_FILTER_PROGRAM] (state, response) {
+		state.FilterProgram = response;
 	}
 }
 

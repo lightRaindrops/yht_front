@@ -7,6 +7,7 @@ const state = {
   userInfo: [],
   userSignup: [],
   loginResult: '',
+  AuthUpdatePasswd: {},
   navigation:[], //导航
   groups:[],//功能组
   update_permission: false,
@@ -103,13 +104,16 @@ const state = {
     sale:true,
     receive:false,
     balance:false,
+    init: false,
     FilterVisible: false,
     CreateCustVisible: false,
     CreateProVisible: false,
     ImportVisible: false,
     SaleOrderVisible: false,
     ReceivebillVisible: false,
-    RefundVisible: false
+    RefundVisible: false,
+    RecePlanVisible: false,
+    ChangeCustVisible: false,
   },
   ARSetFieldType: [],
   ARSumCurrentRow: {},
@@ -158,7 +162,13 @@ const state = {
     },
     ready: false, //是否已经加载过
   },//收款计划列表
-  
+  CustStatus:{
+    //客户状态更新
+  },
+  ARSumFilterTable: {},//表头过滤信息
+  FindARSumFilterValue: [], //远程搜索结果
+  CreateProgram: {},
+  FilterProgram: []
 }
 
 export default {

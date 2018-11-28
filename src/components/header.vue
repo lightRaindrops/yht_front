@@ -16,7 +16,7 @@
 				<ul>
 					<li class="right-menu-item  ">
 						<el-tooltip class="item" effect="dark" content="修改密码" placement="bottom">
-					    	<i class="iconfont icon-mima"></i>
+					    	<i class="iconfont icon-mima" @click="updatePasswd"></i>
 					    </el-tooltip>
 					</li>
 					<li class="right-menu-item  " @click="logout">
@@ -25,29 +25,70 @@
 					    </el-tooltip>
 					</li>
 					<li class="right-menu-item avatar-container ">
-						<el-tooltip class="item" effect="dark" content="个人资料" placement="bottom">
-					    	<img :src="this.$store.state.user.userInfo.headimg ? this.$store.state.user.userInfo.headimg : 'https://e.yhtjc.com/v2/public/img/default.gif'">
-					    </el-tooltip>
+						<el-popover
+							placement="top-start"
+							title="个人资料"
+							width="200"
+							trigger="hover"
+							:content="this.$store.state.user.userInfo.name">
+							
+							<img slot="reference" :src="this.$store.state.user.userInfo.headimg ? this.$store.state.user.userInfo.headimg : 'https://e.yhtjc.com/v2/public/img/default.gif'">
+						</el-popover>
 					</li>
 				</ul>
-				<!-- <div class="avatar-container right-menu-item">
-					<img :src="this.$store.state.user.userInfo.headimg ? this.$store.state.user.userInfo.headimg : 'https://e.yhtjc.com/v2/public/img/default.gif'">
-				</div> -->
+				
 			</div>
 		</div>
 		<div class="tags-view-container">
-			<span class="tags-view-item" v-for="item in history" :class="{active: item.path == $route.path}" @click="GoPath(item.path)">
+			<span class="tags-view-item" v-for="(item, key) in history" :key="key" :class="{active: item.path == $route.path}" @click="GoPath(item.path)">
 				{{item.name}}
 				<span class="el-icon-close" @click.stop="removeHistory(item.path)"></span>
 			</span>
 		</div>
+		<el-dialog
+            title="修改密码"
+		    :visible.sync="passwdVisible"
+		    
+		    width="30%"
+        >
+            <el-form :model="Form" :rules="Rules" style="width: 100%" ref="Form">
+		    	<el-form-item label="新密码" :label-width="formLabelWidth" prop="passwd">
+		    		<el-input type="password"  v-model.trim="Form.passwd" placeholder="请输入密码"></el-input>
+		    	</el-form-item>
+		    	<el-form-item label="确认密码" :label-width="formLabelWidth" prop="checkPasswd">
+		    		<el-input type="password"  v-model.trim="Form.checkpasswd" placeholder="再次输入密码"></el-input>
+		    	</el-form-item>
+		    	
+		    	
+		  	</el-form>
+			<span slot="footer" class="dialog-footer">
+		   		<el-button @click="Close">取 消</el-button>
+			    <el-button type="primary" @click.native="submitForm">提 交</el-button>
+			</span>
+        </el-dialog>
 	</div>
 </template>
 <script>
 export default {
 	data() {
 		return {
-			
+			formLabelWidth: '120px',
+			passwdVisible: false,
+			Form: {
+				passwd: "",
+				checkpasswd: ""
+			},
+			Rules: {
+				passwd: [
+					{required: true, trigger: 'blur', message: "请输入密码"},
+					{validator: this.checkPasswdLen, trigger: 'blur'}
+				],
+				checkPasswd: [
+					{required: true, trigger: 'blur', message: "请输入密码"},
+					{validator: this.checkPasswd, trigger: "blur"},
+					{validator: this.checkPasswdLen, trigger: 'blur'}
+				]
+			}
 		}
 	},
 	methods: {
@@ -67,6 +108,47 @@ export default {
 		},
 		logout() {
 			this.$store.dispatch('logout');
+		},
+		updatePasswd() {
+			this.passwdVisible = true;
+		},
+		checkPasswd(rule, value, callback) {
+			if (value !== this.Form.passwd) {
+				callback(new Error('两次密码不一致'));
+			}
+			else {
+				callback();
+			}
+		},
+		checkPasswdLen(rule, value,callback) {
+			if (value.length < 6) {
+				callback(new Error('密码长度不能小于6位'));
+			}
+			else {
+				callback();
+			}
+		},
+		Close() {
+			this.passwdVisible = false;
+		},
+		submitForm() {
+			this.$refs['Form'].validate((valid) => {
+				this.$store.dispatch('AuthUpdatePasswd', this.Form).then(() => {
+					let response = this.$store.state.user.AuthUpdatePasswd;
+					 
+					if (response.status == 'success') {
+						this.$notify.success('操作成功');
+						this.Form.passwd = "";
+						this.Form.checkpasswd = "";
+						this.$refs['Form'].resetFields();
+					}
+					else {
+						this.$notify.error('操作失败'+response.errmsg);
+					}
+
+					this.passwdVisible = false;
+				});
+			});
 		}
 	},
 	creted() {
@@ -123,7 +205,7 @@ export default {
 					margin-top: 5px;
 					cursor: pointer;
 					height: 50px;
-					
+					width: 40px;
 					img
 						width: 40px;
 						height: 40px;
