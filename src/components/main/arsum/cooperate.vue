@@ -155,14 +155,9 @@ export default{
 			height: "calc(100% - 35px - 100px)",
 			month:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
 			query: {
-				date: new Date().toLocaleDateString(),
-				user_id: 0,
-				cust_id: 0,
-				pid: 0,
-				order: 0,
-				agreement: 2,
-				limit: 15,
+				conf: [],
 				offset: 0,
+				initialization: true, 
 				type: 1
 			},
 			expands: [],
@@ -179,7 +174,9 @@ export default{
 	methods: {
 		init() {
 			this.updateFilterQuery();
-			this.$store.dispatch('ARSum', this.query);
+			this.$store.dispatch('ARSum', this.query).then(() => {
+				this.initialization = false;
+			});
 		},
 		indexMethod(index) {
 

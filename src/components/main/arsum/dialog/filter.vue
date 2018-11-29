@@ -64,12 +64,12 @@
 													<el-option v-for="(opt,key) in operator" :key="key" :label="opt.label"  :value="opt.value"></el-option>
 												</el-select>
 											</div>
-											<div class="section-row-item">
+											<div class="section-row-item"  v-if="RefreshFieldStatus">
 												<span v-if="condition[ConditionIndex].conf[index].type.name == 'input'">
 													<el-input v-model="condition[ConditionIndex].conf[index].value" placeholder="请输入值" ></el-input>
 												</span>
 
-												<span v-if="condition[ConditionIndex].conf[index].type.name == 'enumerate'" >
+												<span v-if="condition[ConditionIndex].conf[index].type.name == 'enumerate'">
 													<el-select v-model="condition[ConditionIndex].conf[index].value"  v-if="condition[ConditionIndex].conf[index].type.name == 'enumerate'" >
 														<el-option  v-for="(opt, key) in condition[ConditionIndex].conf[index].type.list" :key="key" :label="opt.label" :value="opt.value"></el-option>
 													</el-select>
@@ -119,7 +119,7 @@
 					</span>
 					<span class="foot-btn-group">
 						<el-button type="success" size="mini" @click.native="saveProgram">保存当前方案</el-button>
-						<el-button type="primary" size="mini">查询</el-button>
+						<el-button type="primary" size="mini" @click.native="QueryData">查询</el-button>
 						<el-button type="default" size="mini" @click="this.FilterClose">取消</el-button>
 					</span>
 				</div>
@@ -183,6 +183,8 @@ export default {
 			CurrentCondition: [], //
 			ConditionIndex: 0,
 			DOMRefresh: true,
+			RefreshFieldStatus: true,
+			AlreadyInit: false, 
 		}
 	},
 	methods: {
@@ -232,19 +234,19 @@ export default {
 			let row = JSON.parse(JSON.stringify(this.defaultRowParams));
 
 			this.condition[this.ConditionIndex].conf.push(row);
-			//this.CurrentCondition.push(row);
-		
+			// this.CurrentCondition.push(row);
+			this.rowIndex = this.condition[this.ConditionIndex].conf.length - 1;
 		},
 		RemoveRow() {
 			let newArr = [];
 			
-			this.conditionRows.forEach((item, index) => {
+			this.condition[this.ConditionIndex].conf.forEach((item, index) => {
 				if (index != this.rowIndex) {
 					newArr.push(item);
 				}
 			});
 
-			this.conditionRows = newArr;
+			this.condition[this.ConditionIndex].conf = newArr;
 
 			if (this.rowIndex > newArr.length - 1) {
 				this.rowIndex =  newArr.length - 1;
@@ -253,11 +255,13 @@ export default {
 			if (newArr.length < 1) {
 				this.rowIndex = 0;
 			}
+
+			this.CurrentCondition = this.condition[this.ConditionIndex].conf;
 		},
 		InsertRow() {
 			let newArr = [];
 
-			this.conditionRows.forEach((item, index) => {
+			this.condition[this.ConditionIndex].conf.forEach((item, index) => {
 				if (index == this.rowIndex) {
 					newArr.push(JSON.parse(JSON.stringify(this.defaultRowParams)));
 				}
@@ -265,17 +269,21 @@ export default {
 				newArr.push(item);
 			});
 
-			this.conditionRows = newArr;
-			++this.rowIndex;
+			this.condition[this.ConditionIndex].conf = newArr;
+			this.CurrentCondition = this.condition[this.ConditionIndex].conf;
+			// ++this.rowIndex;
 		},
 		RemoveAll() {
-			this.conditionRows = [];
+			this.condition[this.ConditionIndex].conf = [];
+			this.condition[this.ConditionIndex].conf.push(JSON.parse(JSON.stringify(this.defaultRowParams)));
+			this.CurrentCondition = this.condition[this.ConditionIndex].conf;
 			this.rowIndex = 0;
 		},
 		ChooseRow(index) {
 			this.rowIndex = index;
 		},
 		InitFilter() {
+			this.AlreadyInit = false;
 			this.$store.dispatch('GetARSumFilterTable');
 		},
 		//切换字段的事件函数
@@ -299,12 +307,20 @@ export default {
 						if (item.list.length > 0) {
 							this.condition[this.ConditionIndex].conf[index].value = item.list[0].value;
 						}
+						console.log(this.condition[this.ConditionIndex].conf)
 					}
 				}
+			});
+
+			this.RefreshFieldStatus = false;
+
+			this.$nextTick(() => {
+				this.RefreshFieldStatus = true;
 			});
 		},
 		SelectVisibleChange(index)  {
 			this.rowIndex = index;
+			
 			//this.condition[this.ConditionIndex].conf[this.rowIndex].remote = []
 		},
 		remoteMethod(query) {
@@ -338,7 +354,8 @@ export default {
 							this.$refs['Form'].resetFields();
 							this.Form.name = '';
 							this.programmeUpdate = false;
-							this.RefreshProgram();
+							//this.RefreshProgram();
+							this.InitFilter();
 						}
 						else {
 							this.$notify.error('操作失败!' + response.errmsg);
@@ -358,6 +375,7 @@ export default {
 		},
 		//刷新方案
 		RefreshProgram() {
+			this.AlreadyInit = false;
 			this.$store.dispatch('FilterProgram');
 		},
 		//更新方案名
@@ -374,9 +392,10 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				this.$store.dispatch('DeleteProgram', {id: this.list[this.CurrentProgramIndex].id}).then(() => {
+				this.CurrentCondition = [];
+				this.$store.dispatch('DeleteProgram', {id: this.CurrentProgramIndex}).then(() => {
 					let response = this.$store.state.user.CreateProgram;
-
+					console.log(response)
 					if (response.status == 'success') {
 						this.$store.dispatch('FilterProgram');
 						this.$notify.success('删除成功!');
@@ -392,18 +411,46 @@ export default {
 		//保存过滤方案
 		saveProgram() {
 			let data = this.condition[this.ConditionIndex];
+			data.default = this.defaultProgram;
+			
+			if (typeof(data.conf) == 'object' && data.conf != null) {
+				data.conf.forEach((item, index) => {
+					data.conf[index].remote = [];
+					data.conf[index].type.list= [];
+				});
+			}
 			
 			if (this.ConditionIndex > 0) {
 				//修改方案
+				this.$store.dispatch('UpdateFilterConfig', data).then(() => {
+					let response = this.$store.state.user.UpdateFilterConfig;
+					
+					if (response.status == 'success') {
+						this.$notify.success('保存方案成功');
+					}
+					else {
+						this.$notify.error('保存方案失败!' + response.errmsg);
+					}
+				});
 			}
 			else {
 				//在默认方案的基础上保存当前条件
 				
 			}
 		},
+		QueryData() {
+			let param = this.condition[this.ConditionIndex].conf;
+
+			this.$store.dispatch('updateFilterQueryParam', {conf: param, initialization: false}).then(() => {
+				this.$store.dispatch('ARSum', this.$store.state.user.filterQuery).then(() => {
+					this.FilterClose();
+				});
+			});
+		}
 	},
 	computed: {
 		visible: function() {
+			
 			return this.$store.state.user.ARTableConfig.FilterVisible;
 		},
 		list: function() {
@@ -414,30 +461,28 @@ export default {
 			row = JSON.parse(JSON.stringify(this.defaultRowParams));
 
 			this.condition = [{id: 0, conf: [row]}];
-			
+			this.CurrentCondition =  this.condition[0].conf;
+
 			list.forEach((item) => {
 				
-				data.push(item);
-			
-				if (typeof(item.conf) == 'object' && item.conf != null) {
-					//let row = item.conf;
-					let row = {id:item.id, conf:[JSON.parse(JSON.stringify(this.defaultRowParams))]};
-					this.condition.push(row);
-				}
-				else {
-					let row = {id:item.id, conf: [JSON.parse(JSON.stringify(this.defaultRowParams))]};
-				
-					this.condition.push(row);
+				if (!item.conf) {
+					item.conf = [JSON.parse(JSON.stringify(this.defaultRowParams))];
 				}
 
-				if (Boolean(item.default)) {
+				data.push(item);
+				
+				this.condition.push({id: item.id, name: item.name, conf: item.conf});
+
+				if (Boolean(item.default) && this.AlreadyInit == false) {
 					this.defaultProgram = true;
 					this.CurrentProgramIndex = item.id;
 					this.CurrentCondition =  this.condition[this.condition.length - 1].conf;
 					this.ConditionIndex = this.condition.length - 1;
 				}
 			});
-			 
+			
+			this.AlreadyInit = true;
+			
 			return data;
 		},
 		FilterField: function() {
@@ -461,7 +506,7 @@ export default {
 .filter-container
 	width: 100%;
 	height: 100%;
-	height: 300px;
+	height: 350px;
 	overflow-y: auto;
 	overflow-x:hidden;
 	position: relative;

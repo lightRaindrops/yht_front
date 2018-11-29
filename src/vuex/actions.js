@@ -754,5 +754,10 @@ export const DeleteProgram = ({commit}, info) => {
 		return commit('CREATE_PROGRAM', response);
 	})
 }
+export const UpdateFilterConfig = ({commit}, info) => {
+	return api.UpdateFilterConfig(info).then((response) => {
+		return commit('UPDATE_FILTER_CONFIG', response);
+	});
+}
 
 

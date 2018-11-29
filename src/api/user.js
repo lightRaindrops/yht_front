@@ -373,3 +373,6 @@ export const FilterProgram = () => {
 export const DeleteProgram = (info) => {
 	return http.post('arsum/filter/delete/program', info);
 }
+export const UpdateFilterConfig = (info) => {
+	return http.post('arsum/filter/update/config', info);
+}

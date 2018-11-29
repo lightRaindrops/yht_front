@@ -398,6 +398,8 @@ const mutations = {
 		state.ARSummaries = response.summaries;
 		state.ARSumLoading = false;
 
+		console.log(response);
+
 	},
 	[types.AR_SUM_TABLE_LOADING] (state) {
 		state.ARSumLoading = true;
@@ -526,6 +528,9 @@ const mutations = {
 	},
 	[types.GET_FILTER_PROGRAM] (state, response) {
 		state.FilterProgram = response;
+	},
+	[types.UPDATE_FILTER_CONFIG] (state, response) {
+		state.UpdateFilterConfig = response;
 	}
 }
 

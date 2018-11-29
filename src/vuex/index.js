@@ -168,7 +168,8 @@ const state = {
   ARSumFilterTable: {},//表头过滤信息
   FindARSumFilterValue: [], //远程搜索结果
   CreateProgram: {},
-  FilterProgram: []
+  FilterProgram: [],
+  UpdateFilterConfig: {}
 }
 
 export default {
