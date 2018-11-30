@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'production') {
 } else if (process.env.NODE_ENV === 'development') {
   	// BACKEND_DOMAIN = 'http://192.168.1.241/larSys/public/index.php/api/';
 
-   	BACKEND_DOMAIN = 'http://421037.f3322.net:8090/larSys/public/index.php/api/';
+   	BACKEND_DOMAIN = 'http://421037.f3322.net:8090/index.php/api/';
 }
 
 let UE_SERVER = BACKEND_DOMAIN + 'ueditor/';

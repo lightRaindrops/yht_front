@@ -1,7 +1,7 @@
 <template>
 	<div class="create-project-wapper" v-if="visible">
 		<el-dialog
-		  title="项目"
+		  title="潜在项目"
 		  :visible.sync="visible"
 		  :before-close="Close"
 		  width="30%"
@@ -30,11 +30,6 @@
 							    </el-option>
 							</el-option-group>
 						</el-select>
-						<span style="margin-left: 15px;flex-basis: 100px;">
-							<el-button icon="el-icon-plus" type="success" size="mini" @click.native="NewCust">
-								新增客户
-							</el-button>
-						</span>
 					</div>
 				</el-form-item>
 				<el-form-item :label-width="formLabelWidth" label="项目名称" prop="name">
@@ -45,49 +40,16 @@
 						<el-option v-for="(item, key) in FIELD.F_CMK_PROATTR" :label="item.label" :value="item.value" :key = "key"></el-option>
 					</el-select> 
 				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="联系电话" prop="phone_num">
-					<el-input v-model.trim="CreateForm.phone_num" placeholder="项目联系电话"></el-input>
-				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="项目标签" prop="tag">
+                <el-form-item :label-width="formLabelWidth" label="项目标签" prop="tag">
 					<el-select v-model="CreateForm.tag" class="CreateForm-select">
 						<el-option v-for="(item, key) in FIELD.F_CMK_CUSTAG" :label="item.label" :value="item.value" :key = "key"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="挂靠信息" >
-					<el-input v-model.trim="CreateForm.affiliate" placeholder="如无挂靠信息则可以留空"></el-input>
+				<el-form-item :label-width="formLabelWidth" label="联系电话" prop="phone_num">
+					<el-input v-model.trim="CreateForm.phone_num" placeholder="项目联系电话"></el-input>
 				</el-form-item>
 				<el-form-item :label-width="formLabelWidth" label="预计金额">
 					<el-input v-model.trim="CreateForm.estimate" placeholder="项目的预计合作金额"></el-input>
-				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="税率">
-					<el-input v-model.trim="CreateForm.tax" placeholder="项目的税率"></el-input>
-				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="账期">
-					<el-input v-model.trim="CreateForm.payment_days" placeholder="项目账期"></el-input>
-				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="合同">
-					<el-input v-model.trim="CreateForm.agreement" placeholder="合同信息"></el-input>
-				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="合同附件">
-					<div class="attachment">
-						<span v-show="false">
-							<input type="file"  ref="FileInput" @change="AttachmentChange($event)" />
-						</span>
-						<div class="attachment-item">
-							<div class="file-button">
-								<el-button type="success" size="mini" @click.native="uploadAttachment">上传附件</el-button>
-							</div>
-							<div class="file-list">
-								<div class="file-item" v-for="(item, key) in fileList" :key = "key">
-									<span class="file-item-name">{{item.name}}</span>
-									<span @click="removeFile(item.key)">
-										<i class="el-icon-circle-check"></i>
-										<i class="el-icon-close"></i>
-									</span>
-								</div>
-							</div>
-						</div>
-					</div>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -109,12 +71,8 @@ export default {
 				cust_id: "",
 				phone_num: "",
 				tid: "",
-				affiliate: "", //挂靠
-				estimate: "",
-				tax: "",
-				tag: "",
-				agreement: "",
-				payment_days: ""
+				estimate: "",//合作金额
+				tag: "",	
 			},
 			FormRules: {
 				cust_id: [
@@ -130,12 +88,11 @@ export default {
 					{required: true, trigger: 'blur', message: "请选择标签属性"}
 				],
 				phone_num: [
-					{required: true, trigger: 'blur', message: "请输入电话号码"},
 					{validator: this.onlyNumber, trigger: 'blur'}
 				],
 			},
 			CustList: [],
-			fileList: [], //文件列表
+			
 		}
 	},
 	methods: {
@@ -150,13 +107,13 @@ export default {
 				}
 			}
 
-			this.$store.dispatch('AlterTableConfig', {CreateProVisible: false});
+			this.$store.dispatch('AlterTableConfig', {CreatePotentialProVisible: false});
 		},
 		remoteMethod(query) {
 
 			if (query !== '') {
 	          	this.loadingCust = true;
-		        this.$store.dispatch('SearchCust', {keyword: query, type: "cooperate"}).then(() => {
+		        this.$store.dispatch('SearchCust', {keyword: query, type: "potential"}).then(() => {
 		        	this.CustList = this.$store.state.user.SearchCust;
 
 		        	this.loadingCust = false;
@@ -167,66 +124,10 @@ export default {
 		},
 		submitForm() {
 
-			this.$refs['CreateForm'].validate((valid) => {
-
-	    		if (valid) {
-
-	    			let fd = new FormData();
-
-					for (let i in this.CreateForm) {
-						fd.append(i, this.CreateForm[i]);
-					} 	
-
-					if (this.fileList.length > 0) {
-						fd.append('AgreementAtta', this.fileList[0].file);		
-					}
-
-	    			this.$store.dispatch('AddProject', fd).then(() => {
-	    				let response = this.$store.state.user.AddProject;
-	    				
-						if (response.status == 'success') {
-							this.$notify.success('操作成功');
-							this.fileList = [];
-							this.Close();
-							this.resetForm('CreateForm');
-							this.updateTable();
-						} else {
-							this.$notify.error('操作失败, '+response.errmsg);
-						}
-	    			});
-	    		}	
-	    	})
-		},
-		uploadAttachment() {
-			this.$refs.FileInput.click();
-		},
-		/**添加文件**/
-		AttachmentChange(event) {
-			let file = event.target.files[0];
-			
-			this.fileList = [{key: this.FileUniqueKey(), name: file.name, file:file}];
 			
 		},
-		/**删除文件**/
-		removeFile(fileKey) {
-			 
-			for (let i in this.fileList) {
-				if (this.fileList[i].key == fileKey) {
-					this.fileList.splice(i, 1);
-				}
-			}
-		},
-		FileUniqueKey() {
-			let string = "qazxswedcvfrtgbnhyujmkiolp1029384756", keyLen = 10, key = "";
-
-			for (let i = 0; i < keyLen; ++i) {
-				let index = Math.floor(Math.random() * string.length);
-
-				key += string[index];
-			}
-
-			return key;
-		},
+	
+		
 		/**数字验证规则**/
 		onlyNumber(rule, value, callback) {
 			let patt = /^[0-9\-]+$/;
@@ -239,9 +140,9 @@ export default {
 		},
 
 		updateTable() {
-			let filterQuery = this.$store.state.user.filterQuery;
+			// let filterQuery = this.$store.state.user.filterQuery;
 
-			this.$store.dispatch('ARSum', filterQuery);
+			// this.$store.dispatch('ARSum', filterQuery);
 		},
 		resetForm(formName) {
 			this.$refs[formName].resetFields();
@@ -249,7 +150,7 @@ export default {
 	},
 	computed: {
 		visible: function() {
-			return this.$store.state.user.ARTableConfig.CreateProVisible;
+			return this.$store.state.user.ARTableConfig.CreatePotentialProVisible;
 		},
 		FIELD: function() {
 			this.CreateForm.tid = this.$store.state.user.FIELDS.F_CMK_PROATTR[0].value;

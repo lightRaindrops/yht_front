@@ -114,6 +114,7 @@ const state = {
     RefundVisible: false,
     RecePlanVisible: false,
     ChangeCustVisible: false,
+    CreatePotentialProVisible: false
   },
   ARSetFieldType: [],
   ARSumCurrentRow: {},

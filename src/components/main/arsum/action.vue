@@ -5,6 +5,7 @@
 			<el-button type="success" size="mini" @click.native="ShowDialog({CreateCustVisible:true})">新建客户</el-button>
 			<el-button type="success" size="mini" @click.native="ShowDialog({CreateProVisible:true})">新建项目</el-button>
 			<el-button type="success" size="mini" @click.native="ShowDialog({ImportVisible:true})">批量导入</el-button>
+			<el-button type="info" size="mini" @click.native="ShowDialog({CreatePotentialProVisible:true})">新建潜在项目</el-button>
 			<!-- <el-button type="warning" size="mini">偏好设置</el-button> -->
 		</section>
 		<section class="action-tool">

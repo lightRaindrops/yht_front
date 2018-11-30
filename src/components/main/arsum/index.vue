@@ -13,6 +13,7 @@
 		<v-refund />
 		<v-rece-plan />
 		<v-set-cus />
+		<v-potential-pro />
 	</div>
 </template>
 <script>
@@ -29,6 +30,7 @@ import Receivebill from './dialog/CreateReceivebill.vue';
 import Refund from './dialog/CreateRefund.vue';
 import RecePlan from './dialog/CreateRecePlan.vue';
 import SetCustomer from './dialog/SetCustomerStatus.vue';
+import PotentialPro from './dialog/CreatePotentialPro.vue';
 
 export default{
 	data() {
@@ -60,6 +62,7 @@ export default{
 		'v-refund': Refund,
 		'v-rece-plan': RecePlan,
 		'v-set-cus': SetCustomer,
+		'v-potential-pro': PotentialPro,
 		Cooperate,
 		Target,
 

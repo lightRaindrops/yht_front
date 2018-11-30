@@ -99,7 +99,7 @@ export default{
 	computed: {
 		tableData: function() {
 			//console.log(this.$store.state.user.ARSum)
-			return this.$store.state.user.ARSum;
+			// return this.$store.state.user.ARSum;
 		},
 		tableLoading: function() {
 			return this.$store.state.user.ARSumLoading;

@@ -78,12 +78,16 @@
 		<el-table-column prop="user_name" label="业务员"  fixed="left"   width="80">
 		</el-table-column>
 		<el-table-column prop="tag" label="标签"  fixed="left"  width="80">
-			<template slot-scope="id">
-				<el-tag type="success">同行</el-tag>
+			<template slot-scope="scope">
+				<el-tag type="success" >{{scope.row.tag}}</el-tag>
 			</template>
 		</el-table-column>
-		<el-table-column prop="cooperation_amountfor" label="合作金额" fixed="left"  ></el-table-column>
-		<el-table-column prop="estimate" label="预计金额" ></el-table-column>
+		<el-table-column prop="cooperation_amountfor" label="合作金额" fixed="left" width="100" >
+			<template slot-scope="scope">
+				{{scope.row.cooperation_amountfor}}
+			</template>
+		</el-table-column>
+		<el-table-column prop="estimate" label="预计金额"  width="100"></el-table-column>
 		<el-table-column prop="agreement" label="合同"   width="100">
 			<template slot-scope="scope">
 				<template v-if="scope.row.agreement">
@@ -98,7 +102,10 @@
 						</el-popover>
 					</template>
 					<span v-else>
-						{{scope.row.agreement}}
+						<!-- {{scope.row.agreement}} -->
+						<el-tooltip effect="dark" :content="scope.row.agreement" placement="top">
+							<a class="tip" style="color:#606266">{{scope.row.agreement}}</a>
+						</el-tooltip>
 					</span>
 				</template>
 				<template v-else>
@@ -118,7 +125,7 @@
 		<el-table-column prop="tax" label="税率"   width="80"></el-table-column>
 		<el-table-column prop="payment_days" label="账期"     width="100"></el-table-column>
 		
-		<el-table-column prop="init_data" label="期初"></el-table-column>
+		<el-table-column prop="init_data" label="期初" width="100"></el-table-column>
 		<el-table-column prop="id" label="">
 			<template slot-scope="scope">
 				<div class="month-td" v-if="initAmount">期初</div>
