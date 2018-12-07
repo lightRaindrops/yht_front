@@ -38,13 +38,13 @@ export default{
 	},
 	methods: {
 		getBindAttrFromPath: function() {
-			
 			this.$store.dispatch('getBindAttrFromPath', {path:this.$route.path});
 		}
 	},
 	created() {
 		this.getBindAttrFromPath();
 		this.$store.dispatch('ARSumUserRole');
+		this.$store.dispatch('ShrinkStatus');
 	},
 	computed: {
 		Table: function() {
@@ -65,7 +65,6 @@ export default{
 		'v-potential-pro': PotentialPro,
 		Cooperate,
 		Target,
-
 	}
 }
 </script>

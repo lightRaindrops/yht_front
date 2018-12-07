@@ -392,14 +392,11 @@ const mutations = {
 		state.AddReceivebill = response;
 	},
 	[types.AR_SUM_TABLE] (state, response) {
-		
-		state.ARSumTotal = response.total;
+		console.log(response);
 		state.ARSum = response.data;
 		state.ARSummaries = response.summaries;
 		state.ARSumLoading = false;
-
-		console.log(response);
-
+		state.ARSumTotal = response.total;
 	},
 	[types.AR_SUM_TABLE_LOADING] (state) {
 		state.ARSumLoading = true;
@@ -519,6 +516,7 @@ const mutations = {
 	[types.GET_ARSUM_FILTER_TABLE] (state, response) {
 		state.ARSumFilterTable = response;
 		state.FilterProgram = response.program;
+		// console.log(response)
 	},
 	[types.FIND_ARSUM_FILTER_VALUE] (state, response) {
 		state.FindARSumFilterValue = response;
@@ -531,6 +529,18 @@ const mutations = {
 	},
 	[types.UPDATE_FILTER_CONFIG] (state, response) {
 		state.UpdateFilterConfig = response;
+	},
+	[types.GET_POTENTIAL_CUSTOMER] (state, response) {
+		state.PotentialCustomer = response;
+	},
+	[types.UPDATE_POTENTIAL_QUERY] (state, response) {
+		state.PotentialQueryParam = response;
+	},
+	[types.CREATE_POTENTIAL_PROJECT] (state,response) {
+		state.CreatePotentialPro = response;
+	},
+	[types.ARSUM_INITIALZATION] (state, response) {
+		state.ARSumInitialization = response;
 	}
 }
 

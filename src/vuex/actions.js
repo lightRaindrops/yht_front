@@ -759,5 +759,24 @@ export const UpdateFilterConfig = ({commit}, info) => {
 		return commit('UPDATE_FILTER_CONFIG', response);
 	});
 }
+//目标潜在客户
+export const PotentialCustomer = ({commit}, info) => {
+	return api.PotentialCustomer(info).then((response) => {
+		commit('GET_POTENTIAL_CUSTOMER', response);
+	})
+}
+export const updatePotentialFilterQueryParam = ({commit}, info) => {
+	return commit('UPDATE_POTENTIAL_QUERY', info);
+}
+export const CreatePotentialPro = ({commit}, info) => {
+	return api.CreatePotentialPro(info).then((response) => {
+		commit('CREATE_POTENTIAL_PROJECT', response);
+	})
+}
+export const ARSumInitialization = ({commit}) => {
+	return api.ARSumInitialization().then((response) => {
+		commit('ARSUM_INITIALZATION',response);
+	})
+}
 
 

@@ -26,6 +26,7 @@
 	    	<p style="font-size: 12px" v-if="upStatus">操作完成，成功{{upSuccess}}个, <el-button type="text" @click.native="ImportResultVisible = true">失败{{upFail.length}}个。点击查看</el-button></p>
 		    <div slot="footer" class="dialog-footer">
 		    	<el-button v-if="UploadButtonVisible" size="small" type="success" @click="submitUpload" :loading="uploading">确定导入</el-button>
+				<el-button type="warning" @click="resetUpload">重置表单</el-button>
 		    	<el-button @click="Close">取 消</el-button>
 		    	
 		  	</div>
@@ -86,7 +87,7 @@ export default {
 		    	this.upFail = response.fail;
 		    	this.uploading = false;
 		    	this.upStatus = true;
-		    	// this.sumTable();
+		    	this.$store.dispatch('ARSum', this.$store.state.user.filterQuery);
 		    }
 	    },
 	    handleBeforeUpload(file) {
@@ -125,6 +126,11 @@ export default {
 	    	this.fileList = [];
 	    	this.upStatus = false;
 	    },
+		resetUpload() {
+			this.upStatus = false;
+			this.UploadButtonVisible = false;
+			this.fileList = [];
+		}
 	},
 	created() {
     	this.init();

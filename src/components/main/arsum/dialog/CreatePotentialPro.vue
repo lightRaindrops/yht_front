@@ -123,8 +123,27 @@ export default {
 	        }
 		},
 		submitForm() {
+			this.$refs['CreateForm'].validate((valid) => {
+				if (valid) {
+					this.$store.dispatch('CreatePotentialPro', this.CreateForm).then(() => {
+						let response = this.$store.state.user.CreatePotentialPro;
 
-			
+						if (response.status == 'success') {
+							this.$notify.success('操作成功');
+							this.$refs['CreateForm'].resetFields();
+							this.CreateForm.name = "";
+							this.CreateForm.estimate = "";
+
+							this.$store.dispatch('PotentialCustomer', this.$store.state.user.PotentialQueryParam);
+						}
+						else {
+							this.$notify.error('操作失败');
+						}
+
+						this.Close();
+					});
+				}
+			});
 		},
 	
 		
@@ -132,7 +151,7 @@ export default {
 		onlyNumber(rule, value, callback) {
 			let patt = /^[0-9\-]+$/;
 
-			if (!patt.test(value)) {
+			if (value && !patt.test(value)) {
 				callback(new Error('请输入正确的号码'));
 			} else {
 				callback();

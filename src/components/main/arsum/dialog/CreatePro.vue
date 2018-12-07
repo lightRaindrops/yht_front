@@ -48,7 +48,7 @@
 				<el-form-item :label-width="formLabelWidth" label="联系电话" prop="phone_num">
 					<el-input v-model.trim="CreateForm.phone_num" placeholder="项目联系电话"></el-input>
 				</el-form-item>
-				<el-form-item :label-width="formLabelWidth" label="项目标签" prop="tag">
+				<el-form-item :label-width="formLabelWidth" label="标签" prop="tag">
 					<el-select v-model="CreateForm.tag" class="CreateForm-select">
 						<el-option v-for="(item, key) in FIELD.F_CMK_CUSTAG" :label="item.label" :value="item.value" :key = "key"></el-option>
 					</el-select>

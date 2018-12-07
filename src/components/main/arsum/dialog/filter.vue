@@ -1,12 +1,13 @@
 <template>
-	<div class="filter-manager-wapper" v-if="visible">
+	<div class="filter-manager-wapper" >
 		<el-dialog
 		  	title="列表过滤"
 		  	:visible.sync="visible"
 		  	:before-close="FilterClose"
 		  	width="750px"
 			class="filter-dialog"
-			
+			v-dialogDrag
+			ref="dialogDrag"
 		>
 			<div class="filter-container">
 				<div class="filter-program">
@@ -440,7 +441,7 @@ export default {
 		},
 		QueryData() {
 			let param = this.condition[this.ConditionIndex].conf;
-
+			console.log(param)
 			this.$store.dispatch('updateFilterQueryParam', {conf: param, initialization: false}).then(() => {
 				this.$store.dispatch('ARSum', this.$store.state.user.filterQuery).then(() => {
 					this.FilterClose();
@@ -499,7 +500,63 @@ export default {
 	created() {
 		// this.CreateRow();
 		this.InitFilter();
-	}
+	},
+	//vue 指令
+	directives: {
+		//dialog拖动指令
+		dialogDrag: {
+			bind: function(el, binding, vnode,oldVnode){
+				
+				const dialogHeader = el.querySelector('.el-dialog__header');
+				const dialogDom = el.querySelector('.el-dialog');
+				const winHeight = window.innerHeight;
+				const winWidth = window.innerWidth;
+				console.log(winWidth)
+				dialogHeader.style.cursor = 'move';
+				
+				//当鼠标按下时  记录当前位置
+				dialogHeader.onmousedown = (de) => {
+					const style = window.getComputedStyle(dialogDom);
+					const dialogDomWidth = parseInt(style.width.replace(/px/,""));
+					const dialogDomHeight = parseInt(style.height.replace(/px/,""));
+					let oldX = de.clientX, oldY = de.clientY;
+					let styL = parseInt(dialogDom.style.left.replace(/\px/g,"")) || 0;
+					let styT = parseInt(dialogDom.style.top.replace(/\px/,"")) || 0;
+					let dis = dialogDom.offsetLeft - styL;//记录当前点击位置的偏移量
+					
+					
+					// 当鼠标按下并且拖动时  调整位置  完成拖动效果
+					document.onmousemove = (mv) => {
+						 
+						let newX = mv.clientX - oldX + styL;
+						let newY = mv.clientY - oldY + styT;
+						
+						//处理边界问题
+						if ((dialogDomWidth+dialogDom.offsetLeft) >= winWidth - 5) {
+							newX = winWidth - dialogDomWidth - dis - 5; //最大的lfet
+							console.log(newX)
+						}	
+
+						// if ((newY + dialogDomHeight) > winHeight) {
+						// 	nexY = winHeight - dialogDomHeight;
+						// }
+						//console.log('disX:'+disX+',disY:'+disY+',styL:'+styL+',styT'+styT);
+						// console.log('new:'+newX+'newX:'+newX+dialogDomWidth+',winWidth:'+winWidth,',offsetX:'+el.querySelector('.el-dialog').offsetLeft);
+						//console.log('newX:'+newX+',newY:'+newY+'disX:'+disX+',disY:'+disY+'mvx:'+mv.clientX+',mvy:'+mv.clientY+',styL:'+styL+',styT'+styT+',oldX:'+oldX+',oldY:'+oldY);
+						dialogDom.style.left = newX+'px';
+						dialogDom.style.top = newY+'px';
+						
+					};
+
+					document.onmouseup = function (e) {
+						document.onmousemove = null;
+						document.onmouseup = null;
+					};
+				}
+				
+			}
+		}
+	},
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped="scoped">

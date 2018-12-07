@@ -29,13 +29,13 @@ export default {
 		}
 	},
 	methods: {
-		/**初始化分页配置**/
-		InitPagination() {
-			this.$store.dispatch('InitPagination').then(() => {
-				//拉取数据
-				// this.LoadTableData();
-			});
-		},
+		// /**初始化分页配置**/
+		// // InitPagination() {
+		// 	this.$store.dispatch('InitPagination').then(() => {
+		// 		//拉取数据
+		// 		// this.LoadTableData();
+		// 	});
+		// // },
 		//读取分页数据
 		LoadTableData() {
 			this.$store.dispatch(this.actionName, {pid: this.pid,limit: this.limit, offset: this.offset});
@@ -48,7 +48,7 @@ export default {
 		}
 	},
 	created() {
-		this.InitPagination();
+		this.LoadTableData();
 	},
 	computed: {
 		pagination: function() {

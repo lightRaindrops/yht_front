@@ -127,7 +127,7 @@ const state = {
   SaleOrderList: {
     data: [],
     pagination: {
-      total: 0
+      total: 0,
     },
     CurrentRow: {},
     update: false,
@@ -170,7 +170,17 @@ const state = {
   FindARSumFilterValue: [], //远程搜索结果
   CreateProgram: {},
   FilterProgram: [],
-  UpdateFilterConfig: {}
+  UpdateFilterConfig: {},
+  PotentialCustomer: {
+    row: [],
+    total: 0
+  },
+  PotentialQueryParam: {
+    offset: 0,
+    limit: 0
+  },
+  CreatePotentialPro: {},
+  ARSumInitialization: {}
 }
 
 export default {

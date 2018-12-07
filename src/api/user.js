@@ -376,3 +376,12 @@ export const DeleteProgram = (info) => {
 export const UpdateFilterConfig = (info) => {
 	return http.post('arsum/filter/update/config', info);
 }
+export const PotentialCustomer = (info) => {
+	return http.post('potentialCustomer/all', info);
+}
+export const CreatePotentialPro = (info) => {
+	return http.post('potentialProject/store', info);
+}
+export const ARSumInitialization = () => {
+	return http.post('arsum/initialization');
+}

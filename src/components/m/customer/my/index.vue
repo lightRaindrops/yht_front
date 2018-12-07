@@ -233,7 +233,7 @@ export default {
 	    		done();
 	    	}
 
-	    	if (action == 'confirm') {
+	    	if (action === 'confirm') {
 	    		done(false);
 	    		
 	    		if (this.freeContent.length >= 10) {

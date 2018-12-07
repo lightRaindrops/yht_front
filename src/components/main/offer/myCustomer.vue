@@ -155,7 +155,6 @@
 					  placeholder="请输入内容"
 					  v-model.trim="trackComment">
 					</el-input>
-
 		      		<el-button type="primary" @click="submitFllowForm" style="margin-top: 15px;margin-bottom: : -5px;">提交</el-button>
 		      	</div>	
 		    </el-dialog>
@@ -302,7 +301,6 @@ export default {
 	    			this.initList();
 
 	    		} else {
-
 	    			if (this.mobile) {
 
 	    				Toast.error('操作失败');

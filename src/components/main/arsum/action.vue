@@ -2,11 +2,23 @@
 	<div class="filter-wapper">
 		<section>
 			<el-button type="primary" size="mini" @click.native="ShowDialog({FilterVisible:true})">过滤</el-button>
-			<el-button type="success" size="mini" @click.native="ShowDialog({CreateCustVisible:true})">新建客户</el-button>
+			<!-- <el-button type="success" size="mini" @click.native="ShowDialog({CreateCustVisible:true})">新建客户</el-button>
 			<el-button type="success" size="mini" @click.native="ShowDialog({CreateProVisible:true})">新建项目</el-button>
 			<el-button type="success" size="mini" @click.native="ShowDialog({ImportVisible:true})">批量导入</el-button>
-			<el-button type="info" size="mini" @click.native="ShowDialog({CreatePotentialProVisible:true})">新建潜在项目</el-button>
-			<!-- <el-button type="warning" size="mini">偏好设置</el-button> -->
+			<el-button type="info" size="mini" @click.native="ShowDialog({CreatePotentialProVisible:true})">新建潜在项目</el-button> -->
+			
+			<el-dropdown>
+				<el-button type="success" size="mini">
+					新建<i class="el-icon-arrow-down el-icon--right"></i>
+				</el-button>
+				<el-dropdown-menu slot="dropdown" >
+					<el-dropdown-item @click.native="ShowDialog({CreateCustVisible:true})">新建客户</el-dropdown-item>
+					<el-dropdown-item @click.native="ShowDialog({CreateProVisible:true})">新建项目</el-dropdown-item>
+					<el-dropdown-item @click.native="ShowDialog({ImportVisible:true})">批量导入客户</el-dropdown-item>
+					<el-dropdown-item @click.native="ShowDialog({CreatePotentialProVisible:true})">新建潜在项目</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+			<el-button type="warning" size="mini" @click.native="Initialization">初始化</el-button>
 		</section>
 		<section class="action-tool">
 			<el-radio-group v-model="tabPosition"  @change="tabHandle" style="margin-left: -80px;">
@@ -51,7 +63,29 @@ export default{
 		ShowDialog(obj) {
 			this.$store.dispatch('AlterTableConfig', obj);
 		},
-		
+		//调试初始化
+		Initialization() {
+			this.$confirm('该操作会清空所以数据, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				this.$store.dispatch('ARSumInitialization').then(() => {
+					let ARSumInitialization = this.$store.state.user.ARSumInitialization;
+
+					if (ARSumInitialization.status == 'success') {
+						this.$notify.success('操作成功');
+					}
+					else {
+						this.$notify.error('操作失败');
+					}
+
+					this.$store.dispatch('ARSum', this.$store.state.user.filterQuery);
+				});
+			}).catch(() => {
+				
+			});
+		}
 	},
 	created() {
 		this.init();
