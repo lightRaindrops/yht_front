@@ -511,8 +511,8 @@ export default {
 				const dialogDom = el.querySelector('.el-dialog');
 				const winHeight = window.innerHeight;
 				const winWidth = window.innerWidth;
-				console.log(winWidth)
 				dialogHeader.style.cursor = 'move';
+				dialogHeader.style['user-select'] = 'none';
 				
 				//当鼠标按下时  记录当前位置
 				dialogHeader.onmousedown = (de) => {
@@ -522,7 +522,8 @@ export default {
 					let oldX = de.clientX, oldY = de.clientY;
 					let styL = parseInt(dialogDom.style.left.replace(/\px/g,"")) || 0;
 					let styT = parseInt(dialogDom.style.top.replace(/\px/,"")) || 0;
-					let dis = dialogDom.offsetLeft - styL;//记录当前点击位置的偏移量
+					let disX = dialogDom.offsetLeft - styL;//记录当前点击位置X轴的偏移量
+					let disY = dialogDom.offsetTop - styT;
 					
 					
 					// 当鼠标按下并且拖动时  调整位置  完成拖动效果
@@ -530,19 +531,24 @@ export default {
 						 
 						let newX = mv.clientX - oldX + styL;
 						let newY = mv.clientY - oldY + styT;
-						
+						 
 						//处理边界问题
-						if ((dialogDomWidth+dialogDom.offsetLeft) >= winWidth - 5) {
-							newX = winWidth - dialogDomWidth - dis - 5; //最大的lfet
-							console.log(newX)
+						if ((dialogDomWidth+newX+disX) >= winWidth - 10) {
+							newX = winWidth - dialogDomWidth - disX - 10; //最大的left
 						}	
 
-						// if ((newY + dialogDomHeight) > winHeight) {
-						// 	nexY = winHeight - dialogDomHeight;
-						// }
-						//console.log('disX:'+disX+',disY:'+disY+',styL:'+styL+',styT'+styT);
-						// console.log('new:'+newX+'newX:'+newX+dialogDomWidth+',winWidth:'+winWidth,',offsetX:'+el.querySelector('.el-dialog').offsetLeft);
-						//console.log('newX:'+newX+',newY:'+newY+'disX:'+disX+',disY:'+disY+'mvx:'+mv.clientX+',mvy:'+mv.clientY+',styL:'+styL+',styT'+styT+',oldX:'+oldX+',oldY:'+oldY);
+						if (newX < disX * -1) {
+							newX = disX * -1; //最小的left
+						}	
+						
+						if ((dialogDomHeight+newY+disY) >= winHeight - 55) {
+							newY = winHeight - dialogDomHeight - disY - 55; //最大的top
+						}	
+
+						if (newY < disY * -1) {
+							newY = disY * -1 + 5; //最小的top
+						}	
+
 						dialogDom.style.left = newX+'px';
 						dialogDom.style.top = newY+'px';
 						
