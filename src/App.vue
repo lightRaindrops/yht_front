@@ -65,8 +65,7 @@ export default {
           background: 'rgba(255, 255, 255, 0.7)'
         }
       );
-      this.$store.dispatch('getUserInfo').then(() => {
-        
+      this.$store.dispatch('getUserInfo').then(() => {  
         if (this.mobile) {
 
           toast.clear();
@@ -74,27 +73,7 @@ export default {
         } else {
           this.$loading().close();
         }
-
       });
-    },
-
-    /**更新面包屑导航**/
-    updateBreadcrumb(path) {
-      let navigation = this.navigation;
-
-      for (var i in navigation) {
-        
-        let children = navigation[i].children;
-
-        for (var ii in children) {
-
-          if (children[ii].front_path == path) {
-
-            this.path2 = children[ii].name;
-            this.path1 = navigation[i].name;
-          }
-        }
-      }
     },
     handleChangeNavbar(status) {
       this.showNavbar = status;
@@ -102,21 +81,14 @@ export default {
    
   },
   created() {
-  
-    this.updateBreadcrumb(this.$route.path);
 
     this.getUser();
 
     if (document.body.clientWidth < 1300) {
       this.$store.dispatch('InitShrinkStatus', true);
     }
-  },
 
-  watch: {
-    navigation: function() {
-      this.updateBreadcrumb(this.$route.path);
-    },
-
+    this.$store.dispatch('InitToken', this.$tool.getter('token'));
   },
 
   computed: {

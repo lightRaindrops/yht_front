@@ -1,8 +1,10 @@
 import mutations from './mutations.js';
 import * as actions from './actions';
+import tool from '../util/tool.js';
 
 const state = {
   login: '',
+  token: "",
   errorMsg: '', //错误信息
   userInfo: [],
   userSignup: [],
@@ -114,7 +116,25 @@ const state = {
     RefundVisible: false,
     RecePlanVisible: false,
     ChangeCustVisible: false,
-    CreatePotentialProVisible: false
+    CreatePotentialProVisible: false,
+    ColumnVisible: {
+      status_name: {name:"状态",value: true},
+      // index: {name:"序号", value: false},
+      department: {name: "部门", value: false},
+      //name: {name:"客户名称",value:true},
+      //project: {name:"旗下项目", value: true},
+      protype: {name:"施工范围",value:true},
+      affiliate: {name:"挂靠",value:true},
+      user_name: {name:"业务员", value: true},
+      tag: {name:"标签", value: true},
+      cooperation_amountfor: {name:"合作金额", value: true},
+      estimate: {name:"预计金额", value: true},
+      agreement: {name:"合同信息", value: true},
+      tax: {name:"税点", value: true},
+      payment_days: {name:"账期", value: true},
+      init_data: {name:"期初",value:true},
+    },
+    FontSize: tool.getter('FontSize') || 12
   },
   ARSetFieldType: [],
   ARSumCurrentRow: {},

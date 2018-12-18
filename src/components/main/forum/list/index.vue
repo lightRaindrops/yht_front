@@ -1,6 +1,6 @@
 <template>
 	<div class="wapper">
-		<router-view  />
+		<router-view />
 	</div>
 </template>
 <script type="text/javascript">

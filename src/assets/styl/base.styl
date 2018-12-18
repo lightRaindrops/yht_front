@@ -9,16 +9,47 @@ ul,li
 .el-breadcrumb
 	line-height: normal !important;
 .el-submenu__title
-	&:hover
-		background: rgb(30,40,44) !important;
-.el-menu-item
-	&:hover
-		background: rgb(30,40,44) !important;
+	// &:hover
+	// 	background: rgb(30,40,44) !important;
+// .el-menu-item
+// 	&:hover
+// 		// background: rgb(30,40,44) !important;
 .el-form-item__content
 	text-align: left !important;
 	position: relative;
 	.el-cascader
 		width: 100%;
+.forum-el-menu
+	height: 40px;
+	border: 0px #ccc  solid !important;
+	.el-submenu
+		height: 40px;
+		width: 100%;
+		.el-submenu__title
+			height: 40px;
+			width: 100%;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;	
+			// &:hover
+			// 	background: #ebebeb !important;
+	.el-submenu.is-active 
+		.el-submenu__title
+			border: 0px;
+.forum-el-menu-item
+	display: flex;
+	align-items: center;
+	i 
+		flex-basis: 15px;
+		font-size:18px;
+	span 
+		margin-left: 10px;
+		font-size: 15px;
+	&:hover
+		i 
+			color: #303133;
+
 textarea,input
 	font-family: 'Rubik'  !important;
 .wapper-response
@@ -284,6 +315,10 @@ table
 	width: 100%;
 	color:#999;
 	cursor: pointer;
+.filter-wapper
+	.el-select 
+		.el-input
+			width: 100px;
 .filter-dialog
 	.el-dialog__body
 		padding: 10px 15px;	
@@ -307,5 +342,14 @@ table
 							border:0px;	
 							height: 22px !important; 
 							font-size: 12px !important;
+//论坛编辑器样式
+// .ck-content
+// 	height: 350px;
+.content-body
+	figure.image
+		text-align: center;
+		figcaption
+			text-align:center;
+			font-size: 12px;
 					
   

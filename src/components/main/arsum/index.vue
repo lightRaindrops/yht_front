@@ -44,7 +44,7 @@ export default{
 	created() {
 		this.getBindAttrFromPath();
 		this.$store.dispatch('ARSumUserRole');
-		this.$store.dispatch('ShrinkStatus');
+		this.$store.dispatch('InitShrinkStatus', true);
 	},
 	computed: {
 		Table: function() {

@@ -14,7 +14,9 @@ export const signup  = ( {commit}, userInfo) => {
 		commit('USER_SIGNUP', response);
 	});
 }
-
+export const InitToken = ({commit}, token) => {
+	return commit('INIT_TOKEN', token);
+}
 export const AuthUpdatePasswd = ({commit}, info) => {
 	return api.AuthUpdatePasswd(info).then((response) => {
 		commit('AUTH_UPDATE_PASSWD', response);
@@ -488,6 +490,7 @@ export const RemoveHistory = ({commit}, historyPath) => {
 export const ShrinkStatus = ({commit}) => {
 	return commit('SHRINK_STATUS');
 }
+
 export const InitShrinkStatus = ({commit}, status) => {
 	return commit('INIT_SHRINK_STATUS',status);
 }
@@ -777,6 +780,12 @@ export const ARSumInitialization = ({commit}) => {
 	return api.ARSumInitialization().then((response) => {
 		commit('ARSUM_INITIALZATION',response);
 	})
+}
+export const SetARSumColumnVisible = ({commit},info) => {
+	return commit('SET_ARSUM_COLUMN_VISIBLE', info);
+}
+export const SetARSumGlobalFontSize = ({commit}, info) => {
+	return commit('SET_ARSUM_GLOBAL_FONTSIZE', info);
 }
 
 

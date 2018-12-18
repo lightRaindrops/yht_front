@@ -4,7 +4,7 @@
 		<el-table 
 			border
 			class="ar-table"
-			style="margin-top: 15px;"
+			:style="{'margin-top': '15px','font-size': fontSize}"
 			v-loading="tableLoading"
 			:data="tableData"
 			:height="height"
@@ -13,6 +13,7 @@
 			highlight-current-row
 			@row-click="rowClick"
 			@expand-change="expandChange"
+			v-if="DomRefresh"
 		>
 			<el-table-column type="expand" v-show="false" width="-1">
 				<template slot-scope="scope" v-if="scope.row.rowkey == expands[0]">
@@ -44,55 +45,50 @@
 			<el-table-column prop="rowkey" label="rowKey" v-if="false">
 				<template slot-scope="scope" ></template>
 			</el-table-column>
-			<el-table-column prop="status_name" label="状态" fixed="left" width="80">
+			<el-table-column prop="status_name" v-if="ColumnVisible.status_name.value" label="状态" fixed="left" width="80">
 				<template slot-scope="scope">
 					<el-tag type="success" v-if="scope.row.nameshow == true && scope.row.status_name == '平稳'">平稳</el-tag>
 					<el-tag type="warning" v-if="scope.row.nameshow == true && scope.row.status_name == '衰减'">衰减</el-tag>
 					<el-tag type="info" v-if="scope.row.nameshow == true && scope.row.status_name == '流失'">流失</el-tag>
 				</template>	
 			</el-table-column>
-			<el-table-column prop="index" label="序号" fixed="left" width="50" v-if="ColumnVisible.index">
-				<template slot-scope="scope"  >
-					{{scope.row.index}}
-				</template>
-			</el-table-column>
-			<el-table-column prop="department" label="部门名称" fixed="left" width="80" v-if="ColumnVisible.department"></el-table-column>
-			<el-table-column prop="name" label="客户名称" fixed="left" min-width="200">
+			<el-table-column prop="department" label="部门名称" fixed="left" width="80" v-if="ColumnVisible.department.value"></el-table-column>
+			<el-table-column prop="name" label="客户名称" fixed="left" min-width="250" >
 				<template slot-scope="scope" v-if="scope.row.nameshow==true">
 					<el-tooltip effect="dark" :content="scope.row.name" placement="top">
-						<a class="tip" style="color:#ff4081">{{scope.row.name}}</a>
+						<a class="tip" style="color:#ff4081" :style="{'font-size': fontSize}">{{scope.row.name}}</a>
 					</el-tooltip>
 				</template>
 			</el-table-column>
-			<el-table-column prop="index" label="旗下项目" fixed="left" min-width="200">
+			<el-table-column prop="project" label="旗下项目" fixed="left" min-width="250" >
 				<template slot-scope="scope" v-if="scope.row.project != '' && scope.row.projectshow == true">
 					<el-tooltip effect="dark" :content="scope.row.project" placement="top">
-						<span  class="tip " >{{scope.row.project}}</span>
+						<span  class="tip " :style="{'font-size': fontSize}">{{scope.row.project}}</span>
 					</el-tooltip>
 				</template>
 			</el-table-column>
-			<el-table-column prop="protype" label="施工范围" fixed="left"  ></el-table-column>
-			<el-table-column prop="affiliate" label="挂靠" fixed="left" width="50">
+			<el-table-column prop="protype" label="施工范围" fixed="left"  v-if="ColumnVisible.protype.value"></el-table-column>
+			<el-table-column prop="affiliate" label="挂靠" fixed="left" width="50" v-if="ColumnVisible.affiliate.value">
 				<template slot-scope="scope" v-if="scope.row.affiliate != null && scope.row.affiliate != ''">
 					<el-tooltip effect="dark" :content="scope.row.affiliate" placement="top" >
-						<span class="tip ">有</span>
+						<span class="tip " :style="{'font-size': fontSize}">有</span>
 					</el-tooltip>
 				</template>
 			</el-table-column>
-			<el-table-column prop="user_name" label="业务员"  fixed="left"   width="80">
+			<el-table-column prop="user_name" label="业务员"  fixed="left"   width="120" v-if="ColumnVisible.user_name.value">
 			</el-table-column>
-			<el-table-column prop="tag" label="标签"  fixed="left"  width="80">
+			<el-table-column prop="tag" label="标签"  fixed="left"  width="80" v-if="ColumnVisible.tag.value">
 				<template slot-scope="scope">
 					<el-tag type="success" v-if="scope.row.tag">{{scope.row.tag}}</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="cooperation_amountfor" label="合作金额" fixed="left" width="100" >
+			<el-table-column prop="cooperation_amountfor" label="合作金额" fixed="left" width="200" v-if="ColumnVisible.cooperation_amountfor.value" >
 				<template slot-scope="scope">
 					{{scope.row.cooperation_amountfor}}
 				</template>
 			</el-table-column>
-			<el-table-column prop="estimate" label="预计金额"  width="100"></el-table-column>
-			<el-table-column prop="agreement" label="合同"   width="100">
+			<el-table-column prop="estimate" label="预计金额"  width="150" v-if="ColumnVisible.estimate.value" ></el-table-column>
+			<el-table-column prop="agreement" label="合同"   width="100" v-if="ColumnVisible.agreement.value">
 				<template slot-scope="scope">
 					<template v-if="scope.row.agreement">
 						<template v-if="scope.row.attachment">
@@ -101,14 +97,15 @@
 								title="合同附件"
 								width="200"
 								trigger="hover"
-								:content="String(scope.row.attachment)">
+							>
+								<el-button type="success" @click.native="OpenViewWindow(scope.row.attachment)">点击查看</el-button>
 								<el-button type="text" slot="reference">{{scope.row.agreement}}</el-button>
 							</el-popover>
 						</template>
 						<span v-else>
 							<!-- {{scope.row.agreement}} -->
 							<el-tooltip effect="dark" :content="scope.row.agreement" placement="top">
-								<a class="tip" style="color:#606266">{{scope.row.agreement}}</a>
+								<a class="tip" style="color:#606266" :style="{'font-size': fontSize}">{{scope.row.agreement}}</a>
 							</el-tooltip>
 						</span>
 					</template>
@@ -126,10 +123,10 @@
 					</template>
 				</template>
 			</el-table-column>
-			<el-table-column prop="tax" label="税率"   width="80"></el-table-column>
-			<el-table-column prop="payment_days" label="账期"     width="100"></el-table-column>
+			<el-table-column prop="tax" label="税率"   width="80" v-if="ColumnVisible.tax.value"></el-table-column>
+			<el-table-column prop="payment_days" label="账期"     width="180" v-if="ColumnVisible.payment_days.value"></el-table-column>
 			
-			<el-table-column prop="init_data" label="期初" width="100"></el-table-column>
+			<el-table-column prop="init_data" label="期初" width="180" v-if="ColumnVisible.init_data.value"></el-table-column>
 			<el-table-column prop="id" label="">
 				<template slot-scope="scope">
 					<div class="month-td" v-if="initAmount">期初</div>
@@ -169,7 +166,7 @@
 	</div>
 </template>
 <script>
-
+import AppConst from '@/util/appConst.js';
 import SaleOrderList from './tabs/SaleOrderList.vue';
 import ReceivebillList from './tabs/ReceivebillList.vue';
 import DiscountList from './tabs/DiscountList.vue';
@@ -190,10 +187,7 @@ export default{
 				initialization: true, 
 				type: 1
 			},
-			ColumnVisible:{
-				index: false,
-				department: false
-			},
+			
 			expands: [],
 			Tabs: [
 				{name: '销售明细', component: SaleOrderList,moduleName: "SaleOrderList"},
@@ -204,6 +198,7 @@ export default{
 			],
 			CurrentRow: {},
 			ArrowActiveIndex: false, //展开图标旋转类
+			DomRefresh: true,
 		}
 	},
 	methods: {
@@ -311,7 +306,10 @@ export default{
 			this.pageChange(this.currentPage);
 			//this.reloadTable();
 		},
-		
+		/**预览合同附件 */
+		OpenViewWindow(id) {
+			window.open(AppConst.BACKEND_DOMAIN_VIEW_URL+"?id="+id+"&token="+this.$store.state.user.token, new Date().getTime(),'width=800,height=500');
+		}
 	},
 	created() {
 		this.init();
@@ -352,6 +350,22 @@ export default{
 		},
 		total: function() {
 			return this.$store.state.user.ARSumTotal;
+		},
+		ColumnVisible: function() {
+			return this.$store.state.user.ARTableConfig.ColumnVisible;
+		},
+		fontSize: function() {
+			this.DomRefresh = false;
+			let FontSize = this.$store.state.user.ARTableConfig.FontSize;
+			
+			if (FontSize && typeof(FontSize) != 'undefined' ) {
+				
+				this.$nextTick(() => {
+					this.DomRefresh = true;
+				});
+			}
+			
+			return FontSize + 'px';
 		}
 	},
 	

@@ -1,6 +1,5 @@
 <template>
 	<div class="wapper" v-loading="loading" ref="wapper">
-		<!-- <h1 class="title">{{article.title}}</h1> -->
 		<div class="artilce-container">
 			<div class="content-container " >
 				<h1 class="title">{{article.title}}</h1>
@@ -32,24 +31,13 @@
 									</span>
 								</div>
 							</div>
-							<!-- <quill-editor v-model="AnswerForm.content"  
-				                ref="myQuillEditor"
-				                :options="editorOption"
-				                style="min-height: 118px !important;"
-				                >
-				  			</quill-editor> -->
-							<v-ueditor
-								v-model="AnswerForm.content"
-								:defalutMsg="'开始编辑'"
-								:command="UECommand"
-								:toolbars="toolbars"
-								:height="118"
-							></v-ueditor>
+							<div class="Answer-editor">
+								<v-editor :height="200" v-model="AnswerForm.content"></v-editor>
+							</div>
 				  			<div class="AnswerForm-footer">
 				  				<div class="AnswerForm-footerContent">
-				  					<div></div>
 				  					<div class="AnswerForm-footerRight">
-				  						<el-button type="primary" size="medium" @click.native="SubmitAnswer" :loading="SubmitAnswerStatus">提交回答</el-button>
+				  						<el-button type="primary" size="medium" @click.native="SubmitAnswer" :loading="SubmitAnswerStatus">提交评论</el-button>
 				  					</div>
 				  				</div>
 				  			</div>
@@ -59,8 +47,8 @@
 						<div class="Answer-list ">
 							<div class="Answer-List-header">
 								<h4 class="List-headerText">
-									<span v-if="AnswerList.length > 0">{{AnswerList.length}}个回答</span>
-									<span v-else >暂无回答</span>
+									<span v-if="AnswerList.length > 0">{{AnswerList.length}}个评论</span>
+									<span v-else >暂无评论</span>
 								</h4>
 							</div>
 							<div class="Answer-list-item" v-for="(item, keys) in AnswerList" :key="keys">
@@ -82,62 +70,7 @@
 									    </el-tooltip>
 									</p>
 								</div>
-								<!-- <div class="ContentItem-actions" v-if="false">
-									<button type="button"  class="Button ContentItem-action" @click="handleOpenCommentList(item.id)" ><i class="iconfont icon-icon_comment"></i>15条 评论(点击查看)</button>
-								</div> -->
-								<!-- <div class="ContentItem-comments-list Item-Card" v-show="ContentItemId == item.id" v-if="false">
-									<div class="CommentTopbar">
-										<h2 class="CommentTopbar-title">
-											50条评论
-										</h2>
-									</div>
-									<div class="Comments-list">
-										<div class="Comments-item">
-											<div class="Comments-item-user">
-												<div class="Comments-item-user-avatar">
-													<img :src="'http://e.yhtjc.com/v2/public/img/default.png'">
-												</div>
-												<div class="Comments-item-user-name">
-													<span class="user-link">古天乐</span> 
-												</div>
-											</div>
-											<div class="Comments-item-content">
-												我只知道随着黑洞质量变大，体积相对变大的更快，吸收物质的速度也越快，密度相应的越小，而宇宙中确实存在几个亿太阳的大黑洞，是宇宙大爆炸时留下的。
-											</div>
-											<div class="Comments-item-foot">
-												<span class="Comments-created">
-													2018-08-08
-												</span>
-												<span class="Comments-item-reply">
-													<button type="button" class="Comments-reply-button"><i class="iconfont icon-icon_reply"></i> 回复</button>
-												</span>
-											</div>
-										</div>
-
-										<div class="Comments-item">
-											<div class="Comments-item-user">
-												<div class="Comments-item-user-avatar">
-													<img :src="'http://e.yhtjc.com/v2/public/img/default.png'">
-												</div>
-												<div class="Comments-item-user-name">
-													<span class="user-link">刘德华</span>
-													<span class="CommentItem-roleInfo">(作者)</span>
-													<span class="CommentItem-reply"> 回复</span>
-													<span class="user-link">古天乐</span> 
-												</div>
-											</div>
-											<div class="Comments-item-content">
-												你为什么这么黑?
-											</div>
-										</div>
-									</div>
-									<div class="ContentItem-comments-foot" ref="CommentsFoot">
-											<input type="text" class="ContentItem-comments-input" :class="{'is-focus': isFocus}" @focus="handleInputFocus(keys)" placeholder="写下你的评论..."/>
-										
-											<el-button type="primary" class="Button-comment" >评论</el-button>
-										
-									</div>
-								</div> -->
+								
 							</div>
 						</div>
 					</div>
@@ -149,7 +82,8 @@
 </template>
 <script type="text/javascript">
 import Toast from 'muse-ui-toast';
-import UE from '../publish/ueditor.vue';
+import Editor from '../publish/editor.vue';
+
 export default {
 	props: {
 		navsTakeUp: {
@@ -171,51 +105,7 @@ export default {
 			SubmitAnswerStatus: false,	  
 			isFocus: false,  
 			CuerrentCommentsFootIndex: '', 
-			UECommand: '',
-			toolbars: [ 
-		        'undo', //撤销
-		        'redo', //重做
-		        'bold', //加粗
-		        'indent', //首行缩进
-		        'italic', //斜体
-		        'underline', //下划线
-		        'strikethrough', //删除线
-		        'subscript', //下标
-		        'fontborder', //字符边框
-		        'superscript', //上标
-		        'formatmatch', //格式刷
-		        'selectall', //全选
-		        'horizontal', //分隔线
-		        'removeformat', //清除格式
-		        'time', //时间
-		        'date', //日期
-		        'unlink', //取消链接
-		        'cleardoc', //清空文档
-		        'fontfamily', //字体
-		        'fontsize', //字号
-		        'paragraph', //段落格式
-		        'simpleupload', //单图上传
-		        'insertimage', //多图上传
-		        'link', //超链接
-		        'emotion', //表情
-		        'spechars', //特殊字符
-		        'searchreplace', //查询替换
-		        'justifyleft', //居左对齐
-		        'justifyright', //居右对齐
-		        'justifycenter', //居中对齐
-		        'justifyjustify', //两端对齐
-		        'forecolor', //字体颜色
-		        'backcolor', //背景色
-		        'rowspacingtop', //段前距
-		        'rowspacingbottom', //段后距
-		        'imagenone', //默认
-		        'imageleft', //左浮动
-		        'imageright', //右浮动
-		        'imagecenter', //居中
-		        'lineheight', //行间距
-		        'touppercase', //字母大写
-		        'tolowercase', //字母小写
-		    ] ,//默认工具栏
+			
 		}
 	},
 	methods: {
@@ -229,7 +119,7 @@ export default {
 			this.$store.dispatch('ArticleOne', info).then(() => {
 				this.AnswerForm.article_id = this.article.id;
 				this.loading = false;
-				//获取回答
+				//获取评论
 				this.getAnswer(this.article.id);
 				//获取赞数
 				this.getAgree(this.article.id);
@@ -245,11 +135,9 @@ export default {
 		},
 		SubmitAnswer() {
 			this.SubmitAnswerStatus = true;
-
 			if (this.AnswerForm.content == '') {
 				return false;
 			}
-
 			this.$store.dispatch('AddArticleAnswer', this.AnswerForm).then(() => {
 				if (this.$store.state.user.AddArticleAnswer.status == 'success') {
 					Toast.success('评论成功');	
@@ -292,7 +180,6 @@ export default {
 	},
 	created() {
 		this.init();
-		// window.addEventListener('click', this.handleBodyClick);
 	},
 	
 	destoryed() {
@@ -304,16 +191,10 @@ export default {
 			return this.$store.state.user.ArticleOne;
 		},
 		fixedStyle: function() {
-
     		if (this.navsTakeUp == true) {
-    			// let width = document.body.clientWidth;
-    			
 				return {
-    			
     				left: 'calc((100% - 65px - 1042px)/2 + 65px + 694px + 20px)'
     			};
-	    			
-    			
     		} else {
     			return  {
     				left: "calc((100% - 210px - 1042px)/2 + 210px + 694px + 20px)"
@@ -321,7 +202,6 @@ export default {
     		}
     	},
     	AnswerList: function () {
-    		
     		return this.$store.state.user.ArticleAnswer;
     	},
     	alreadyAgree: function () {
@@ -335,8 +215,8 @@ export default {
     	}
 	},
 	components: {
-    	'v-ueditor': UE
-    },
+		'v-editor': Editor
+	},
 	directives: {
 	  	focus: {
 	    	// 指令的定义
@@ -379,13 +259,12 @@ export default {
 		// margin: 0 auto;
 		position: relative;
 		.content-container
-			// width: 694px;
+			width: 100%;
 			max-height: 90%;
 			position: relative;
 			.content-body
-				// width: 694px;
-				// margin: 0 auto;
 				margin-bottom: 15px;
+				
 			.thend
 				width: 100%;
 				height: 1px;
@@ -459,6 +338,8 @@ export default {
 									margin-left: 14px;
 									color: #444;
 									font-weight: 600;	
+						.Answer-editor
+							padding: 10px 16px;
 						.AnswerForm-footer
 							position: relative;
 							.AnswerForm-footerContent
@@ -466,7 +347,7 @@ export default {
 								display: flex;
 								height: 52px;
 								padding: 5px 24px;
-								justify-content: space-between;
+								// justify-content: space-between;
 				.QuestionAnswers-answers
 					.Answer-list
 						margin-bottom: 30px;
@@ -735,17 +616,4 @@ export default {
 								top: 0;
 								left: 0;
 								right: 0;
-/* 可以设置不同的进入和离开动画 */
-/* 设置持续时间和动画函数 */
-// .show-button-enter
-// 	transform: scale(0);
-// .show-button-enter-active
-// 	transition: all 0.3s;  
-// .show-button-leave-active
-// 	transition: all 0.3s;
-// .show-button-leave-to	
-// 	transform: scale(0);
-
-
-
 </style>

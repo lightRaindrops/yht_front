@@ -50,19 +50,19 @@
 										<div class="header-item">逻辑</div>
 										<div class="header-item">#</div>
 									</div>
-									<section>
-										<div class="section-row" v-for="(item,index) in CurrentCondition" :key="index" @click.capture="ChooseRow(index)">
+									<section >
+										<div class="section-row" v-for="(item,index) in CurrentCondition" :key="index" @click.capture="ChooseRow(index)" v-if="DOMRefresh">
 											<div class="section-row-item">
 												<i :class="{'el-icon-caret-right': index == rowIndex && !rowEditStatus,'el-icon-edit':index == rowIndex && rowEditStatus}"></i>
 											</div>
 											<div class="section-row-item">
-												<el-select v-model="condition[ConditionIndex].conf[index].field" @change="FilterFieldChangeHandle(index)" @visible-change="SelectVisibleChange(index)">
+												<el-select v-model="condition[ConditionIndex].conf[index].field" @change="FilterFieldChangeHandle(index,condition[ConditionIndex].conf[index].field)" @visible-change="SelectVisibleChange(index)">
 													<el-option v-for="(opt,key) in FilterField" :key="key" :label="opt.label"  :value="opt.value"></el-option>
 												</el-select>
 											</div>
 											 <div class="section-row-item">
-												<el-select v-model="condition[ConditionIndex].conf[index].operator" @visible-change="SelectVisibleChange(index)">
-													<el-option v-for="(opt,key) in operator" :key="key" :label="opt.label"  :value="opt.value"></el-option>
+												<el-select v-model="condition[ConditionIndex].conf[index].operator" @visible-change="SelectVisibleChange(index)" @change="opearateChange(index)">
+													<el-option v-for="(opt,key) in condition[ConditionIndex].conf[index].option" :key="key" :label="opt.label"  :value="opt.value"></el-option>
 												</el-select>
 											</div>
 											<div class="section-row-item"  v-if="RefreshFieldStatus">
@@ -77,20 +77,24 @@
 												</span>
 												
 												<span  ref="elSelect" v-if="DOMRefresh">
-													<el-select 
-														v-model="condition[ConditionIndex].conf[index].value" 
-														
-														filterable
-														remote
-														reserve-keyword
-														placeholder="请输入关键词"
-														:remote-method="remoteMethod"
-														:loading="remoteLoading"
-														class="remote-select"
-														v-if="condition[ConditionIndex].conf[index].type.name == 'server'"	
-													>
-														<el-option v-for="(opt, key) in condition[ConditionIndex].conf[index].remote" :key="key" :label="opt.label" :value="opt.value"></el-option>
-													</el-select>
+													<span v-if="condition[ConditionIndex].conf[index].type.name == 'server' && condition[ConditionIndex].conf[index].operator == 0">
+														<el-select 
+															v-model="condition[ConditionIndex].conf[index].value" 
+															
+															filterable
+															remote
+															reserve-keyword
+															placeholder="请输入关键词"
+															:remote-method="remoteMethod"
+															:loading="remoteLoading"
+															class="remote-select"	
+														>
+															<el-option v-for="(opt, key) in condition[ConditionIndex].conf[index].remote" :key="key" :label="opt.label" :value="opt.value"></el-option>
+														</el-select>
+													</span>
+													<span v-if="condition[ConditionIndex].conf[index].type.name == 'server' && condition[ConditionIndex].conf[index].operator > 0">
+														<el-input v-model="condition[ConditionIndex].conf[index].value" placeholder="请输入值"></el-input>
+													</span>
 												</span>
 											</div>
 											<div class="section-row-item">
@@ -106,7 +110,29 @@
 						<el-tab-pane label="显示隐藏列">
 							<div class="condition-container">
 								<div class="column-list">
-									<div class="" v-for="(item,key) in list" :key="key">显示{{item}}</div>
+									<section>
+										<div class="section-row-item" v-for="(item, key) in ColumnVisible" :key="key">
+											<el-checkbox v-model="ColumnVisibleTemp[key].value" @change="UpdateColumnStatus">{{item.name}}</el-checkbox>
+										</div>
+									</section>
+								</div>
+							</div>
+						</el-tab-pane>
+						<el-tab-pane label="其他">
+							<div class="condition-container">
+								<div class="column-list">
+									<div class="font-size-item">
+										<span class="font-size-item-label">字体大小:</span>
+										<div class="font-size-item-slider">
+											<el-slider
+												v-model="FontSize"
+												:max="16"
+												:min="12"
+												show-input
+											>
+											</el-slider>
+										</div>
+									</div>
 								</div>
 							</div>
 						</el-tab-pane>
@@ -161,7 +187,8 @@ export default {
 					name: "",
 					list: [],
 				},
-				remote: []
+				remote: [],
+				option: []
 			},
 			conditionRows: [],
 			rowIndex: 0,
@@ -186,6 +213,9 @@ export default {
 			DOMRefresh: true,
 			RefreshFieldStatus: true,
 			AlreadyInit: false, 
+			ColumnVisibleTemp: {},
+			CurrentOpIndex: 0,
+			//condition:[],
 		}
 	},
 	methods: {
@@ -193,7 +223,10 @@ export default {
 		FilterClose: function() {
 			this.$store.dispatch('AlterTableConfig', {FilterVisible: false});
 		},
-
+		//更新显示隐藏列状态
+		UpdateColumnStatus() {
+			this.$store.dispatch('SetARSumColumnVisible', this.ColumnVisibleTemp);
+		},
 		//切换方案
 		ChangeProgram(index) {
 			this.CurrentProgramIndex = index;
@@ -233,10 +266,17 @@ export default {
 		},
 		CreateRow() {
 			let row = JSON.parse(JSON.stringify(this.defaultRowParams));
-
+			
 			this.condition[this.ConditionIndex].conf.push(row);
 			// this.CurrentCondition.push(row);
 			this.rowIndex = this.condition[this.ConditionIndex].conf.length - 1;
+			this.CurrentCondition = [];
+			this.DOMRefresh  = false;
+			//刷新dom
+			this.$nextTick(() => {
+				this.CurrentCondition = this.condition[this.ConditionIndex].conf;
+				this.DOMRefresh = true;
+			});
 		},
 		RemoveRow() {
 			let newArr = [];
@@ -282,23 +322,42 @@ export default {
 		},
 		ChooseRow(index) {
 			this.rowIndex = index;
+
+			// let field = this.condition[this.ConditionIndex].conf[index].field;
+
+			// this.FilterField.forEach((item, i) => {
+			// 	if (item.value == field) {
+			// 		// this.CurrentOpIndex = i;
+			// 	}
+			// });
 		},
 		InitFilter() {
 			this.AlreadyInit = false;
 			this.$store.dispatch('GetARSumFilterTable');
+			//获取本地显示隐藏列配置信息
+			let ColConfig = JSON.parse(this.$tool.getter('arsum_column_visible')) || {};
+			//Object.keys(obj) 获取对象的key集合  array类型
+			if (Object.keys(ColConfig).length > 0 ) {
+				
+				this.$store.dispatch('SetARSumColumnVisible', ColConfig);
+			}
 		},
 		//切换字段的事件函数
-		FilterFieldChangeHandle(index) {
+		/**
+		*@param index 当前对应的条件索引
+		*@param val 当前选择的字段值
+		*/
+		FilterFieldChangeHandle(index, val) {
+			
 			if (this.condition[this.ConditionIndex].conf[index].logic == "") {
 				
 				this.condition[this.ConditionIndex].conf[index].logic = 1;
-				this.condition[this.ConditionIndex].conf[index].operator = 0;
 			}
 
 			this.condition[this.ConditionIndex].conf[index].value = "";
 			this.condition[this.ConditionIndex].conf[index].type = {name: "", list: []};
 
-			this.FilterField.forEach((item) => {
+			this.FilterField.forEach((item, i) => {
 				if (item.value == this.condition[this.ConditionIndex].conf[index].field) {
 					this.condition[this.ConditionIndex].conf[index].type.name = item.type;
 					 
@@ -308,16 +367,30 @@ export default {
 						if (item.list.length > 0) {
 							this.condition[this.ConditionIndex].conf[index].value = item.list[0].value;
 						}
-						console.log(this.condition[this.ConditionIndex].conf)
 					}
 				}
+
+				if (item.value == val) {
+					this.condition[this.ConditionIndex].conf[index].operator = item.opearate[0].value;
+					this.condition[this.ConditionIndex].conf[index].option = item.opearate;
+				}
+				// if (item.value == val) {
+				// 	this.CurrentOpIndex = i;
+				// }
 			});
 
-			this.RefreshFieldStatus = false;
 
+			this.RefreshFieldStatus = false;
 			this.$nextTick(() => {
 				this.RefreshFieldStatus = true;
 			});
+		},
+		/**远程搜索select 切换到input时  清空绑定内容 */
+		opearateChange(index) {
+			if (this.condition[this.ConditionIndex].conf[index].type.name == 'server') {
+				this.condition[this.ConditionIndex].conf[index].value = "";
+			}
+			
 		},
 		SelectVisibleChange(index)  {
 			this.rowIndex = index;
@@ -396,7 +469,7 @@ export default {
 				this.CurrentCondition = [];
 				this.$store.dispatch('DeleteProgram', {id: this.CurrentProgramIndex}).then(() => {
 					let response = this.$store.state.user.CreateProgram;
-					console.log(response)
+					
 					if (response.status == 'success') {
 						this.$store.dispatch('FilterProgram');
 						this.$notify.success('删除成功!');
@@ -421,6 +494,9 @@ export default {
 				});
 			}
 			
+			data.fontSize = this.FontSize;
+			data.colVisible = this.ColumnVisibleTemp;
+			
 			if (this.ConditionIndex > 0) {
 				//修改方案
 				this.$store.dispatch('UpdateFilterConfig', data).then(() => {
@@ -436,18 +512,19 @@ export default {
 			}
 			else {
 				//在默认方案的基础上保存当前条件
-				
+				this.$notify.error('请选择一个方案');
 			}
 		},
 		QueryData() {
 			let param = this.condition[this.ConditionIndex].conf;
-			console.log(param)
+			// console.log(param);return;
 			this.$store.dispatch('updateFilterQueryParam', {conf: param, initialization: false}).then(() => {
 				this.$store.dispatch('ARSum', this.$store.state.user.filterQuery).then(() => {
 					this.FilterClose();
 				});
 			});
-		}
+		},
+	
 	},
 	computed: {
 		visible: function() {
@@ -460,7 +537,6 @@ export default {
 			], 
 			list = this.$store.state.user.FilterProgram,
 			row = JSON.parse(JSON.stringify(this.defaultRowParams));
-
 			this.condition = [{id: 0, conf: [row]}];
 			this.CurrentCondition =  this.condition[0].conf;
 
@@ -473,7 +549,8 @@ export default {
 				data.push(item);
 				
 				this.condition.push({id: item.id, name: item.name, conf: item.conf});
-
+				
+				//如果是初次读取并且获取默认方案
 				if (Boolean(item.default) && this.AlreadyInit == false) {
 					this.defaultProgram = true;
 					this.CurrentProgramIndex = item.id;
@@ -482,25 +559,61 @@ export default {
 				}
 			});
 			
-			this.AlreadyInit = true;
+			if (list.length > 0) {
+				this.AlreadyInit = true; //完成初次读取
+			} 
 			
 			return data;
 		},
 		FilterField: function() {
 			return this.$store.state.user.ARSumFilterTable.field;
 		},
-		operator: function() {
-			return  this.$store.state.user.ARSumFilterTable.operator;
+		opearator: function() {
+			//console.log( this.$store.state.user.ARSumFilterTable.operator)
+			let field = this.$store.state.user.ARSumFilterTable.field;
+			let op = [];
+			
+			if (typeof(field) == 'object') {
+				field.forEach((item) => {
+					op.push(item.opearate);
+				});
+			}
+			
+			return  op;
 		},
 		logic: function() {
 			return  this.$store.state.user.ARSumFilterTable.logic;
 		},
-		
+		ColumnVisible: function() {
+			//return this.$store.state.user.ARTableConfig.ColumnVisible
+			let data = this.$store.state.user.ARTableConfig.ColumnVisible;
+			this.ColumnVisibleTemp = JSON.parse(JSON.stringify(data));
+			return data;
+		},
+		FontSize: {
+			get() {
+				// return 
+				let FontSize =  this.$tool.getter('FontSize');
+				
+				if (typeof(FontSize) == 'undefined' || !FontSize) {
+					FontSize = this.$store.state.user.ARTableConfig.FontSize;
+				}
+
+				return Number(FontSize);
+			},
+			set(val) {
+				this.$store.dispatch('SetARSumGlobalFontSize', val).then(() => {
+					this.$tool.setter('FontSize', val);
+				});
+			}
+		}
 	},
 	created() {
 		// this.CreateRow();
 		this.InitFilter();
+		
 	},
+	
 	//vue 指令
 	directives: {
 		//dialog拖动指令
@@ -676,10 +789,17 @@ export default {
 								flex: 0;
 								flex-basis: 20px;
 							.remote-select
-								height: 22px;
+								height: 22px;	
 			.column-list
 				height: 100%;
 				overflow-y: auto;
+				.font-size-item
+					display: flex;
+					align-items: center;
+					.font-size-item-label
+						flex-basis: 80px;
+					.font-size-item-slider
+						flex: 1;
 .footer
 	width: 100%;
 	margin-top: 5px;

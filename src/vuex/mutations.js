@@ -1,8 +1,10 @@
 import * as types from './mutation-type.js';
+import tool from '../util/tool.js';
 
 const mutations = {
 	[types.LOGIN] (state, data) {
 		state.login = data;
+		state.token = data.token;
 	},
 
 	[types.SET_ERROR_INFO] (state, data) {
@@ -16,6 +18,9 @@ const mutations = {
 	},
 	[types.USER_SIGNUP] (state, data) {
 		state.userSignup = data;
+	},
+	[types.INIT_TOKEN] (state, token) {
+		state.token = token;
 	},
 	[types.AUTH_UPDATE_PASSWD] (state, response) {
 		state.AuthUpdatePasswd = response;
@@ -343,6 +348,7 @@ const mutations = {
 	[types.SHRINK_STATUS] (state) {
 		state.ShrinkStatus = !state.ShrinkStatus;
 	},
+
 	[types.INIT_SHRINK_STATUS] (state, status) {
 		state.ShrinkStatus = status;
 	},
@@ -392,7 +398,6 @@ const mutations = {
 		state.AddReceivebill = response;
 	},
 	[types.AR_SUM_TABLE] (state, response) {
-		console.log(response);
 		state.ARSum = response.data;
 		state.ARSummaries = response.summaries;
 		state.ARSumLoading = false;
@@ -516,7 +521,11 @@ const mutations = {
 	[types.GET_ARSUM_FILTER_TABLE] (state, response) {
 		state.ARSumFilterTable = response;
 		state.FilterProgram = response.program;
-		// console.log(response)
+		// response.program.forEach((item) => {
+		// 	if (item.default) {
+		// 		state.ARTableConfig.ColumnVisible = item.colvisible;
+		// 	}
+		// });
 	},
 	[types.FIND_ARSUM_FILTER_VALUE] (state, response) {
 		state.FindARSumFilterValue = response;
@@ -541,6 +550,16 @@ const mutations = {
 	},
 	[types.ARSUM_INITIALZATION] (state, response) {
 		state.ARSumInitialization = response;
+	},
+	[types.SET_ARSUM_COLUMN_VISIBLE] (state, data) {
+		for (let i in data) {
+			state.ARTableConfig.ColumnVisible[i].value = data[i].value;
+		}
+
+		tool.setter('arsum_column_visible', JSON.stringify(state.ARTableConfig.ColumnVisible));
+	},
+	[types.SET_ARSUM_GLOBAL_FONTSIZE] (state, FontSize) {
+		state.ARTableConfig.FontSize = FontSize;
 	}
 }
 

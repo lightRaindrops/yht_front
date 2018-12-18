@@ -3,23 +3,29 @@
 		<div class="sub-menu">
 			<div class="Submenu-list Card">
 				<ul>
-					<li class="Submenu-item " @click="changeRoute(item.front_path)" :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in ForumMenu" :key ="keys">
+					<!-- <li class="Submenu-item " @click="changeRoute(item.front_path)" :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in ForumMenu" :key ="keys">
 						<div class="Button Submenu-item-link" >
 							<i class="iconfont " :class="item.classname"></i>
+							<span>{{item.name}}</span>
+						</div>
+					</li> -->
+					<li class="Submenu-item "  :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in department" :key ="keys">
+						<div class="Button Submenu-item-link" >
+							<!-- <i class="iconfont " :class="item.classname"></i> -->
 							<span>{{item.name}}</span>
 						</div>
 					</li>
 				</ul>
 			</div>
 			<div class="Submenu-info Card">
-				<div class="user-info">
+				<!-- <div class="user-info">
 					<div class="avator">
 						<img :src="user.headimg != null ? user.headimg : 'http://e.yhtjc.com/v2/public/img/default.png' "/>
 					</div>
 					<div class="user-name">
 						{{user.name}}
 					</div>
-				</div>
+				</div> -->
 				<div class="Submenu-content-list">
 					<div class="Submenu-content-item">
 						<div class="label">
@@ -51,13 +57,20 @@
 						<el-button type="primary" @click.native="MyMessage">我的动态</el-button>
 					</el-badge>
 				</p>
+				<div class="hr"></div>
+				<div class="Submenu-content-action">
+					<el-menu class="forum-el-menu" mode="horizontal" @select="handleSelect">
+						<el-submenu index="888">
+							<template slot="title">我的工作台</template>
+							<el-menu-item :index="item.front_path" @click="changeRoute(item.front_path)" :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in ForumMenu" :key ="keys" class="forum-el-menu-item"><i class="iconfont " :class="item.classname"></i><span>{{item.name}}</span></el-menu-item>
+						</el-submenu>
+					</el-menu>
+				</div>
 			</div>
 			
 		</div>
-		<div class="sub-main Card">
-			
-			<router-view  />
-			
+		<div class="sub-main">
+			<router-view />
 		</div>
 	</div>
 </template>
@@ -89,7 +102,9 @@ export default {
 	},
 	data() {
 		return {
-			CurrentRoute: ''
+			CurrentRoute: '',
+			//前面100个字符
+							
 		}
 	},
 	methods: {
@@ -97,6 +112,7 @@ export default {
 			this.$emit('handleChangeNavbar', false);
 			this.LoadMenu();
 			this.LoadNotify();
+			this.$store.dispatch('departmentList');
 		},
 		LoadMenu() {
 			this.$store.dispatch('ForumMenu').then(() => {
@@ -112,7 +128,7 @@ export default {
 		MyMessage() {
 			this.$router.push('/app/forum/message');
 		},
-
+		handleSelect() {}
 	},
 	created() {
 		this.init();
@@ -127,21 +143,27 @@ export default {
 		},
 		NotifyInfo: function() {
 			return this.$store.state.user.MyArticleNotify;
-		}
+		},
+		department: function() {
+			return this.$store.state.user.department_list;
+		},
+		
 	}
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 .wapper
 	width: 100%;
+	height: 100%;
 	max-height: 100%;
 	position: relative;
 	display: flex;
-	// align-items: flex-start;
-	// overflow-y: auto;
-	// background: #ecf0f5;
+	overflow-y: auto;
+	overflow-x: hidden;
+	.hr
+		border-top: 1px solid #ebebeb;
+		margin: 10px 0px;
 	.Card
-		// margin-bottom: 10px;
 		background: #fff;
 		overflow: hidden;
 		border-radius: 2px;
@@ -155,16 +177,8 @@ export default {
 		border-radius: 3px;
 		border: 1px solid #ebebeb;
 	.sub-menu
-		flex:1;
-		// .AddAticle
-		// 	color: #fff;
-		// 	background: #3c8dbc;
-		// 	border-color: #367fa9;
-		// 	margin-bottom: 20px;
-		// 	&:hover 
-		// 		background: #367fa9;
-		// 	&:active
-		// 		background: #204d74;
+		flex-basis: 250px;
+		height: 100%;
 		.Submenu-list
 			position: relative;
 			.Submenu-item
@@ -220,8 +234,6 @@ export default {
 		.Submenu-content-list
 			display: flex;
 			align-items: center;
-			border-top: 1px solid #f6f6f6;
-			margin-top: 12px;
 			padding-top: 12px;
 			.Submenu-content-item
 				flex: 1;
@@ -235,9 +247,11 @@ export default {
 					font-weight: 600;
 					cursor: pointer;
 	.sub-main
-		flex: 4;
+		flex: 1;
 		margin-left: 30px;
 		height: auto;
 		position: relative;
-		border-top: 4px solid #3c8dbc;
+		max-width: 1200px;
+		
+
 </style>

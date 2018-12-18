@@ -105,8 +105,12 @@ let  routes = [
             {
                 path: 'forum',
                 component: () => import('@/components/main/forum/index.vue'),
-                redirect: '/app/forum/list',
+                redirect: '/app/forum/portal',
                 children: [
+                    {
+                        path: 'portal',
+                        component: () => import('@/components/main/forum/portal.vue')
+                    },
                     {
                         path: 'write',
                         component: () => import('@/components/main/forum/write.vue')

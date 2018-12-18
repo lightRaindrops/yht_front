@@ -1,7 +1,7 @@
 <template>
 	<div class="wapper">
 		<div class="content-list">
-			<div class="content-item" v-for="(item , keys) in article">
+			<div class="content-item" v-for="(item , keys) in article" :key="keys">
 				<div class="ContentItem-avatar">
 					<img :src="item.headimg ? item.headimg : 'http://e.yhtjc.com/v2/public/img/default.png'">
 				</div>

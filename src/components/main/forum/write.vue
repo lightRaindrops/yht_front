@@ -22,14 +22,9 @@
 			<div class="write-title">
 				<input  v-model.trim="article.title" class="titleInput" placeholder="请输入标题" />
 			</div>
-			<!-- <mavon-editor v-model="content" :toolbars="toolbars" style="height: 500px;" @change="editChange" /> -->
-			<!-- <quill-editor v-model="article.body" class="Write-QuillEditor"
-                ref="myQuillEditor"
-                :options="editorOption"
-                >
-  			</quill-editor> -->
-  			<div class="ueditor" ref="editor" >
-  				<v-ueditor :defaultMsg="defaultMsg" v-model="article.body" :command="UECommand"  v-if="hackReset" />
+			
+  			<div class="editor"  >
+				  <v-editor v-model="article.body" :height="350"></v-editor>
   			</div>
   			<div class="category">
   				<p>
@@ -52,29 +47,27 @@
 			<div class="write-tool" v-else>
 				<el-button type="warning"  size="medium" :disabled="article.body =='' ? true : false" @click="saveArticle">保存修改</el-button>
 				<el-button type="success" v-if="article.status == 0" size="medium" :disabled="article.body =='' ? true : false	" @click="publishArticle">发表文章</el-button>
-			</div class="write-too">
+			</div>
 	  	</div>
 	</div>
 </template>
 <script type="text/javascript">
-import UE from './publish/ueditor.vue';
+import Editor from './publish/editor.vue';
 export default {
-
 	data() {
 		return {
+			
 			defaultMsg: '',
 			titlePicBase64: '',
 			showTitlePic: false,
 			article: {
 				id: '',
 				title: '',
-				// titlepic: '',
 				body: '',
 				status: 0,
 				category_id: ''
 			},
 			errStatus: false,
-	        UECommand: '',
 	        update: false,
 	        defaultArticle: {},
 	        hackReset: false,
@@ -137,7 +130,6 @@ export default {
     		this.defaultArticle = JSON.parse(JSON.stringify(this.article));
     		this.loadCategory();
     		this.isEdit();
-    		
     	},
 
     	/**更新模式下**/
@@ -153,18 +145,13 @@ export default {
     	getContent($id) {
     		this.$store.dispatch('ArticleEdit', {id:$id}).then(() => {
     			
-
     			let data = this.$store.state.user.ArticleEditOne;
 
     			this.article.id = data.id;
-    			// this.defaultMsg = data.body;
+    			this.article.body = data.body;
     			this.article.title = data.title;
     			this.article.status = data.status;
     			this.article.category_id = data.category_id;
-
-    			setTimeout(() => {
-    				this.defaultMsg = data.body;
-    			}, 200);
     		});
     	},
     	loadCategory() {
@@ -221,8 +208,8 @@ export default {
     	}
     },
     components: {
-    	'v-ueditor': UE
-    },
+		'v-editor': Editor
+	}
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped="scoped">
@@ -328,7 +315,7 @@ export default {
 				border: 0px;
 				position: relative;
 				border-bottom: 1px solid #f6f6f6;
-		.ueditor
+		.editor
 			padding: 15px;
 		.category
 			text-align: left;

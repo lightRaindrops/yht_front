@@ -8,7 +8,7 @@ export default {
 
   data() {
     return {
-      a: '',
+      
     }
   },
   methods: {
@@ -18,17 +18,11 @@ export default {
       });
     },
     baseToken() {
-      // if (this.$route.query.token != '' && typeof(this.$route.query.token) != 'undefined') {
-
-      //   this.$tool.setter('token', this.$route.query.token);
-
-      // }
-
+     
       let params = this.parseUrl();
-
+      
       if (params.token != '' && typeof(params.token) != 'undefined') {
           this.$tool.setter('token', params.token);
-
       }
      
       // console.log(this.$tool.getter('token'))
