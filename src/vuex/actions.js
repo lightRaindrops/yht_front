@@ -486,6 +486,30 @@ export const SetHistory = ({commit}, history) =>  {
 export const RemoveHistory = ({commit}, historyPath) => {
 	return commit('REMOVE_HISTORY', historyPath);
 }
+//论坛公共版块管理
+export const GetForumModuleTable = ({commit}) => {
+	return api.GetForumModuleTable().then((response) => {
+		return commit('FORUM_MODULE_TABLE_DATA', response);
+	})
+}
+
+//新增图册
+export const ForumPhotosAdd = ({commit}, info) => {
+	return api.ForumPhotosAdd(info).then((response) => {
+		return commit('FORM_PHOTOS_ADD', response);
+	})
+}
+export const GetForumModule = ({commit}) => {
+	return api.GetForumModule().then((response) => {
+		return commit('FORUM_MODULE', response);
+	})
+}
+export const ForumModuleStore = ({commit}, info) => {
+	return api.ForumModuleStore(info).then((response) => {
+		return commit('FORUM_MODULE_STORE', response);
+	});
+}
+
 //侧边菜单伸缩
 export const ShrinkStatus = ({commit}) => {
 	return commit('SHRINK_STATUS');

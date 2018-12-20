@@ -75,6 +75,10 @@ const state = {
   ArticleAgreeNotify: {},
   ArticleAnswerNotify: {},
   ArticleAgreeList: [],
+  ForumModule: [],
+  ForumPhotosAdd: {},
+  ForumModuleTableData: [],
+  ForumModuleStore: {},
   AgreeEveryMonth: [],
   MyArticleNotify: {},
   historyMenu: [],
@@ -136,6 +140,7 @@ const state = {
     },
     FontSize: tool.getter('FontSize') || 12
   },
+  
   ARSetFieldType: [],
   ARSumCurrentRow: {},
   AddEnumberate: {},

@@ -3,29 +3,15 @@
 		<div class="sub-menu">
 			<div class="Submenu-list Card">
 				<ul>
-					<!-- <li class="Submenu-item " @click="changeRoute(item.front_path)" :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in ForumMenu" :key ="keys">
+					<!-- -->
+					<li class="Submenu-item " :class="{'Submenu-active': CurrentModuleId == item.id && CurrentModuleAttr == item.attr}" v-for="(item, keys) in ForumModule" :key ="keys" @click="JumpModule(item.id,item.attr)">
 						<div class="Button Submenu-item-link" >
-							<i class="iconfont " :class="item.classname"></i>
-							<span>{{item.name}}</span>
-						</div>
-					</li> -->
-					<li class="Submenu-item "  :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in department" :key ="keys">
-						<div class="Button Submenu-item-link" >
-							<!-- <i class="iconfont " :class="item.classname"></i> -->
 							<span>{{item.name}}</span>
 						</div>
 					</li>
 				</ul>
 			</div>
 			<div class="Submenu-info Card">
-				<!-- <div class="user-info">
-					<div class="avator">
-						<img :src="user.headimg != null ? user.headimg : 'http://e.yhtjc.com/v2/public/img/default.png' "/>
-					</div>
-					<div class="user-name">
-						{{user.name}}
-					</div>
-				</div> -->
 				<div class="Submenu-content-list">
 					<div class="Submenu-content-item">
 						<div class="label">
@@ -62,7 +48,7 @@
 					<el-menu class="forum-el-menu" mode="horizontal" @select="handleSelect">
 						<el-submenu index="888">
 							<template slot="title">我的工作台</template>
-							<el-menu-item :index="item.front_path" @click="changeRoute(item.front_path)" :class="{'Submenu-active': CurrentRoute == item.front_path}" v-for="(item, keys) in ForumMenu" :key ="keys" class="forum-el-menu-item"><i class="iconfont " :class="item.classname"></i><span>{{item.name}}</span></el-menu-item>
+							<el-menu-item :index="item.front_path" @click="changeRoute(item.front_path)"  v-for="(item, keys) in ForumMenu" :key ="keys" class="forum-el-menu-item"><i class="iconfont " :class="item.classname"></i><span>{{item.name}}</span></el-menu-item>
 						</el-submenu>
 					</el-menu>
 				</div>
@@ -70,30 +56,32 @@
 			
 		</div>
 		<div class="sub-main">
-			<router-view />
+			<transition :name="transitionName" mode="out-in">
+				<router-view :key="routeKey"></router-view>
+			</transition>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
 export default {
-	beforeRouteUpdate(to, from, next) {
-		this.CurrentRoute = to.path;
+	// beforeRouteUpdate(to, from, next) {
+	// 	this.CurrentRoute = to.path;
 
-		if (to.path.indexOf('/app/forum/list/article') > -1) {
-			this.CurrentRoute = '/app/forum/list/index';
-		}
+	// 	if (to.path.indexOf('/app/forum/list/article') > -1) {
+	// 		this.CurrentRoute = '/app/forum/list/index';
+	// 	}
 
-		next();
-	},
-	beforeRouteEnter(to, from, next) {
-		next((vm) => {
-			vm.CurrentRoute = to.path;
+	// 	next();
+	// },
+	// beforeRouteEnter(to, from, next) {
+	// 	next((vm) => {
+	// 		vm.CurrentRoute = to.path;
 
-			if (to.path.indexOf('/app/forum/list/article') > -1) {
-				vm.CurrentRoute = '/app/forum/list/index';
-			}
-		});
-	},
+	// 		if (to.path.indexOf('/app/forum/list/article') > -1) {
+	// 			vm.CurrentRoute = '/app/forum/list/index';
+	// 		}
+	// 	});
+	// },
 
 	props: {
 		navsTakeUp: {
@@ -102,9 +90,10 @@ export default {
 	},
 	data() {
 		return {
-			CurrentRoute: '',
+			CurrentModuleId: 0,
+			CurrentModuleAttr: 'public',
 			//前面100个字符
-							
+			transitionName: "fade"			
 		}
 	},
 	methods: {
@@ -112,7 +101,7 @@ export default {
 			this.$emit('handleChangeNavbar', false);
 			this.LoadMenu();
 			this.LoadNotify();
-			this.$store.dispatch('departmentList');
+			this.$store.dispatch('GetForumModule');
 		},
 		LoadMenu() {
 			this.$store.dispatch('ForumMenu').then(() => {
@@ -128,7 +117,22 @@ export default {
 		MyMessage() {
 			this.$router.push('/app/forum/message');
 		},
-		handleSelect() {}
+		handleSelect() {},
+
+		JumpModule(id,attr) {
+			let path = "";
+
+			if(id > 0) {
+				path = '/app/forum/module/'+id+'/attr/'+attr;
+			}
+			else {
+				path = '/app/forum/portal';
+			}
+
+			this.CurrentModuleId = id;
+			this.CurrentModuleAttr = attr;
+			this.$router.push(path);
+		}
 	},
 	created() {
 		this.init();
@@ -144,10 +148,13 @@ export default {
 		NotifyInfo: function() {
 			return this.$store.state.user.MyArticleNotify;
 		},
-		department: function() {
-			return this.$store.state.user.department_list;
+		ForumModule: function() {
+			return this.$store.state.user.ForumModule;
 		},
-		
+		routeKey: function() {
+			//组件复用特效 生成不同的key
+			return this.$route.path.replace(/\//g, '_');
+		}
 	}
 }
 </script>
@@ -158,8 +165,7 @@ export default {
 	max-height: 100%;
 	position: relative;
 	display: flex;
-	overflow-y: auto;
-	overflow-x: hidden;
+	overflow: hidden;
 	.hr
 		border-top: 1px solid #ebebeb;
 		margin: 10px 0px;
@@ -167,7 +173,7 @@ export default {
 		background: #fff;
 		overflow: hidden;
 		border-radius: 2px;
-		box-shadow: 0 1px 3px rgba(26,26,26,.3);
+		box-shadow:0px 2px 3px rgba(26,26,26,0.1);
 	.Button
 		line-height: 1.4;
 		display: block;
@@ -177,8 +183,10 @@ export default {
 		border-radius: 3px;
 		border: 1px solid #ebebeb;
 	.sub-menu
-		flex-basis: 250px;
+		flex-basis: 200px;
 		height: 100%;
+		margin-left:5px;
+		margin-top:5px;
 		.Submenu-list
 			position: relative;
 			.Submenu-item
@@ -198,6 +206,7 @@ export default {
 					font-size: 18px;
 				span
 					margin-left: 8px;
+					user-select: none;
 				&:not(:first-child)
 					border-top: 1px solid #ebebeb;
 			.Submenu-active
@@ -249,9 +258,13 @@ export default {
 	.sub-main
 		flex: 1;
 		margin-left: 30px;
-		height: auto;
+		height: 100%;
+		overflow:hidden-y;
 		position: relative;
 		max-width: 1200px;
 		
-
+.fade-enter-active, .fade-leave-active
+	transition: opacity .5s;
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ 
+	opacity: 0;
 </style>

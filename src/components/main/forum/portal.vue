@@ -19,7 +19,7 @@
         
         <div class="hr"></div>
         <h3 class="main-hd-title">
-            热门内容
+            热门推荐
         </h3>
         <div class="hot-content-list">
             <div class="hot-item" v-for="(item,key) in contentList" :key="key" >
@@ -82,7 +82,7 @@ export default {
 
 			for (let i = 0; i < 16; ++i) {
 				let index = Math.ceil(Math.random()*500);
-				data.push('http://dev.miaoyi09.com/storage/thumb/default/'+index+'.jpg');
+				data.push('https://picsum.photos/120/120?t='+new Date().getTime()+'&r='+index);
 			}
 
 			return data;
@@ -92,7 +92,7 @@ export default {
 
 			for (let i = 0; i < 10; ++i) {
 				let index = Math.ceil(Math.random()*500);
-				data.push('http://dev.miaoyi09.com/storage/thumb/default/'+index+'.jpg');
+				data.push('https://picsum.photos/190/105?t='+new Date().getTime()+'&r='+index);
 			}
 
 			return data;
@@ -104,10 +104,11 @@ export default {
 .welcome-wallper
     width: 100%;
     height: 100%;
+    overflow-y:auto;
     .welcome
         padding-bottom: 45px;
         maring-bottom: 45px;
-        width: 100%;
+        width: 90%;
         border-bottom: 1px solid #e5e5e5;
         .wel-title
             margin-bottom: 40px;
@@ -133,6 +134,7 @@ export default {
                 background-size: 100% 100%;
                 position: relative;
                 margin-top: 10px;
+                transition: all 0.3s;
                 // overflow:hidden;
                 img 
                     width: 120px;

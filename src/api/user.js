@@ -232,6 +232,9 @@ export const ArticleAgreeList = () => {
 export const AgreeEveryMonth = (info) => {
 	return http.post('article/agree/count', info);
 }
+export const ForumPhotosAdd = (info) => {
+	return http.post('article/photos/post',info);
+}
 export const MyArticleNotify = () => {
 	return http.post('article/mine/notify');
 }
@@ -384,4 +387,13 @@ export const CreatePotentialPro = (info) => {
 }
 export const ARSumInitialization = () => {
 	return http.post('arsum/initialization');
+}
+export const GetForumModuleTable = () => {
+	return http.post('article/module/table');
+}
+export const GetForumModule = () => {
+	return http.post('article/module/all');
+}
+export const ForumModuleStore = (info) => {
+	return http.post('article/module/store', info);
 }

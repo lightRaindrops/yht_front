@@ -112,23 +112,37 @@ let  routes = [
                         component: () => import('@/components/main/forum/portal.vue')
                     },
                     {
-                        path: 'write',
-                        component: () => import('@/components/main/forum/write.vue')
-                    },
-                    {
-                        path: 'list',
-                        component: () => import('@/components/main/forum/list/index.vue'),
-                        redirect: '/app/forum/list/index',
+                        path: 'create',
+                        component: () => import('@/components/main/forum/create.vue'),
                         children: [
                             {
-                                path: 'index',
-                                component: () => import('@/components/main/forum/list/list.vue'),
+                                path: 'article',
+                                component: () => import('@/components/main/forum/create/write.vue')
                             },
                             {
-                                path: 'article/:id',
-                                component: () => import('@/components/main/forum/list/content.vue')
-                            }
+                                path: 'photos',
+                                component: () => import('@/components/main/forum/create/photos.vue')
+                            },
                         ]
+                    },
+                    
+                    {
+                        // path: 'list/:id',
+                        // component: () => import('@/components/main/forum/list/index.vue'),
+                        // redirect: '/app/forum/list/index/:id',
+                        // children: [
+                        //     {
+                        //         path: 'index',
+                        //         component: () => import('@/components/main/forum/list/list.vue'),
+                        //     },
+                        //     {
+                        //         path: 'article/:id',
+                        //         component: () => import('@/components/main/forum/list/content.vue')
+                        //     }
+                        // ]
+                        path: 'module/:id/attr/:attr',
+                        name: 'forumModule',
+                        component: () => import('@/components/main/forum/list/list.vue'),
                     },
                     {
                         path: 'publish',
@@ -141,6 +155,10 @@ let  routes = [
                     {
                         path: 'category',
                         component: () => import('@/components/main/forum/manager/category.vue')
+                    },
+                    {
+                        path: 'module_manager',
+                        component:() =>import('@/components/main/forum/manager/module.vue')
                     },
                     {
                         path: 'setup',

@@ -167,7 +167,6 @@ const mutations = {
 		state.acceptCustomer = data;
 	},
 	[types.CUSTOMER_MANAGER_LIST] (state,data) {
-		console.log(data)
 		//console.log(data);
 		state.customerManagerList = data;
 	},
@@ -295,8 +294,11 @@ const mutations = {
 		state.ArticleSetFine = data;
 	},
 	[types.ARTICLE_DELETE] (state, data) {
-		console.log(data);
 		state.ArticleDelete = data;
+	},
+	[types.FORM_PHOTOS_ADD] (state, response) {
+		
+		state.ForumPhotosAdd = response;
 	},
 	[types.ARTICLE_AGREE_NOTIFY] (state, data) {
 		// console.log(data);
@@ -560,6 +562,21 @@ const mutations = {
 	},
 	[types.SET_ARSUM_GLOBAL_FONTSIZE] (state, FontSize) {
 		state.ARTableConfig.FontSize = FontSize;
+	},
+	[types.FORUM_MODULE_TABLE_DATA] (state, response) {
+		// 
+		if (response.data.length > 0) {
+			state.ForumModuleTableData = response.data;
+		}
+	},
+	[types.FORUM_MODULE] (state, response) {
+		console.log(response)
+		if (response.data.length > 0) {
+			state.ForumModule = response.data;
+		}
+	},
+	[types.FORUM_MODULE_STORE] (state, response) {
+		state.ForumModuleStore = response
 	}
 }
 
