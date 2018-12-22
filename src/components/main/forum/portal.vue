@@ -1,39 +1,34 @@
 <template>
-<div class="welcome-wallper">
+<div class="welcome-wallper" ref="portal" @scroll.passive="onScroll">
     <div class="welcome">
         <h2 class="wel-title">欢迎</h2>
         <p>系统论坛是一个可以交流各种工作经验的地方</p>
     </div>
     <div class="main-content">
         <h3 class="main-hd-title">
-            最新图集
+            最新图册
         </h3>
-        <div class="main-content-list">
-            <a class="content-item" v-for="(item,key) in list" :key="key" >
-                <img :src="item" alt="">
-                <div class="main-item-foot">
-                    <span>{{item}}</span>
-                </div>
-            </a>
+        <div class="main-content-list" v-viewer="options" :class="{'main-content-list-fade': picLoaded}">
+            <img :src="item.thumb" alt="" :data-source="item.url" v-for="(item,key) in PicList.list" :key="key" class="pic-content-item" title="点击查看">
         </div>
-        
+        <h4 class="pic-title" :class="{'main-content-list-fade': picLoaded}">{{PicList.title}} <span class="change-pic" v-if="picLoaded" @click="changePhoto">换一个图册</span></h4>
         <div class="hr"></div>
         <h3 class="main-hd-title">
             热门推荐
         </h3>
         <div class="hot-content-list">
-            <div class="hot-item" v-for="(item,key) in contentList" :key="key" >
+            <div class="hot-item" v-for="(item,key) in ArticleList" :key="key" >
                 <div class="item-content">
-                    <div class="rich-pic">
-                        <img :src="item">
+                    <div class="rich-pic" v-if="item.titlepic">
+                        <img :src="item.titlepic" @click="showArticle(item.id)">
                     </div>
                     <div class="rich-text">
-                        <a href="javascript:void(0)">
-                            中国人口这么多，为什么顶端人才比不了西方？
+                        <a href="javascript:void(0)" @click="showArticle(item.id)">
+                            {{item.title}}
                         </a>
-                        <div class="content">
-                            {{str}}
-                            <span class="read-article">阅读全文<i class="el-icon-arrow-down"></i></span>
+                        <div class="content" @click="showArticle(item.id)">
+                            {{item.abstract}}
+                            <span class="read-article" >阅读全文<i class="el-icon-arrow-down"></i></span>
                         </div>
                     </div>
                 </div>
@@ -41,19 +36,19 @@
                     <span class="foot-item">
                         <i class="iconfont icon-zuozhe"></i>
                         <span class="foot-name">
-                            作者：Mr.5
+                            作者：{{item.user}}
                         </span>
                     </span>
                     <span class="foot-item">
                         <i class="iconfont icon-shijian01"></i>
                         <span class="foot-name">
-                            发表时间：2018-2018
+                            发表时间：{{item.created}}
                         </span>
                     </span>
                     <span class="foot-item">
                         <i class="iconfont icon-ai45"></i>
                         <span class="foot-name">
-                            点赞：666
+                            点赞：{{item.agree}}
                         </span>
                     </span>
                     <span class="foot-item">
@@ -65,17 +60,46 @@
                 </div>
             </div>
         </div>
-        <div class="more">查看更多精彩内容</div>
+        <div class="more"><span @click="LoadMore">{{LoadStr}}</span></div>
     </div>
 </div>
 </template>
 <script>
+import 'viewerjs/dist/viewer.css';
+import Viewer from 'v-viewer';
+import Vue from 'vue';
+Vue.use(Viewer);
+
 export default {
    data() {
 		return {
-			str: '鹤云声： 这个事非常容易，我在河南工作的时候，经常去一些非常贫困的县村里。比如，在河南的平顶山叶县。叶县下面的各乡镇非常的贫穷，有些村甚至没有电，没有自来水，甚至有的连砖房都没有。 那么，这种村子就会充斥…'
-		}
+            options: {
+                toolbar: true,
+                url: 'data-source'
+            },
+            pagination: {
+                pagesize: 10,
+                pagenow: 1,
+            },
+            picLoaded: false,
+			scrollInit: false,
+            loadMoreStatus: false,
+        }
 	},
+    created() {
+        this.loadPic();
+        this.loadArticle();
+    },
+    activated() {
+        //从文章页返回到当前页  滚动到上一次浏览的位置
+        this.$nextTick(() => {
+            this.$refs.portal.scrollTo(0, this.$route.meta.scrollTop);
+            this.scrollInit = true;
+        })
+    },
+    deactivated() {
+        this.scrollInit = false;
+    },
 	computed: {
 		list: function() {
 			let data = [];
@@ -87,6 +111,12 @@ export default {
 
 			return data;
 		},
+        PicList: function() {
+            return this.$store.state.user.PortalPicList;
+        },
+        ArticleList: function() {
+            return this.$store.state.user.PortalArticleData.data;
+        },
 		contentList: function() {
 			let data = [];
 
@@ -96,13 +126,65 @@ export default {
 			}
 
 			return data;
-		}
-	} 
+		},
+        loaded: function() {
+            return this.$store.state.user.PortalArticleData.loaded;
+        },
+        LoadStr: function() {
+             
+            if (this.loaded) {
+                return '已加载完毕';
+            }
+            else {
+                 if (this.loadMoreStatus) {
+                    return '加载中...';
+                }
+                else {
+                    return '查看更多';
+                }
+            }
+           
+        }
+	},
+    methods: {
+        loadPic() {
+            this.picLoaded = false;
+            this.$store.dispatch('PortalPicList').then(() => {
+                this.picLoaded = true;
+            });
+           
+        },
+        loadArticle() {
+            this.loadMoreStatus = true;
+             //获取首页文章
+            this.$store.dispatch('ArticlePortalShow', this.pagination).then(() => {
+                this.loadMoreStatus = false;
+            });
+        },
+        changePhoto() {
+            this.loadPic();
+        },
+        showArticle(id) {
+            this.$router.push('/app/forum/article/'+id);
+        },
+        LoadMore() {
+            if (!this.loaded) {
+                ++this.pagination.pagenow;
+                this.loadArticle();
+            }
+        },
+        //滚动时记住当前位置
+        onScroll($event) {
+            if (this.scrollInit) {
+                this.$route.meta.scrollTop = this.$refs.portal.scrollTop;
+            }
+        }
+    } 
 }
 </script>
 <style lang="stylus" scoped>
 .welcome-wallper
-    width: 100%;
+    max-width: 1200px;
     height: 100%;
     overflow-y:auto;
     .welcome
@@ -122,11 +204,21 @@ export default {
             display:inline-block;
             font-size: 18px;
             font-weight: 400;
+        .pic-title
+            margin: 0;
+            text-align: center;
+            .change-pic
+                color: #409EFF;
+                margin-left:3px;
+                cursor: pointer;
+        .main-content-list-fade
+            animation: fadeIn 0.8s;
         .main-content-list
             padding: 20px;
             display: flex;
             flex-wrap: wrap;
-            .content-item
+            transition: all 0.3s;
+            .pic-content-item
                 width: 120px;
                 height: 120px;
                 margin-right: 10px;
@@ -135,14 +227,8 @@ export default {
                 position: relative;
                 margin-top: 10px;
                 transition: all 0.3s;
-                // overflow:hidden;
-                img 
-                    width: 120px;
-                    height: 120px;
-                    transition: all 0.3s;
-                    &:hover
-                        //transform-origin:0 0;
-                        transform:scale(1.1);
+                &:hover
+                    transform:scale(1.1);
                         
                 .main-item-foot
                     background: rgba(0,0,0,0.5);
@@ -157,7 +243,7 @@ export default {
         .hot-content-list
             padding: 0px;
             .hot-item
-                width: 710px;
+                width: 800px;
                 padding: 20px;
                 .item-content
                     display: flex;
@@ -187,6 +273,7 @@ export default {
                                 color: #175199;
                         .content
                             cursor:pointer;
+                            margin-top:10px;
                             .read-article
                                 cursor: pointer;
                                 margin-left: 5px;
@@ -202,14 +289,15 @@ export default {
                     .foot-item
                         margin-right: 20px;
         .more
-            width: 710px;
+            width: 800px;
             text-align:center;
             font-size: 15px;
             padding-top:15px;
-            color:	#175199;
+            color:	#ff4081;
             cursor:pointer;
+            user-select: none;
             &:hover
-                color:#646464;
+                color:#ff5000;
 </style>
 
 

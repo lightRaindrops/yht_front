@@ -1,5 +1,11 @@
 <template>
 	<div class="wapper" v-loading="loading" ref="wapper">
+		<div class="btn-return">
+			<div class="return-circle" title="返回" @click="returnPre">
+				<i class="el-icon-back"></i>
+				<!-- <span>返回</span> -->
+			</div>
+		</div>
 		<div class="artilce-container">
 			<div class="content-container " >
 				<h1 class="title">{{article.title}}</h1>
@@ -83,6 +89,7 @@
 <script type="text/javascript">
 import Toast from 'muse-ui-toast';
 import Editor from '../publish/editor.vue';
+
 
 export default {
 	props: {
@@ -176,7 +183,10 @@ export default {
 	    			this.isFocus = false;
 	    		}
 	    	}
-    	}
+    	},
+		returnPre() {
+			this.$router.go(-1);
+		}
 	},
 	created() {
 		this.init();
@@ -187,7 +197,7 @@ export default {
 	},
 	computed: {
 		article: function() {
-			console.log(this.$store.state.user.ArticleOne)
+			//console.log(this.$store.state.user.ArticleOne)
 			return this.$store.state.user.ArticleOne;
 		},
 		fixedStyle: function() {
@@ -229,11 +239,28 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 .wapper
-	width: 100%;
+	width: 85%;
 	// height: %;
 	margin-top: 15px;
 	position: relative;
 	overflow-y: auto;
+	padding-left:40px;
+	.btn-return
+		position: fixed;
+		bottom: 100px;
+		right: 100px;
+		z-index: 9999;
+		.return-circle 
+			display: block;
+			height: 60px;
+			width: 60px;
+			background: #fff;
+			box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+			border-radius: 50%;
+			display: flex;
+			cursor: pointer;
+			align-items: center;
+			justify-content: center;
 	.Item-Card
 		margin-bottom: 10px;
 		background: #fff;

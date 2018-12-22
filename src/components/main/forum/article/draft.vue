@@ -40,6 +40,7 @@ export default {
 		
 		init() {
 			this.list();
+			
 			this.loadCategory();
 		},
 		list() {

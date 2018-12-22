@@ -14,10 +14,11 @@
                     :on-success="uploadSuccess"
                     :before-upload="beforeUpload"
                     :on-progress="onProgress"
+                    
                     multiple>
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处, 或<em>点击上传</em></div>
-                    <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2MB</div>
                 </el-upload>
             </div>
             <div class="progress">
@@ -60,7 +61,8 @@ export default {
             ImgList: [],
             titleErr: false,
             titleErrMsg: "",
-            // percent: 0,
+            listType: 'picture-card',
+
             fileNums: 0,
             uploaded: 0,
             percent: 0,
@@ -88,8 +90,17 @@ export default {
             }
         },
         beforeUpload(file) {
-            ++this.fileNums;
+            if (!this.validatorImg(file)) {
+                return false;
+            }            
 
+            if (this.uploaded == this.fileNums && this.uploaded > 0) {
+                this.percent = 0;
+            }
+            else {
+                ++this.fileNums;
+            }
+           
             if (this.fileNums > 0) {
                 // return parseInt((this.uploaded / this.fileNums)*100);
                 var self = this;
@@ -118,6 +129,23 @@ export default {
                     }
                 }, 100);
             }
+        },
+        validatorImg(file) {
+            //判断文件类型和大小
+            const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            
+            if (!isJPG) {
+
+                this.$message.error('上传图片只能是 JPG 和 PNG 格式!');
+                
+            }
+            
+            if (!isLt2M) {
+                this.$message.error('上传图片大小不能超过 2MB!');
+            }
+
+            return isJPG && isLt2M;
         },
         onProgress(event, file, fileList) {
            
@@ -172,6 +200,7 @@ export default {
                     this.photo.title = "";
                     this.photo.list = [];
                     this.ImgList = [];
+                    this.percent = 0;
                 }
                 else {
                     this.$notify.error('上传失败');
@@ -225,6 +254,7 @@ export default {
         position: relative;
         .progress
             display: flex;
+            margin-top: 30px;
             padding: 10px 10px 10px 0px;
             .progress-container
                 flex: 1;
@@ -248,6 +278,8 @@ export default {
                     position: relative;
                     transition: all 0.3s;
                     margin: 5px 10px 5px 10px;
+                    border-radius:3px;
+                    overflow: hidden;
                     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 1px 1px rgba(0,0,0,.16);
                     img 
                         transition: all 0.3s;

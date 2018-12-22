@@ -57,7 +57,13 @@
 		</div>
 		<div class="sub-main">
 			<transition :name="transitionName" mode="out-in">
-				<router-view :key="routeKey"></router-view>
+				<!-- <router-view :key="routeKey"></router-view> -->
+				<keep-alive>
+					<router-view v-if="$route.meta.keepAlive" :key="routeKey"></router-view>
+				</keep-alive>
+			</transition>
+			<transition :name="transitionName" mode="out-in">
+				<router-view v-if="!$route.meta.keepAlive" :key="routeKey"></router-view>
 			</transition>
 		</div>
 	</div>
@@ -261,7 +267,7 @@ export default {
 		height: 100%;
 		overflow:hidden-y;
 		position: relative;
-		max-width: 1200px;
+		
 		
 .fade-enter-active, .fade-leave-active
 	transition: opacity .5s;

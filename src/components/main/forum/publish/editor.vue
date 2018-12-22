@@ -64,7 +64,7 @@ export default {
           		disableRightClick: true,//是否屏蔽右击
                 colorsHEXInput: true,//关闭16进制色值
                 toolbarSticky: true,//操作栏是否自动吸顶
-                zIndex: 99999,
+                // zIndex: 99999,
 				height: this.height
         	},
       	}

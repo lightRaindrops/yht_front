@@ -346,12 +346,16 @@ export const ArticlePost = ({commit}, article) => {
 		return commit('ARTICLE_POST', response);
 	})
 }
-export const ArticleShow = ({commit}, info) => {
-	return api.ArticleShow(info).then((response) => {
-		return commit('ARTICLE_GET',response);
+export const ForumModuleArticles = ({commit}, info) => {
+	return api.ForumModuleArticles(info).then((response) => {
+		return commit('FORUM_MODULE_ARTICLES',response);
 	})
 }
-
+export const ArticlePortalShow = ({commit},info) => {
+	return api.ArticlePortalShow(info).then((response) => {
+		return commit('ARTICLE_PORTAL_SHOW', response);
+	})
+}
 export const ArticleCategory = ({commit}) => {
 	return api.ArticleCategory().then((response) => {
 		return commit('ARTICLE_CATEGORY', response);
@@ -497,6 +501,12 @@ export const GetForumModuleTable = ({commit}) => {
 export const ForumPhotosAdd = ({commit}, info) => {
 	return api.ForumPhotosAdd(info).then((response) => {
 		return commit('FORM_PHOTOS_ADD', response);
+	})
+}
+//论坛首页图册
+export const PortalPicList = ({commit}) => {
+	return api.PortalPicList().then((response) => {
+		commit('PORTAL_PIC_LIST', response);
 	})
 }
 export const GetForumModule = ({commit}) => {

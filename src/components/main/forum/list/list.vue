@@ -11,7 +11,7 @@
                             {{item.title}}
                         </a>
                         <div class="content">
-                            {{str}}
+                            {{item.abstract}}
                             <span class="read-article" @click="JumpArticle(item.id)">阅读全文<i class="el-icon-arrow-down"></i></span>
                         </div>
                     </div>
@@ -63,34 +63,27 @@ export default {
 	},
 	data() {
 		return {
-			query: {
-				category_id: 0,
-			},
+			
 			fixedStyle: {},
 			CategoryPopver: false,
 			DateSection: 0,
-			str: '鹤云声： 这个事非常容易，我在河南工作的时候，经常去一些非常贫困的县村里。比如，在河南的平顶山叶县。叶县下面的各乡镇非常的贫穷，有些村甚至没有电，没有自来水，甚至有的连砖房都没有。 那么，这种村子就会充斥…',
-			moduleId: "",
+				moduleId: "",
 			moduleAttr: ""
 		}
 	},
 	methods: {
 		init() {
-			this.$store.dispatch('ArticleShow', this.query).then(() => {
+			let param = {};
+			this.$store.dispatch('ForumModuleArticles', param).then(() => {
 
 			});
-			this.loadCategory();
+			 
 		},
-		loadCategory() {
-    		this.$store.dispatch('ArticleCategory');
-    	},
+		
     	JumpArticle(id) {
-    		this.$router.push('/app/forum/list/article/'+id);
+    		this.$router.push('/app/forum/article/'+id);
     	},
     	
-    	ChangeCategory(id) {
-    		this.query.category_id = id;
-    	},
     	ChangeDate(id) {
     		this.DateSection = id;
     	},
@@ -110,35 +103,15 @@ export default {
 		}
 	},
 	created() {
-		this.init();
+		this.init();	
 	},
 	
 	computed: {
 		article: function() {
-			return this.$store.state.user.article;
+			return this.$store.state.user.ForumModuleArticles.data;
 		},
-    	category: function() {
-    		let data = this.$store.state.user.ArticleCategory;
-    		let list = [
-    			{value: 0, label: '全部分类'}
-    		];
-
-    		for (let i in data) {
-    			let obj = {};
-    			obj.value = data[i].id;
-    			obj.label = data[i].name;
-    			list.push(obj);
-    		}
-
-    		return list;
-    	},
-    	CurrentCategory: function() {
-    		for (let i in this.category) {
-    			if (this.query.category_id == this.category[i].value) {
-    				return this.category[i].label;
-    			}
-    		}
-    	},
+    	
+    	
     	dateList: function() {
     		return [
     			{label: '时间不限', value: 0},

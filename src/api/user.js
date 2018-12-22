@@ -167,8 +167,11 @@ export const createChat = (info) => {
 export const ArticlePost = (article) => {
 	return http.post('article/post', article);
 }
-export const ArticleShow = (info) => {
-	return http.post('article/get', info);
+export const ForumModuleArticles = (info) => {
+	return http.post('article/modules/get', info);
+}
+export const ArticlePortalShow = (info) => {
+	return http.post('article/portal/get', info);
 }
 export const ArticleCategory = () => {
 	return http.post('article/category/get');
@@ -234,6 +237,9 @@ export const AgreeEveryMonth = (info) => {
 }
 export const ForumPhotosAdd = (info) => {
 	return http.post('article/photos/post',info);
+}
+export const PortalPicList = () => {
+	return http.post('article/photos/one');
 }
 export const MyArticleNotify = () => {
 	return http.post('article/mine/notify');

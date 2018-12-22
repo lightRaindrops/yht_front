@@ -140,7 +140,7 @@ export default {
     				this.update = false;
     				this.reset();
     				this.UECommand = 'cleardoc';//清空文档
-    				this.$router.push('/app/forum/write');
+    				// this.$router.push('/app/forum/create/article');
     			} else {
     				this.$notify.error('操作失败,请重试');
     			}
@@ -172,7 +172,8 @@ export default {
     			this.article.body = data.body;
     			this.article.title = data.title;
     			this.article.status = data.status;
-    			this.article.category_id = data.category_id;
+				this.article.attr = data.attr;
+    			this.article.module_id = data.module_id;
     		});
     	},
     	loadCategory() {

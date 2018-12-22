@@ -56,7 +56,14 @@ const state = {
   createChat: [],
   CurrentCustomer: [],
   ArticlePost: [],
-  article: [],
+  ForumModuleArticles: {
+    data: [],
+    loaded: false,
+  },
+  PortalArticleData:{
+    data: [],
+    loaded: false
+  },
   ArticleCategory: [],
   ArticleCategoryPost: [],
   ArticleOne: [],
@@ -77,6 +84,7 @@ const state = {
   ArticleAgreeList: [],
   ForumModule: [],
   ForumPhotosAdd: {},
+  PortalPicList: {},
   ForumModuleTableData: [],
   ForumModuleStore: {},
   AgreeEveryMonth: [],

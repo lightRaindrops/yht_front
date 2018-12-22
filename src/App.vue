@@ -58,20 +58,20 @@ export default {
     },
 
     getUser() {
-      this.$loading(
-        {
-          lock: true,
-          text: 'Loading',
-          background: 'rgba(255, 255, 255, 0.7)'
-        }
-      );
+      // this.$loading(
+      //   {
+      //     lock: true,
+      //     text: 'Loading',
+      //     background: 'rgba(255, 255, 255, 0.7)'
+      //   }
+      // );
       this.$store.dispatch('getUserInfo').then(() => {  
         if (this.mobile) {
 
           toast.clear();
 
         } else {
-          this.$loading().close();
+          // this.$loading().close();
         }
       });
     },

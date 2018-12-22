@@ -230,9 +230,18 @@ const mutations = {
 		//console.log(data);
 		state.ArticlePost = data;
 	},
-	[types.ARTICLE_GET] (state, data) {
+	[types.FORUM_MODULE_ARTICLES] (state, data) {
 		// console.log(data);
-		state.article = data;
+		state.ForumModuleArticles = data;
+	},
+	[types.ARTICLE_PORTAL_SHOW] (state, response) {
+		state.PortalArticleData.loaded = response.loaded;
+		
+		if (response.data.length > 0) {
+			response.data.forEach((item) => {
+				state.PortalArticleData.data.push(item);
+			});
+		}
 	},
 	[types.ARTICLE_CATEGORY] (state, data) {
 		//console.log(data);
@@ -266,9 +275,9 @@ const mutations = {
 		//console.log(data);
 		state.ForumMenu = data;
 	},
-	[types.ARTICLE_DRAFT] (state, data) {
-		//console.log(data);
-		state.ArticleDraft = data;
+	[types.ARTICLE_DRAFT] (state, response) {
+		console.log(response);
+		state.ArticleDraft = response.data;
 	},
 	[types.ARTICLE_PUBLISH] (state, data) {
 		//console.log(data);
@@ -570,13 +579,16 @@ const mutations = {
 		}
 	},
 	[types.FORUM_MODULE] (state, response) {
-		console.log(response)
+		// console.log(response)
 		if (response.data.length > 0) {
 			state.ForumModule = response.data;
 		}
 	},
 	[types.FORUM_MODULE_STORE] (state, response) {
 		state.ForumModuleStore = response
+	},
+	[types.PORTAL_PIC_LIST] (state, response) {
+		state.PortalPicList = response.data;
 	}
 }
 

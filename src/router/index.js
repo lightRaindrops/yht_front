@@ -109,7 +109,11 @@ let  routes = [
                 children: [
                     {
                         path: 'portal',
-                        component: () => import('@/components/main/forum/portal.vue')
+                        component: () => import('@/components/main/forum/portal.vue'),
+                        meta: {
+                            keepAlive: true ,// 需要被缓存
+                            scrollTop: 0,
+                        },
                     },
                     {
                         path: 'create',
@@ -123,9 +127,12 @@ let  routes = [
                                 path: 'photos',
                                 component: () => import('@/components/main/forum/create/photos.vue')
                             },
-                        ]
+                        ],
                     },
-                    
+                    {
+                        path: 'article/:id',
+                        component: () => import('@/components/main/forum/list/content.vue')
+                    },
                     {
                         // path: 'list/:id',
                         // component: () => import('@/components/main/forum/list/index.vue'),
@@ -135,10 +142,7 @@ let  routes = [
                         //         path: 'index',
                         //         component: () => import('@/components/main/forum/list/list.vue'),
                         //     },
-                        //     {
-                        //         path: 'article/:id',
-                        //         component: () => import('@/components/main/forum/list/content.vue')
-                        //     }
+                        //     
                         // ]
                         path: 'module/:id/attr/:attr',
                         name: 'forumModule',

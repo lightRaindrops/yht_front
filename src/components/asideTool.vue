@@ -26,16 +26,6 @@
 				searchValue: '',
 			}
 		},
-
-		computed: {
-			isLoading: function() {
-				if (this.$store.state.user.userInfo.name) {
-					return true;
-				}
-
-				return false;
-			}
-		}
 	}
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>

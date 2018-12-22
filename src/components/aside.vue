@@ -82,9 +82,7 @@ export default {
 		}
 	},
 	computed: {
-		isLoading: function() {
-			return true;
-		},
+		
 		navigation: function () {
 
 			return this.$store.state.user.navigation;

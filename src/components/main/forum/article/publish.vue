@@ -1,14 +1,14 @@
 <template>
 	<div class="wapper">
 		<div class="content-list">
-			<div class="content-item" v-for="(item , keys) in article">
+			<div class="content-item" v-for="(item , keys) in article" :key="keys">
 				<div class="ContentItem-avatar">
 					<img :src="item.headimg ? item.headimg : 'http://e.yhtjc.com/v2/public/img/default.png'">
 				</div>
 				<div class="ContentItem-container">
 					<div class="ContentItem-title">
 						<div class="ContentItem-title-text">
-							<router-link :to="'/app/forum/list/article/'+item.id">{{item.title}}</router-link>
+							<router-link :to="'/app/forum/article/'+item.id">{{item.title}}</router-link>
 						</div>
 						<div class="ContentItem-subtitle">
 							<span class="ContentItem-created">创建于:{{item.created}}</span>
@@ -55,7 +55,7 @@ export default {
     	
     	/**编辑文章**/
     	edit($id) {
-    		this.$router.push('/app/forum/write?id='+$id);
+    		this.$router.push('/app/forum/create/article?id='+$id);
     	}
 	},
 	created() {
