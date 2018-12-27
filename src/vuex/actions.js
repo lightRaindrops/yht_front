@@ -351,9 +351,27 @@ export const ForumModuleArticles = ({commit}, info) => {
 		return commit('FORUM_MODULE_ARTICLES',response);
 	})
 }
+export const ForumModuleArticlesClear = ({commit}) => {
+	return commit('FORUM_MODULE_ARTICLE_CLEAR');
+}
+export const ForumModuleSync = ({commit}, info) => {
+	return api.ForumModuleSync().then((response) => {
+		return commit('FORUM_MODULE_SYNC', response);
+	})
+}
 export const ArticlePortalShow = ({commit},info) => {
 	return api.ArticlePortalShow(info).then((response) => {
 		return commit('ARTICLE_PORTAL_SHOW', response);
+	})
+}
+export const SetArticleTop = ({commit}, info) => {
+	return api.SetArticleTop(info).then((response) => {
+		return commit('SET_ARTICLE_TOP', response);
+	});
+}
+export const CancelArticleTop = ({commit}, info) => {
+	return api.CancelArticleTop(info).then((response) => {
+		return commit('SET_ARTICLE_TOP', response);
 	})
 }
 export const ArticleCategory = ({commit}) => {
@@ -361,7 +379,16 @@ export const ArticleCategory = ({commit}) => {
 		return commit('ARTICLE_CATEGORY', response);
 	});
 }
-
+export const ArticleManagerCategory = ({commit}) => {
+	return api.ArticleManagerCategory().then((response) => {
+		return commit('ARTICLE_MANAGER_CATEGORY', response);
+	});
+}
+export const LoadArticleModuleCategory = ({commit}, info) => {
+	return api.LoadArticleModuleCategory(info).then((response) => {
+		return commit('LOAD_ARTICLE_MODULE_CATEGORY', response);
+	});
+}
 export const ArticleCategoryPost = ({commit}, info) => {
 	return api.ArticleCategoryPost(info).then((response) => {
 		return commit('ARTICLE_CATEGORY_POST', response);

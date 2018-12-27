@@ -1,10 +1,6 @@
 <template>
 	<div class="table-wallper">
-		<div class="table-tool">
-			<p>
-				<el-button type="success" @click="showAddDialog = true">添加文章分类</el-button>
-			</p>
-		</div>
+		<h3 class="title">管理本部门的内容分类</h3>
 		<div class="table">
 			<el-table
 			    :data="tableData"
@@ -29,6 +25,10 @@
 			      prop="created"
 			      label="添加时间">
 			    </el-table-column>
+				<el-table-column
+			      prop="department"
+			      label="部门名称">
+			    </el-table-column>
 			    <el-table-column
 			    	prop="id"
 			      	label="操作"
@@ -43,11 +43,15 @@
 			    </el-table-column>
 			</el-table>
 		</div>	
+		<div class="table-tool">
+			<el-button type="primary"  @click="showAddDialog = true">添加分类</el-button>
+		</div>
 		<el-dialog title="添加文章分类" :visible.sync="showAddDialog" @close="resetForm">
 		  	<el-form :model="form" :rules="rules" ref="form">
 		    	<el-form-item label="分类名称" :label-width="'120px'" prop="name">
 		      		<el-input v-model="form.name" auto-complete="off"></el-input>
 		    	</el-form-item>
+				
 		  	</el-form>
 		  	<div slot="footer" class="dialog-footer">
 		    	<el-button @click="showAddDialog = false">取 消</el-button>
@@ -63,7 +67,7 @@ export default {
 			showAddDialog: false,
 			form: {
 				id: '',
-				name: ''
+				name: '',
 			},
 			rules: {
 				name: [
@@ -73,6 +77,7 @@ export default {
 			},
 			defaultForm: {},
 			update: false,
+			
 		}
 	},
 	methods: {
@@ -82,9 +87,7 @@ export default {
 			this.defaultForm = JSON.parse(JSON.stringify(this.form));
 		},
 		loadTable() {
-			this.$store.dispatch('ArticleCategory').then(() => {
-
-			});
+			this.$store.dispatch('ArticleManagerCategory');
 		},
 		submit() {
 			this.$refs.form.validate((valid) => {
@@ -109,7 +112,7 @@ export default {
 							this.update = false;
 							this.resetForm();
 						} else {
-							this.$notify.error('操作失败');
+							this.$notify.error('操作失败'+response.errmsg);
 						}
 					});
 				}
@@ -125,14 +128,15 @@ export default {
 			for (let i in this.defaultForm) {
 				this.form[i] = this.defaultForm[i];
 			}
-		}
+		},
+		
 	},
 	created() {
 		this.init();
 	},
 	computed: {
 		tableData: function() {
-			return this.$store.state.user.ArticleCategory;
+			return this.$store.state.user.ArticleManagerCategory;
 		}
 	}
 }
@@ -143,8 +147,12 @@ export default {
 	height: 100%;
 	padding: 15px 30px;
 	position: relative;
+	.title
+		font-size: 22px;
+		font-weight: 400;
+		color: #1f2f3d;
 	.table-tool
 		width: 100%;
-		p
-			text-align: left;
+		margin: 15px 0px;
+		
 </style>

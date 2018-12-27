@@ -3,6 +3,7 @@
 		<div class="table-tool">
 			<p>
 				<el-button type="success" @click="showAddDialog = true">添加版块</el-button>
+				<el-button type="success" @click="updateModules">更新版块</el-button>
 			</p>
 		</div>
 		<div class="table">
@@ -124,6 +125,18 @@ export default {
 			for (let i in this.defaultForm) {
 				this.form[i] = this.defaultForm[i];
 			}
+		},
+		updateModules() {
+			this.$store.dispatch('ForumModuleSync').then(() => {
+				let response = this.$store.state.user.ForumModuleSync;
+
+				if (response.status == 'success') {
+					this.$notify.success('操作成功');
+				}
+				else {
+					this.$notify.error('操作失败'+response.errmsg);
+				}
+			});
 		}
 	},
 	created() {

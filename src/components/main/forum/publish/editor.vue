@@ -65,7 +65,8 @@ export default {
                 colorsHEXInput: true,//关闭16进制色值
                 toolbarSticky: true,//操作栏是否自动吸顶
                 // zIndex: 99999,
-				height: this.height
+				height: this.height,
+				charCounterMax: -1,//字数
         	},
       	}
     },

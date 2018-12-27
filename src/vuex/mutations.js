@@ -230,9 +230,24 @@ const mutations = {
 		//console.log(data);
 		state.ArticlePost = data;
 	},
-	[types.FORUM_MODULE_ARTICLES] (state, data) {
-		// console.log(data);
-		state.ForumModuleArticles = data;
+	[types.FORUM_MODULE_ARTICLES] (state, response) {
+		state.ForumModuleArticles.loaded = response.loaded;
+		state.ForumModuleArticles.hasRole = response.hasRole;
+
+		if (response.data.length > 0) {
+			response.data.forEach((item) => {
+				state.ForumModuleArticles.data.push(item);
+			});
+		}
+	},
+	[types.SET_ARTICLE_TOP] (state, response) {
+		state.SetArticleTop = response;
+	},
+	[types.FORUM_MODULE_ARTICLE_CLEAR] (state) {
+		state.ForumModuleArticles.data = [];
+	},
+	[types.FORUM_MODULE_SYNC] (state, response) {
+		state.ForumModuleSync = response;
 	},
 	[types.ARTICLE_PORTAL_SHOW] (state, response) {
 		state.PortalArticleData.loaded = response.loaded;
@@ -243,9 +258,14 @@ const mutations = {
 			});
 		}
 	},
-	[types.ARTICLE_CATEGORY] (state, data) {
-		//console.log(data);
-		state.ArticleCategory = data;
+	[types.ARTICLE_CATEGORY] (state, response) {
+		state.ArticleCategory = repsonse.data;
+	},
+	[types.LOAD_ARTICLE_MODULE_CATEGORY] (state, response) {
+		state.ArticleModuleCategory = response.data;
+	},
+	[types.ARTICLE_MANAGER_CATEGORY] (state, response) {
+		state.ArticleManagerCategory = response;
 	},
 	[types.ARTICLE_CATEGORY_POST] (state, data) {
 		//console.log(data);

@@ -51,12 +51,13 @@
                             点赞：{{item.agree}}
                         </span>
                     </span>
-                    <span class="foot-item">
+                     <span class="foot-item">
                         <i class="iconfont icon-Collection"></i>
                         <span class="foot-name">
                             收藏
                         </span>
                     </span>
+                    
                 </div>
             </div>
         </div>
@@ -140,7 +141,7 @@ export default {
                     return '加载中...';
                 }
                 else {
-                    return '查看更多';
+                    return '查看更多精彩内容';
                 }
             }
            

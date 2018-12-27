@@ -3,11 +3,17 @@
 		<div class="sub-menu">
 			<div class="Submenu-list Card">
 				<ul>
-					<!-- -->
-					<li class="Submenu-item " :class="{'Submenu-active': CurrentModuleId == item.id && CurrentModuleAttr == item.attr}" v-for="(item, keys) in ForumModule" :key ="keys" @click="JumpModule(item.id,item.attr)">
-						<div class="Button Submenu-item-link" >
-							<span>{{item.name}}</span>
-						</div>
+					<li class="Submenu-item "
+						v-for="(item, keys) in ForumModule" 
+						:key ="keys" @click="JumpModule(item.id,item.attr)"
+						:class="{'Submenu-active': CurrentModuleId == item.id}" 
+						:style="{'animation-delay': keys/10+'s'}"
+					>
+						<mu-ripple>
+							<div class="Button Submenu-item-link" >
+								<span>{{item.name}}</span>
+							</div>
+						</mu-ripple>
 					</li>
 				</ul>
 			</div>
@@ -57,7 +63,6 @@
 		</div>
 		<div class="sub-main">
 			<transition :name="transitionName" mode="out-in">
-				<!-- <router-view :key="routeKey"></router-view> -->
 				<keep-alive>
 					<router-view v-if="$route.meta.keepAlive" :key="routeKey"></router-view>
 				</keep-alive>
@@ -70,24 +75,12 @@
 </template>
 <script type="text/javascript">
 export default {
-	// beforeRouteUpdate(to, from, next) {
-	// 	this.CurrentRoute = to.path;
-
-	// 	if (to.path.indexOf('/app/forum/list/article') > -1) {
-	// 		this.CurrentRoute = '/app/forum/list/index';
-	// 	}
-
-	// 	next();
-	// },
-	// beforeRouteEnter(to, from, next) {
-	// 	next((vm) => {
-	// 		vm.CurrentRoute = to.path;
-
-	// 		if (to.path.indexOf('/app/forum/list/article') > -1) {
-	// 			vm.CurrentRoute = '/app/forum/list/index';
-	// 		}
-	// 	});
-	// },
+	
+	beforeRouteEnter(to, from, next) {
+		next((vm) => {
+			vm.CurrentModuleId = to.params.id || 0;
+		});
+	},
 
 	props: {
 		navsTakeUp: {
@@ -172,6 +165,7 @@ export default {
 	position: relative;
 	display: flex;
 	overflow: hidden;
+	transition: all 0.5s;
 	.hr
 		border-top: 1px solid #ebebeb;
 		margin: 10px 0px;
@@ -193,14 +187,18 @@ export default {
 		height: 100%;
 		margin-left:5px;
 		margin-top:5px;
+		transition: all 0.5s;
 		.Submenu-list
 			position: relative;
+			transition: all 0.5s;
 			.Submenu-item
 				display: flex;
 				cursor: pointer;
 				align-items: center;
 				position: relative;
 				overflow: hidden;
+				animation: flipInY 0.7s;
+				animation-fill-mode: backwards;
 				&:hover
 					background: rgb(247,247,247);
 				.Button
@@ -216,12 +214,6 @@ export default {
 				&:not(:first-child)
 					border-top: 1px solid #ebebeb;
 			.Submenu-active
-				// background: rgb(51,122,183);
-				// .Button
-				// 	color: #fff;
-				// 	font-weight: 600;
-				// &:hover
-				// 	background: rgb(51,122,183);
 				&::after
 					content: '';
 					height: 100%;
@@ -230,9 +222,9 @@ export default {
 		.Submenu-info
 			margin-top: 30px;
 			padding: 15px;
+			transition: all 0.5s;
 			.user-info
 				.avator
-					// padding: 15px;
 					text-align:center;
 					img
 						width: 75px;
@@ -262,13 +254,13 @@ export default {
 					font-weight: 600;
 					cursor: pointer;
 	.sub-main
+		// flex-basis: calc(100% - 350px);
 		flex: 1;
 		margin-left: 30px;
 		height: 100%;
 		overflow:hidden-y;
 		position: relative;
-		
-		
+		border-radius: 5px;
 .fade-enter-active, .fade-leave-active
 	transition: opacity .5s;
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ 

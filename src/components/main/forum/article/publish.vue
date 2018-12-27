@@ -20,6 +20,7 @@
 					</div>
 					<div class="ContentItem-actions">
 						<el-button type="primary" @click.native="edit(item.id)">编辑</el-button>
+						<el-button type="primary" @click.native="del(item.id)">编辑</el-button>
 					</div>
 				</div>
 			</div>

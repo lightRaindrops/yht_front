@@ -147,6 +147,10 @@ let  routes = [
                         path: 'module/:id/attr/:attr',
                         name: 'forumModule',
                         component: () => import('@/components/main/forum/list/list.vue'),
+                        meta: {
+                            keepAlive: true ,// 需要被缓存
+                            scrollTop: 0,
+                        },
                     },
                     {
                         path: 'publish',

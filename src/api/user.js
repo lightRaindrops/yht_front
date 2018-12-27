@@ -170,11 +170,18 @@ export const ArticlePost = (article) => {
 export const ForumModuleArticles = (info) => {
 	return http.post('article/modules/get', info);
 }
+
 export const ArticlePortalShow = (info) => {
 	return http.post('article/portal/get', info);
 }
 export const ArticleCategory = () => {
 	return http.post('article/category/get');
+}
+export const ArticleManagerCategory = () => {
+	return http.post('article/category/manager/get');
+}
+export const LoadArticleModuleCategory = (info) => {
+	return http.post('article/list/category/get', info);
 }
 export const ArticleCategoryPost = (info) => {
 	return http.post('article/category/post', info);
@@ -402,4 +409,13 @@ export const GetForumModule = () => {
 }
 export const ForumModuleStore = (info) => {
 	return http.post('article/module/store', info);
+}
+export const ForumModuleSync = () =>{
+	return http.post('article/module/sync');
+}
+export const SetArticleTop = (info) => {
+	return http.post('article/settop', info);
+}
+export const CancelArticleTop = (info) => {
+	return http.post('article/canceltop', info);
 }

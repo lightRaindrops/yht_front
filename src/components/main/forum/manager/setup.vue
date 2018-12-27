@@ -1,10 +1,8 @@
 <template>
 	<div class="wapper">
-		<div class="content-title">
-			
-		</div>
 		<div class="content-list">
-			<div class="content-item" v-for="(item , keys) in article">
+			<p class="content-title">本模块可以管理当前部门下的内容</p>
+			<div class="content-item" v-for="(item , keys) in article" :key="keys">
 				<div class="ContentItem-avatar">
 					<img :src="item.headimg ? item.headimg : 'http://e.yhtjc.com/v2/public/img/default.png'">
 				</div>
@@ -40,32 +38,19 @@ export default {
 				category_id: 0,
 			},
 			fixedStyle: {},
-			CategoryPopver: false,
-			DateSection: 0,
-
+			
 		}
 	},
 	methods: {
 		
 		init() {
-			this.list();
-			this.loadCategory();
-		},
-		list () {
-			this.$store.dispatch('ArticleShow', this.query).then(() => {
 
-			});
 		},
-		loadCategory() {
-    		this.$store.dispatch('ArticleCategory');
-    	},
+		
     	JumpArticle(id) {
     		this.$router.push('/app/forum/list/article/'+id);
     	},
     	
-    	ChangeCategory(id) {
-    		this.query.category_id = id;
-    	},
     	ChangeDate(id) {
     		this.DateSection = id;
     	},
@@ -137,28 +122,7 @@ export default {
 		article: function() {
 			return this.$store.state.user.article;
 		},
-    	category: function() {
-    		let data = this.$store.state.user.ArticleCategory;
-    		let list = [
-    			{value: 0, label: '全部分类'}
-    		];
-
-    		for (let i in data) {
-    			let obj = {};
-    			obj.value = data[i].id;
-    			obj.label = data[i].name;
-    			list.push(obj);
-    		}
-
-    		return list;
-    	},
-    	CurrentCategory: function() {
-    		for (let i in this.category) {
-    			if (this.query.category_id == this.category[i].value) {
-    				return this.category[i].label;
-    			}
-    		}
-    	},
+    	
     	dateList: function() {
     		return [
     			{label: '时间不限', value: 0},
@@ -180,6 +144,10 @@ export default {
 		position: relative;
 		padding: 15px;
 		width: 100%;
+		.content-title
+			text-align: center;
+			font-size: 13px;
+			color:#ff4081;
 		.content-item
 			padding-top: 5px;
 			padding-bottom: 10px;

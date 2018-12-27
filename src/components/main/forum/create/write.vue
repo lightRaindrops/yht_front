@@ -41,6 +41,20 @@
 					</p>
 					<p v-show="AttrErrStatus" class="error-msg"> 请选择一个文章的属性</p>
 				</div>	
+				<div class="article-attribute">
+					<p>
+						<span>文章分类:</span>
+						<el-select v-model="article.category" placeholder="请选择分类">
+							<el-option
+							v-for="item in category"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value">
+							</el-option>
+						</el-select>
+					</p>
+					<p v-show="CategoryErrStatus" class="error-msg"> 请选择文章的分类</p>
+				</div>	
 				<div class="article-attribute" v-if="article.attr === 'public'">
 					<p>
 						<span>发&nbsp;布&nbsp;到&nbsp;:</span>
@@ -82,10 +96,12 @@ export default {
 				title: '',
 				body: '',
 				status: 0,
-				module_id: 0
+				module_id: 0,
+				category: 0
 			},
 			AttrErrStatus: false,
 			ModuleErrStatus: false,
+			CategoryErrStatus: false,
 	        update: false,
 	        defaultArticle: {},
 	        hackReset: false,
@@ -93,6 +109,7 @@ export default {
 				{label:'公开',value:'public'},
 				{label:'部门可见', value: 'protected'}
 			],
+			module_id: ""
 		}
 	},
 	methods: {
@@ -111,6 +128,8 @@ export default {
 		},
 		/**保存到草稿箱**/
     	saveArticle() {
+			let action = 'ArticlePost';
+
     		if (this.article.title == '' || this.article.body == '') {
     			this.$message.error('标题或者内容不能为空!');
     			return false;
@@ -123,7 +142,13 @@ export default {
     			this.AttrErrStatus = false;
     		}
 
-    		let action = 'ArticlePost';
+			if (!this.article.category) {
+    			this.CategoryErrStatus = true;
+    			return false;
+    		} else {
+    			this.CategoryErrStatus = false;
+    		}
+			
     		if (this.update) {
     			action = 'ArticlePut';
     		} 
@@ -205,6 +230,7 @@ export default {
     },
     created() {
     	this.init();
+		this.module_id = this.$route.params.module_id;
     },
     mounted() {
     	this.$nextTick(() => {
@@ -214,7 +240,7 @@ export default {
     computed: {
     	category: function() {
     		let data = this.$store.state.user.ArticleCategory;
-    		let list = [];
+    		let list = [{label: '其他', value: 0}];
 
     		for (let i in data) {
     			let obj = {};
@@ -222,7 +248,7 @@ export default {
     			obj.label = data[i].name;
     			list.push(obj);
     		}
-
+			
     		return list;
     	},
     	ArticleContent: function() {
@@ -236,7 +262,7 @@ export default {
 					data.push({label:item.name,value:item.id});
 				}
 			});
-			console.log(data);
+		 
 			return data;
 		},
     },

@@ -1,5 +1,15 @@
 <template>
-	<div class="wapper">
+	<div class="article-list-wapper" @scroll="LoadMore" ref="ArticleList" @scroll.passive="onScroll">
+		<div class="article-list-category " :class="{'holder-top': TopBarFixed}">
+			<span 
+				v-for="(item,key) in category" :key="key" 
+				:class="{'is-active': CurrentCateId == item.id}" 
+				@click="ChangeCategory(item.id)"
+				class="category-item" 
+			>
+				{{item.name}}
+			</span>
+		</div>
 		<div class="hot-content-list">
 			<div class="hot-item" v-for="(item,key) in article" :key="key" >
                 <div class="item-content">
@@ -9,6 +19,9 @@
                     <div class="rich-text">
                         <a href="javascript:void(0)" @click="JumpArticle(item.id)">
                             {{item.title}}
+							<span v-if="item.top" class="hot-top-title">
+								<i class="iconfont icon-redu"></i>
+							</span>
                         </a>
                         <div class="content">
                             {{item.abstract}}
@@ -17,6 +30,10 @@
                     </div>
                 </div>
                 <div class="foot-list">
+					<span class="foot-item" v-if="hasRole">
+						<el-button type="primary" size="mini" v-if="!item.top" @click.native="setTop(item.id)">置顶</el-button>
+						<el-button type="info" size="mini" v-else @click.native="cancelTop(item.id)">取消置顶</el-button>
+					</span>
                     <span class="foot-item">
                         <i class="iconfont icon-zuozhe"></i>
                         <span class="foot-name">
@@ -35,6 +52,12 @@
                             点赞：{{item.agree}}
                         </span>
                     </span>
+					<span class="foot-item">
+                        <i class="iconfont icon-biaoqian"></i>
+                        <span class="foot-name">
+                            分类： {{item.category}}
+                        </span>
+                    </span>
                     <span class="foot-item">
                         <i class="iconfont icon-Collection"></i>
                         <span class="foot-name">
@@ -43,75 +66,154 @@
                     </span>
                 </div>
             </div>
+			<div class="hot-item">
+				<p class="article-loading" >{{LoadMoreStr}}</p>
+			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
 export default {
-	beforeRouteEnter(to, from, next) {
-		next(vm => {
-			vm.moduleId = to.params.id;
-			vm.moduleAttr = to.params.attr;
-			vm.checkRoute();
-		});
-	},	
-	beforeRouteUpdate(to, from, next) {
-		this.moduleId = to.params.id;
-		this.moduleAttr = to.params.attr;
-		this.checkRoute();
-		next();
-	},
 	data() {
 		return {
-			
 			fixedStyle: {},
 			CategoryPopver: false,
 			DateSection: 0,
-				moduleId: "",
-			moduleAttr: ""
+			pagesize: 15,
+			pagenow: 1,
+			triggerHeight: 50, //触发无限滚动的距离
+			scrollInit: false,
+			CurrentCateId: "",//当前分类
+			TopBarFixed: false,
 		}
 	},
 	methods: {
-		init() {
-			let param = {};
-			this.$store.dispatch('ForumModuleArticles', param).then(() => {
-
-			});
-			 
+		init: function() {
+			this.LoadArticleModuleCategory(this.$route.params.id)
+				
 		},
-		
+		ReloadArticle() {
+			this.$store.dispatch('ForumModuleArticlesClear');
+			this.LoadArticle();
+		},
+		LoadArticle() {
+			let param = {
+				attr: this.moduleAttr,
+				module_id: this.moduleId,
+				pagesize: this.pagesize,
+				pagenow: this.pagenow,
+				category: this.CurrentCateId
+			};
+			
+			this.$store.dispatch('ForumModuleArticles', param);
+		},
     	JumpArticle(id) {
     		this.$router.push('/app/forum/article/'+id);
     	},
-    	
-    	ChangeDate(id) {
-    		this.DateSection = id;
-    	},
-		//检查路由
-		checkRoute() {
-			let data = this.$store.state.user.ForumModule, flag = false;
+    	//读取当前部门下的分类
+    	LoadArticleModuleCategory(moduleId) {
+			this.$store.dispatch('LoadArticleModuleCategory',{module_id: moduleId}).then(() => {
+				this.ReloadArticle();
+			});;
+		},
+		//无限滚动
+		LoadMore() {
+			let dom = this.$refs.ArticleList;
+			let height = dom.scrollHeight - dom.offsetHeight - dom.scrollTop; //距离底部的高度
 
-			data.forEach((item) => {
-				if (item.id == this.moduleId && item.attr == this.moduleAttr) {
-					flag = true;
-				}
+			if (height <= this.triggerHeight && !this.loaded) {
+				this.pagenow += 1;
+				this.LoadArticle();
+			}	
+		},
+		setTop(id) {
+			this.$confirm('置顶该文章?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'primary'
+			}).then(() => {
+				this.$store.dispatch('SetArticleTop',{id:id}).then(() => {
+					let response = this.$store.state.user.SetArticleTop;
+
+					if (response.status == 'success') {
+						this.$notify.success('操作成功');
+						this.pagenow = 1;
+						this.init();
+					}
+					else {
+						this.$notify.error('操作失败!'+response.errmsg);
+					}
+				});
+			}).catch(() => {
+				         
 			});
-			
-			if (flag === false) {
-				this.$router.push('/app/forum/portal');
+		},
+		cancelTop(id) {
+			this.$confirm('取消该文章的置顶?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'info'
+			}).then(() => {
+				this.$store.dispatch('CancelArticleTop',{id:id}).then(() => {
+					let response = this.$store.state.user.SetArticleTop;
+
+					if (response.status == 'success') {
+						this.$notify.success('操作成功');
+						this.ReloadArticle();
+					}
+					else {
+						this.$notify.error('操作失败!'+response.errmsg);
+					}
+				});
+			}).catch(() => {
+				         
+			});
+		},
+		onScroll() {
+			if (this.scrollInit) {
+				this.$route.meta.scrollTop = this.$refs.ArticleList.scrollTop;
+
+				if (this.$route.meta.scrollTop > 50) {
+					this.TopBarFixed = true;
+				}
+				else {
+					this.TopBarFixed = false;
+				}
 			}
+		},
+		//切换分类
+		ChangeCategory(categoryid) {
+			this.CurrentCateId = categoryid;
+			this.ReloadArticle();
 		}
 	},
 	created() {
-		this.init();	
+		// this.LoadArticleModuleCategory(this.$route.params.id);
+		// this.init();
 	},
-	
+	activated() {
+		this.$nextTick(() => {
+            this.$refs.ArticleList.scrollTo(0, this.$route.meta.scrollTop);
+            this.scrollInit = true;
+        });
+		this.init();
+	},
+	deactivated() {
+        this.scrollInit = false;
+    },
 	computed: {
 		article: function() {
 			return this.$store.state.user.ForumModuleArticles.data;
 		},
-    	
-    	
+		hasRole: function() {
+			return this.$store.state.user.ForumModuleArticles.hasRole;
+		},
+    	moduleId: function() {
+			return this.$route.params.id;
+		},
+    	moduleAttr: function() {
+			return this.$route.params.attr;
+		},
     	dateList: function() {
     		return [
     			{label: '时间不限', value: 0},
@@ -119,23 +221,68 @@ export default {
     			{label: '三个月内', value: 2},
     			{label: '六个月内', value: 3}
     		]
-    	}
+    	},
+		loaded: function() {
+			return this.$store.state.user.ForumModuleArticles.loaded;
+		},
+		LoadMoreStr: function() {
+			if (this.loaded) {
+				return "加载完毕 共"+this.article.length+"篇文章";
+			}
+			else {
+				return "加载中...";
+			}
+		},
+		category: function() {
+			let data = this.$store.state.user.ArticleModuleCategory;
+
+			if (data.length > 0) {
+				this.CurrentCateId = data[0].id;
+			}
+
+			return data;
+		},
+		
     },
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.wapper
+.article-list-wapper
 	width: 100%;
 	height: 100%;
 	position: relative;
 	overflow-y: auto;
-	
+	.article-list-category
+		width: 100%;
+		height: 35px;
+		margin-left: 35px;
+		width: 1200px;
+		border-bottom: 1px solid #ebebeb;
+		.category-item
+			font-size: 14px;
+			font-weight: 400;
+			cursor: pointer;
+			margin-right: 25px;
+			color: rgba(0,0,0,0.4);
+			display: inline-block;
+			height: 100%;
+			transition: all 0.3s;
+			&.is-active
+				color: #3397cf;
+				border-bottom: 2px solid #3397cf;
+		&.holder-top
+			position: fixed;
+			background: #fff;
+			z-index: 999;
+			box-shadow: 0 1px 0 rgba(0,0,0,.04);
 	.hot-content-list
-		padding: 0px;
+		padding: 0px 0px 0px 20px;
+		width: 100%;
+		position:relative;
 		.break-path
 			margin-bottom: 20px;
 		.hot-item
-			width: 710px;
+			width: 910px;
 			padding: 20px;
 			.item-content
 				display: flex;
@@ -163,6 +310,8 @@ export default {
 						margin-bottom: 15px;
 						&:hover
 							color: #175199;
+						.hot-top-title
+							color: red;
 					.content
 						cursor:pointer;
 						.read-article
@@ -179,4 +328,7 @@ export default {
 				padding: 10px 10px 0px 20px;
 				.foot-item
 					margin-right: 20px;
+		.article-loading
+			color:#ff4081;
+			text-align: center;
 </style>

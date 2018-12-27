@@ -59,12 +59,17 @@ const state = {
   ForumModuleArticles: {
     data: [],
     loaded: false,
+    hasRole: false
   },
+  SetArticleTop: {},
   PortalArticleData:{
     data: [],
     loaded: false
   },
+  ForumModuleSync: {},
   ArticleCategory: [],
+  ArticleModuleCategory: [],
+  ArticleManagerCategory: [],
   ArticleCategoryPost: [],
   ArticleOne: [],
   AddArticleAnswer: {},
