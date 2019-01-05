@@ -10,9 +10,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 let EDITOR_IMG_URL = BACKEND_DOMAIN + 'editor/uploadimage';
+let FILE_UPLOAD_URL = BACKEND_DOMAIN + 'file/upload';
 
 export default {
   BACKEND_DOMAIN,
   BACKEND_DOMAIN_VIEW_URL,
-  EDITOR_IMG_URL
+  EDITOR_IMG_URL,
+  FILE_UPLOAD_URL
 }

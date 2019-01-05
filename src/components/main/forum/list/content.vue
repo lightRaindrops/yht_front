@@ -13,7 +13,8 @@
 					<span>{{article.name}}</span>
 					<span>{{article.created}}</span>
 				</p>
-				<div class="content-body"  v-html="article.body"></div>
+				<div class="content-body" ref="ContentBody" v-html="article.body"></div>
+				<!-- <content-body></content-body> -->
 				<div class="thend"></div>
 				<div class="agree">
 					<div class="click-agree" :class="{alreadyAgree: alreadyAgree}" @click="handleAgree">
@@ -21,7 +22,7 @@
 							<i class="iconfont icon-dianzan"></i>
 						</div>
 						<span v-if="!alreadyAgree">赞一下 ({{AgreeNum}})</span>
-						<span v-if="alreadyAgree">已赞 {{AgreeNum}}</span>
+						<span v-if="alreadyAgree">已赞{{AgreeNum}}</span>
 					</div>
 				</div>
 				<div class="QuestionAnswers-Wrapper " ref="editor">
@@ -50,7 +51,7 @@
 						</div>
 					</div>
 					<div class="QuestionAnswers-answers">
-						<div class="Answer-list ">
+						<div class="Answer-list " ref="AnswerList">
 							<div class="Answer-List-header">
 								<h4 class="List-headerText">
 									<span v-if="AnswerList.length > 0">{{AnswerList.length}}个评论</span>
@@ -67,7 +68,7 @@
 									</div>
 								</div>
 								<div class="RichContent">
-									<div class="RichContent-inner" v-html="item.content"></div>
+									<div class="RichContent-inner"  v-html="item.content"></div>
 
 									<p class="RichContent-created">
 										
@@ -186,10 +187,29 @@ export default {
     	},
 		returnPre() {
 			this.$router.go(-1);
-		}
+		},
+		AttaPrevent($el) {
+			this.$nextTick(function() {
+				let frNode = $el.getElementsByClassName('fr-file');
+				
+				for (let i = 0;i < frNode.length; ++i) {
+					frNode[i].removeEventListener('click', this.AttaClick);
+					frNode[i].addEventListener('click', this.AttaClick);
+				
+				}
+			});
+			
+		},
+		AttaClick(e) {
+			e.preventDefault();//阻止默认跳转行为
+			 
+			let href = e.target.href;	
+			window.open(href+'?token='+this.$store.state.user.token);
+		}	
 	},
 	created() {
 		this.init();
+		
 	},
 	
 	destoryed() {
@@ -225,15 +245,40 @@ export default {
     	}
 	},
 	components: {
-		'v-editor': Editor
+		'v-editor': Editor,
+		//渲染函数 终极方案 用于修改附件信息 
+		// 'content-body': {
+		// 	render: function(createElement) {
+		// 		return createElement(
+		// 			{
+		// 				template:'<div class="content-body">'+this.$store.state.user.ArticleOne.body+'</div>'
+		// 			}
+		// 		);
+		// 	}
+		// }
 	},
 	directives: {
 	  	focus: {
 	    	// 指令的定义
 	    	inserted: function (el) {
-	      		el.focus()
+	      		el.focus();
 	    	}
-	  	}
+	  	},
+	
+	},
+	watch: {
+		article: {
+			deep: true,
+			handler: function() {
+				this.AttaPrevent(this.$refs.ContentBody);
+			}
+		},
+		AnswerList: {
+			deep: true,
+			handler: function() {
+				this.AttaPrevent(this.$refs.AnswerList);
+			}
+		}
 	}
 }
 </script>

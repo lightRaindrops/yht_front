@@ -54,7 +54,6 @@ export default {
     	
     	/**发布文章**/
     	publish($id) {
-
     		this.$confirm('发表该文章, 是否继续?', '提示', {
 	          	confirmButtonText: '确定',
 	          	cancelButtonText: '取消',
@@ -74,7 +73,7 @@ export default {
     	},
     	/**编辑文章**/
     	edit($id) {
-    		this.$router.push('/app/forum/write?id='+$id);
+    		this.$router.push('/app/forum/create/article?id='+$id);
     	},
     	/**删除草稿**/
     	drop($id) {

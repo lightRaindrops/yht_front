@@ -85,27 +85,31 @@ export default {
 			scrollInit: false,
 			CurrentCateId: "",//当前分类
 			TopBarFixed: false,
+			isLoading: false,
+			lastCategory: ""
 		}
 	},
 	methods: {
 		init: function() {
-			this.LoadArticleModuleCategory(this.$route.params.id)
-				
+			this.LoadArticleModuleCategory(this.$route.params.id)	
 		},
 		ReloadArticle() {
 			this.$store.dispatch('ForumModuleArticlesClear');
 			this.LoadArticle();
 		},
 		LoadArticle() {
-			let param = {
+			this.isLoading = true;
+			let params = {
 				attr: this.moduleAttr,
 				module_id: this.moduleId,
 				pagesize: this.pagesize,
 				pagenow: this.pagenow,
 				category: this.CurrentCateId
 			};
-			
-			this.$store.dispatch('ForumModuleArticles', param);
+		
+			this.$store.dispatch('ForumModuleArticles', params).then(() => {
+				this.isLoading = false;
+			});
 		},
     	JumpArticle(id) {
     		this.$router.push('/app/forum/article/'+id);
@@ -121,7 +125,7 @@ export default {
 			let dom = this.$refs.ArticleList;
 			let height = dom.scrollHeight - dom.offsetHeight - dom.scrollTop; //距离底部的高度
 
-			if (height <= this.triggerHeight && !this.loaded) {
+			if (height <= this.triggerHeight && !this.loaded && !this.isLoading) {
 				this.pagenow += 1;
 				this.LoadArticle();
 			}	
@@ -183,19 +187,25 @@ export default {
 		},
 		//切换分类
 		ChangeCategory(categoryid) {
-			this.CurrentCateId = categoryid;
-			this.ReloadArticle();
+			if (categoryid != this.lastCategory) {
+				this.CurrentCateId = categoryid;
+				this.pagenow = 1;
+				this.$route.meta.category = categoryid;
+				this.ReloadArticle();
+				this.lastCategory = categoryid;
+			}
 		}
 	},
 	created() {
-		// this.LoadArticleModuleCategory(this.$route.params.id);
-		// this.init();
+		
 	},
 	activated() {
 		this.$nextTick(() => {
             this.$refs.ArticleList.scrollTo(0, this.$route.meta.scrollTop);
             this.scrollInit = true;
         });
+		this.CurrentCateId = this.$route.meta.category;
+		 
 		this.init();
 	},
 	deactivated() {
@@ -214,14 +224,7 @@ export default {
     	moduleAttr: function() {
 			return this.$route.params.attr;
 		},
-    	dateList: function() {
-    		return [
-    			{label: '时间不限', value: 0},
-    			{label: '一周内', value: 1},
-    			{label: '三个月内', value: 2},
-    			{label: '六个月内', value: 3}
-    		]
-    	},
+    	
 		loaded: function() {
 			return this.$store.state.user.ForumModuleArticles.loaded;
 		},
@@ -236,7 +239,7 @@ export default {
 		category: function() {
 			let data = this.$store.state.user.ArticleModuleCategory;
 
-			if (data.length > 0) {
+			if (data.length > 0 && !this.CurrentCateId) {
 				this.CurrentCateId = data[0].id;
 			}
 
@@ -257,6 +260,7 @@ export default {
 		height: 35px;
 		margin-left: 35px;
 		width: 1200px;
+		user-select: none;
 		border-bottom: 1px solid #ebebeb;
 		.category-item
 			font-size: 14px;

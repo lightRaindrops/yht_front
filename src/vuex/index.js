@@ -71,7 +71,9 @@ const state = {
   ArticleModuleCategory: [],
   ArticleManagerCategory: [],
   ArticleCategoryPost: [],
-  ArticleOne: [],
+  ArticleOne: {
+    body: "",
+  },
   AddArticleAnswer: {},
   ArticleAnswer: {},
   ArticleAgree: '',

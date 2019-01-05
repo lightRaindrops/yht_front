@@ -259,7 +259,7 @@ const mutations = {
 		}
 	},
 	[types.ARTICLE_CATEGORY] (state, response) {
-		state.ArticleCategory = repsonse.data;
+		state.ArticleCategory = response.data;
 	},
 	[types.LOAD_ARTICLE_MODULE_CATEGORY] (state, response) {
 		state.ArticleModuleCategory = response.data;
@@ -296,7 +296,6 @@ const mutations = {
 		state.ForumMenu = data;
 	},
 	[types.ARTICLE_DRAFT] (state, response) {
-		console.log(response);
 		state.ArticleDraft = response.data;
 	},
 	[types.ARTICLE_PUBLISH] (state, data) {

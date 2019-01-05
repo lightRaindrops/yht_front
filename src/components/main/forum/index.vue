@@ -197,7 +197,7 @@ export default {
 				align-items: center;
 				position: relative;
 				overflow: hidden;
-				animation: flipInY 0.7s;
+				animation: fadeInRight 0.3s;
 				animation-fill-mode: backwards;
 				&:hover
 					background: rgb(247,247,247);

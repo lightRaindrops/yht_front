@@ -11,7 +11,7 @@
 							<router-link :to="'/app/forum/article/'+item.id">{{item.title}}</router-link>
 						</div>
 						<div class="ContentItem-subtitle">
-							<span class="ContentItem-created">创建于:{{item.created}}</span>
+							<span class="ContentItem-created">最后修改时间:{{item.created}}</span>
 							<span class="ContentItem-agree">
 								<i class="iconfont icon-dianzan"></i>
 								&nbsp;{{item.agree}}
@@ -20,7 +20,7 @@
 					</div>
 					<div class="ContentItem-actions">
 						<el-button type="primary" @click.native="edit(item.id)">编辑</el-button>
-						<el-button type="primary" @click.native="del(item.id)">编辑</el-button>
+						<el-button type="danger" @click.native="del(item.id)">删除</el-button>
 					</div>
 				</div>
 			</div>
@@ -46,9 +46,7 @@ export default {
 			this.loadCategory();
 		},
 		list() {
-			this.$store.dispatch('ArticlePublishList', this.query).then(() => {
-
-			});
+			this.$store.dispatch('ArticlePublishList', this.query);
 		},
 		loadCategory() {
     		this.$store.dispatch('ArticleCategory');
@@ -57,7 +55,28 @@ export default {
     	/**编辑文章**/
     	edit($id) {
     		this.$router.push('/app/forum/create/article?id='+$id);
-    	}
+    	},
+		del(id) {
+			this.$confirm('删除该文章, 是否继续?', '提示', {
+	          	confirmButtonText: '确定',
+	          	cancelButtonText: '取消',
+	          	type: 'danger'
+	        }).then(() => {
+	          this.$store.dispatch('ArticleDelete', {id:id}).then(() => {
+					let response = this.$store.state.user.ArticleDelete;
+
+				  	if (response.status == 'success') {
+						this.$notify.success('操作成功');
+						this.list();
+				  	}
+					else {
+						this.$notify.error('操作失败');
+					}
+			  });
+	        }).catch(() => {
+	                  
+	        });
+		}
 	},
 	created() {
 		this.init();

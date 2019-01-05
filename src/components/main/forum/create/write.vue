@@ -86,7 +86,6 @@ import Editor from '../publish/editor.vue';
 export default {
 	data() {
 		return {
-			
 			defaultMsg: '',
 			titlePicBase64: '',
 			showTitlePic: false,
@@ -129,7 +128,7 @@ export default {
 		/**保存到草稿箱**/
     	saveArticle() {
 			let action = 'ArticlePost';
-
+			 
     		if (this.article.title == '' || this.article.body == '') {
     			this.$message.error('标题或者内容不能为空!');
     			return false;
@@ -142,7 +141,7 @@ export default {
     			this.AttrErrStatus = false;
     		}
 
-			if (!this.article.category) {
+			if (this.article.category === false) {
     			this.CategoryErrStatus = true;
     			return false;
     		} else {
@@ -152,14 +151,15 @@ export default {
     		if (this.update) {
     			action = 'ArticlePut';
     		} 
-    		 
+    		
     		this.$store.dispatch(action, this.article).then(() => {
 
     			let response = this.$store.state.user.ArticlePost;
+				
     			if (this.update) {
     				response = this.$store.state.user.ArticleUpdate;
     			}
-
+				 
     			if (response.status == 'success') {
     				this.$notify.success('操作成功');
     				this.update = false;
@@ -190,15 +190,25 @@ export default {
     	/**获取文章方法**/
     	getContent($id) {
     		this.$store.dispatch('ArticleEdit', {id:$id}).then(() => {
-    			
-    			let data = this.$store.state.user.ArticleEditOne;
+    			let response = this.$store.state.user.ArticleEditOne;
 
-    			this.article.id = data.id;
-    			this.article.body = data.body;
-    			this.article.title = data.title;
-    			this.article.status = data.status;
-				this.article.attr = data.attr;
-    			this.article.module_id = data.module_id;
+				if (response.status == 'success') {
+					let data = response.data;
+					this.article.id = data.id;
+					this.article.body = data.body;
+					this.article.title = data.title;
+					this.article.status = data.status;
+					this.article.attr = data.attr;
+					this.article.module_id = data.module_id;
+					this.article.category = data.category_id;
+				}
+				else {
+					this.$message.warning(response.errmsg);
+					setTimeout(() => {
+						this.$message.close();
+						this.$router.push('/app/forum/portal');
+					}, 2500);
+				}
     		});
     	},
     	loadCategory() {
@@ -240,7 +250,7 @@ export default {
     computed: {
     	category: function() {
     		let data = this.$store.state.user.ArticleCategory;
-    		let list = [{label: '其他', value: 0}];
+    		let list = [{label: '默认', value: 0}];
 
     		for (let i in data) {
     			let obj = {};
@@ -258,7 +268,7 @@ export default {
 			let list = this.$store.state.user.ForumModule, data = [];
 
 			list.forEach((item) => {
-				if (item.attr == 'public') {
+				if (item.attr == 'public' && item.id > 0) {
 					data.push({label:item.name,value:item.id});
 				}
 			});

@@ -150,6 +150,7 @@ let  routes = [
                         meta: {
                             keepAlive: true ,// 需要被缓存
                             scrollTop: 0,
+                            category: 0,
                         },
                     },
                     {

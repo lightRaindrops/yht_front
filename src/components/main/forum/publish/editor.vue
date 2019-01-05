@@ -1,5 +1,5 @@
 <template>
-	<div class="editor-container" ref="ckeditor">
+	<div class="editor-container" ref="editor">
 		<froala :tag="'textarea'" :config="froalaConfig" v-model="content"></froala>
 	</div>
 </template>
@@ -53,18 +53,52 @@ export default {
 					'video', 
 					'wordPaste'
 				],
-                toolbarButtons: ['undo', 'redo', 'clearFormatting', '|', 'bold', 'italic', 'underline','strikeThrough','|', 'fontFamily', 'fontSize', 'color', '|','paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable',  'specialCharacters', 'insertHR'],
-        		theme: "dark",//主题
+                toolbarButtons: [
+					'undo', 
+					'redo', 
+					'clearFormatting', '|', 
+					'bold', 
+					'italic', 
+					'underline',
+					'strikeThrough','|', 
+					'fontFamily', 
+					'fontSize', 
+					'color', '|',
+					'paragraphFormat', 
+					'align', 
+					'formatOL', 
+					'formatUL', 
+					'outdent', 
+					'indent', "|",
+					'quote',  
+					'insertLink', 
+					'insertImage', 
+					'insertVideo', 
+					'insertTable',  
+					'specialCharacters', 
+					'insertHR',
+					'insertFile',
+				],
+
+				theme: "dark",//主题
                 placeholder: "请输入内容",
                 language: "zh_cn",//国际化
+				fileUpload: true,
+        		fileInsertButtons: ['fileBack', '|'],
+				fileUploadMethod: 'POST',
+				fileUploadParam: 'uploadfile',
+				fileUploadParams: {
+					id: 'my_editor'
+				},
                 imageUploadURL: this.$appConst.EDITOR_IMG_URL+'?token='+this.$store.state.user.token,//上传url
-          		//fileUploadURL: "http://i.froala.com/upload",//上传url 更多上传介绍 请访问https://www.froala.com/wysiwyg-editor/docs/options
+          		fileUploadURL: this.$appConst.FILE_UPLOAD_URL+'?token='+this.$store.state.user.token,//上传url 更多上传介绍 请访问https://www.froala.com/wysiwyg-editor/docs/options
                 // quickInsertButtons: [],//快速插入项
           		// toolbarVisibleWithoutSelection: true,//是否开启 不选中模式
           		disableRightClick: true,//是否屏蔽右击
                 colorsHEXInput: true,//关闭16进制色值
                 toolbarSticky: true,//操作栏是否自动吸顶
                 // zIndex: 99999,
+				width: '100%',
 				height: this.height,
 				charCounterMax: -1,//字数
         	},
