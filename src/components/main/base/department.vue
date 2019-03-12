@@ -121,16 +121,11 @@ export default {
 		}
 	},
 	methods: {
-		
 		onSubmit(formName) {
-			
 			this.$refs[formName].validate( (valid) => {
-
 				if (valid) {
-
 					this.$store.dispatch(this.actionName, this.form).then(() => {
 						if (this.result.status == 'success') {
-
 							this.$notify.success({title: '操作成功'});
 							this.showAddDialog = false;
 							this.initTable();
@@ -222,9 +217,7 @@ export default {
 		}
 	},
 	created(){
-
 		this.initTable();
-		console.log(this.manager);
 	},
 	computed: {
 		tableData: function() {

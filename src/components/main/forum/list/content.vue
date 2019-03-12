@@ -1,5 +1,5 @@
 <template>
-	<div class="wapper" v-loading="loading" ref="wapper">
+	<div class="content-wallper" v-loading="loading" ref="wapper">
 		<div class="btn-return">
 			<div class="return-circle" title="返回" @click="returnPre">
 				<i class="el-icon-back"></i>
@@ -93,12 +93,7 @@ import Editor from '../publish/editor.vue';
 
 
 export default {
-	props: {
-		navsTakeUp: {
-			type: Boolean,
-			default: false
-		}
-	},
+
 	data() {
 		return {
 			loading: true,
@@ -134,18 +129,16 @@ export default {
 			});
 		},
 		getAnswer(id) {
-			this.$store.dispatch('ArticleAnswer', {article_id: id}).then(() => {
-
-			});
+			this.$store.dispatch('ArticleAnswer', {article_id: id});
 		},
 		getAgree(id) {
 			this.$store.dispatch('ArticleAgree',{'article_id': id});
 		},
 		SubmitAnswer() {
-			this.SubmitAnswerStatus = true;
 			if (this.AnswerForm.content == '') {
 				return false;
 			}
+			this.SubmitAnswerStatus = true;
 			this.$store.dispatch('AddArticleAnswer', this.AnswerForm).then(() => {
 				if (this.$store.state.user.AddArticleAnswer.status == 'success') {
 					Toast.success('评论成功');	
@@ -209,28 +202,16 @@ export default {
 	},
 	created() {
 		this.init();
-		
 	},
-	
-	destoryed() {
+
+	destroyed() {
 		window.removeEventListener('click', this.handleBodyClick);
+		this.$store.dispatch('ClearArticle');
 	},
 	computed: {
 		article: function() {
-			//console.log(this.$store.state.user.ArticleOne)
 			return this.$store.state.user.ArticleOne;
 		},
-		fixedStyle: function() {
-    		if (this.navsTakeUp == true) {
-				return {
-    				left: 'calc((100% - 65px - 1042px)/2 + 65px + 694px + 20px)'
-    			};
-    		} else {
-    			return  {
-    				left: "calc((100% - 210px - 1042px)/2 + 210px + 694px + 20px)"
-    			}
-    		}
-    	},
     	AnswerList: function () {
     		return this.$store.state.user.ArticleAnswer;
     	},
@@ -283,9 +264,10 @@ export default {
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.wapper
+.content-wallper
 	width: 85%;
 	// height: %;
+	/*height: auto;*/
 	margin-top: 15px;
 	position: relative;
 	overflow-y: auto;

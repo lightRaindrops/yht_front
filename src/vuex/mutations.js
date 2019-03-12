@@ -8,13 +8,19 @@ const mutations = {
 	},
 
 	[types.SET_ERROR_INFO] (state, data) {
-
 		state.loginResult = data;
 	},
 	[types.USER_INFO] (state, data) {
-
 		state.userInfo = data.data;
-
+	},
+	[types.USER_IMPORT] (state, response) {
+		state.UserImport = response;
+	},
+	[types.USER_DISABLE] (state, response) {
+		state.UserDisable = response;
+	},
+	[types.CLEAR_ARTICLE] (state) {
+		state.ArticleOne = {};
 	},
 	[types.USER_SIGNUP] (state, data) {
 		state.userSignup = data;
@@ -230,6 +236,12 @@ const mutations = {
 		//console.log(data);
 		state.ArticlePost = data;
 	},
+	[types.FEELBACK_POST] (state, response) {
+		state.FeelbackPost = response;
+	},
+	[types.FEELBACK_PUT] (state, response) {
+		state.FeelbackPost = response;
+	},
 	[types.FORUM_MODULE_ARTICLES] (state, response) {
 		state.ForumModuleArticles.loaded = response.loaded;
 		state.ForumModuleArticles.hasRole = response.hasRole;
@@ -260,6 +272,9 @@ const mutations = {
 	},
 	[types.ARTICLE_CATEGORY] (state, response) {
 		state.ArticleCategory = response.data;
+	},
+	[types.FEELBACK_CATEGORY] (state,response) {
+		state.FeelbackCategory = response.data;
 	},
 	[types.LOAD_ARTICLE_MODULE_CATEGORY] (state, response) {
 		state.ArticleModuleCategory = response.data;
@@ -608,6 +623,16 @@ const mutations = {
 	},
 	[types.PORTAL_PIC_LIST] (state, response) {
 		state.PortalPicList = response.data;
+	},
+	[types.ARTICLE_PERSONAL_MODULE] (state,response) {
+
+		state.ArticlePersonalModule = response.data;
+	},
+	[types.ARTICLE_CHANGE_CATEGORY] (state, response) {
+		state.ArticleChangeCategory = response;
+	},
+	[types.ARTICLE_CATEGORY_DELETE] (state, response) {
+		state.ArticleCategoryDelete = response;
 	}
 }
 

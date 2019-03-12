@@ -6,6 +6,7 @@ import 'muse-ui/dist/muse-ui.css';
 import 'vant/lib/vant-css/index.css';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/animate.css';
+import 'swiper/dist/css/swiper.css';
 
 
 import VueAxios from 'vue-axios'
@@ -20,6 +21,7 @@ import { Dialog } from 'vant';
 import { Field } from 'vant';
 import { Popup } from 'vant';
 import './assets/styl/base.styl';
+
 // 引入 Froala Editor js file.
 require('froala-editor/js/froala_editor.pkgd.min');
 
@@ -32,7 +34,8 @@ require('font-awesome/css/font-awesome.css');//此处可在index.html中引入�
 require('froala-editor/css/froala_style.min.css');
 
 // Import and use Vue Froala lib.
-import VueFroala from 'vue-froala-wysiwyg'
+import VueFroala from 'vue-froala-wysiwyg';
+import Progress from './plugins/progress';
 Vue.use(VueFroala)
 
 Vue.use(Popup);
@@ -43,6 +46,7 @@ Vue.use(Tab).use(Tabs);
 Vue.use(Actionsheet);
 Vue.use(Dialog);
 Vue.use(Element, {size: 'small'});
+Vue.use(Progress);
 Vue.config.productionTip = false;
 Vue.prototype.$tool = tool;
 Vue.prototype.$appConst = appConst;

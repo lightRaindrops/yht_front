@@ -2,9 +2,9 @@
 	<div class="wapper">
 		<div class="content-list">
 			<div class="content-item" v-for="(item , keys) in article" :key="keys">
-				<div class="ContentItem-avatar">
+				<!-- <div class="ContentItem-avatar">
 					<img :src="item.headimg ? item.headimg : 'http://e.yhtjc.com/v2/public/img/default.png'">
-				</div>
+				</div> -->
 				<div class="ContentItem-container">
 					<div class="ContentItem-title">
 						<div class="ContentItem-title-text">

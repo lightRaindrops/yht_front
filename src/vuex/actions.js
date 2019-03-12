@@ -14,6 +14,21 @@ export const signup  = ( {commit}, userInfo) => {
 		commit('USER_SIGNUP', response);
 	});
 }
+export const UserImport = ({commit}, info) => {
+	return api.UserImport(info).then((response) => {
+		commit('USER_IMPORT', response);
+	});
+}
+export const UserDisable = ({commit}, info) => {
+	return api.UserDisable(info).then((response) => {
+		commit('putUserRole', response);
+	});
+}
+export const UserDelete = ({commit}, info) => {
+	return api.UserDelete(info).then((response) => {
+		commit('USER_DISABLE', response);
+	})
+}
 export const InitToken = ({commit}, token) => {
 	return commit('INIT_TOKEN', token);
 }
@@ -346,6 +361,7 @@ export const ArticlePost = ({commit}, article) => {
 		return commit('ARTICLE_POST', response);
 	})
 }
+
 export const ForumModuleArticles = ({commit}, info) => {
 	return api.ForumModuleArticles(info).then((response) => {
 		return commit('FORUM_MODULE_ARTICLES',response);
@@ -378,6 +394,15 @@ export const ArticleCategory = ({commit}) => {
 	return api.ArticleCategory().then((response) => {
 		return commit('ARTICLE_CATEGORY', response);
 	});
+}
+export const ArticleChangeCategory = ({commit},info) => {
+	return api.ArticleChangeCategory(info).then((response) => {
+		return commit('ARTICLE_CHANGE_CATEGORY', response);
+	});
+}
+
+export const ClearArticle = ({commit}) => {
+	return commit('CLEAR_ARTICLE');
 }
 export const ArticleManagerCategory = ({commit}) => {
 	return api.ArticleManagerCategory().then((response) => {
@@ -545,6 +570,16 @@ export const ForumModuleStore = ({commit}, info) => {
 	return api.ForumModuleStore(info).then((response) => {
 		return commit('FORUM_MODULE_STORE', response);
 	});
+}
+export const ForumModuleDel = ({commit}, info) => {
+	return api.ForumModuleDel(info).then((response) => {
+		return commit('FORUM_MODULE_STORE', response);
+	})
+}
+export const ForumModuleUpdate = ({commit}, info) => {
+	return api.ForumModuleUpdate(info).then((response) => {
+		return commit('FORUM_MODULE_STORE', response);
+	})
 }
 
 //侧边菜单伸缩
@@ -847,6 +882,16 @@ export const SetARSumColumnVisible = ({commit},info) => {
 }
 export const SetARSumGlobalFontSize = ({commit}, info) => {
 	return commit('SET_ARSUM_GLOBAL_FONTSIZE', info);
+}
+export const ArticlePersonalModule = ({commit}) => {
+	return api.ArticlePersonalModule().then((response) => {
+		return commit('ARTICLE_PERSONAL_MODULE', response);
+	});
+}
+export const ArticleCategoryDelete = ({commit}, info) => {
+	return api.ArticleCategoryDelete(info).then((response) => {
+		commit('ARTICLE_CATEGORY_DELETE',response);
+	})
 }
 
 

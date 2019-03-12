@@ -30,7 +30,7 @@
 							title="个人资料"
 							width="200"
 							trigger="hover"
-							:content="this.$store.state.user.userInfo.name">
+							:content="this.$store.state.user.userInfo.name + ' - ' +this.$store.state.user.userInfo.department">
 							
 							<img slot="reference" :src="this.$store.state.user.userInfo.headimg ? this.$store.state.user.userInfo.headimg : 'https://e.yhtjc.com/v2/public/img/default.gif'">
 						</el-popover>
@@ -171,13 +171,13 @@ export default {
 	height: 100%;
 	background: #fff;
 	.navbar
-		height: 50px;
+		height: 40px;
 		display: flex;
 		justify-content: space-between;
 		line-height: 50px;
 		.hamburger-container
 			padding: 0 10px;
-			height: 50px;
+			height: 40px;
 			display: flex;
 			align-items: center;
 			transition: all 0.5s;
@@ -214,7 +214,9 @@ export default {
 		height: 30px;
 		width: 100%;
 		position: relative;
-		box-shadow: 0 1px 3px 0 rgba(0,0,0,.12), 0 0 3px 0 rgba(0,0,0,.04);
+		//box-shadow: 0 1px 3px 0 rgba(0,0,0,.12), 0 0 3px 0 rgba(0,0,0,.04);
+		//border-top: 1px solid #ebebeb;
+		border-bottom: 1px solid #ebebeb;
 		.tags-view-item
 			background: #fff;
 			border: 1px solid #d8dce5;

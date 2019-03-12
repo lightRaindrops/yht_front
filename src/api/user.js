@@ -11,7 +11,15 @@ export const signup = (userInfo) => {
 export const getUserInfo = () =>{
 	return http.get('auth/user');
 }
-
+export const UserImport = (info) => {
+	return http.post('user/import', info);
+}
+export const UserDisable = (info) => {
+	return http.post('user/disable', info);
+}
+export const UserDelete = (info) => {
+	return http.post('user/delete', info);
+}
 export const logout = () => {
 	return http.post('auth/logout');
 }
@@ -167,15 +175,21 @@ export const createChat = (info) => {
 export const ArticlePost = (article) => {
 	return http.post('article/post', article);
 }
+
 export const ForumModuleArticles = (info) => {
 	return http.post('article/modules/get', info);
 }
-
+export const ArticleChangeCategory = (info) => {
+	return http.post('article/category/change', info);
+}
 export const ArticlePortalShow = (info) => {
 	return http.post('article/portal/get', info);
 }
 export const ArticleCategory = () => {
 	return http.post('article/category/get');
+}
+export  const FeelbackCategory = () => {
+	return http.post('article/category/get/feelback');
 }
 export const ArticleManagerCategory = () => {
 	return http.post('article/category/manager/get');
@@ -410,6 +424,12 @@ export const GetForumModule = () => {
 export const ForumModuleStore = (info) => {
 	return http.post('article/module/store', info);
 }
+export const ForumModuleDel = (info) => {
+	return http.post('article/module/delete', info);
+}
+export const ForumModuleUpdate = (info) => {
+	return http.post('article/module/update', info);
+}
 export const ForumModuleSync = () =>{
 	return http.post('article/module/sync');
 }
@@ -418,4 +438,10 @@ export const SetArticleTop = (info) => {
 }
 export const CancelArticleTop = (info) => {
 	return http.post('article/canceltop', info);
+}
+export const ArticlePersonalModule = () => {
+	return http.post('article/module/personal');
+}
+export const ArticleCategoryDelete = (info)=> {
+	return http.post('article/category/delete', info);
 }

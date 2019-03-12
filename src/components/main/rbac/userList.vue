@@ -2,6 +2,7 @@
 	<div class="user-wapper">
 		<div class="role-wapper">
 			<div class="tool">
+                <el-button type="primary" :loading="syncBtnLoading" @click="ImportDialogVisible = true">导入用户</el-button>
 				<el-button type="success" :loading="syncBtnLoading" @click="syncUserList">同步企业微信通讯录</el-button>
 				<span style="font-size: 12px;vertical-align:bottom;line-height: 1;margin-left: 10px;">上一次同步的时间: {{initData.sync_date}}</span>
 			</div>
@@ -50,7 +51,7 @@
 				      label="注册时间">
 				    </el-table-column>
 
-				    <el-table-column label="操作" width="180">
+				    <el-table-column label="操作" width="250">
 				    	<template slot-scope="scope">
 				    		<el-tooltip class="item" effect="dark" content="设置角色" placement="top">
 					    		<el-button
@@ -78,11 +79,19 @@
 						    <el-tooltip class="item" effect="dark" content="禁用" placement="top" v-show="scope.row.authorize == 1">
 						        <el-button
 						          size="mini"
-						          type="danger"
+						          type="warning"
 						          :disabled= "scope.row.username == 'admin' ? true : false"
-						          @click="handleDisable(scope.row)"><i class="el-icon-delete"></i>
+						          @click="handleDisable(scope.row)"><i class="el-icon-close"></i>
 						      	</el-button>
 						    </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="top" >
+                                <el-button
+                                        size="mini"
+                                        type="danger"
+                                        :disabled= "scope.row.username == 'admin' ? true : false"
+                                        @click="handleDel(scope.row)"><i class="el-icon-delete"></i>
+                                </el-button>
+                            </el-tooltip>
 					    </template>
 				    </el-table-column>
 				</el-table>
@@ -96,6 +105,37 @@
 				    	<el-button @click="setRoleVisible = false">取 消</el-button>
 				  	</div>
 				</el-dialog>
+                <el-dialog title="导入用户" :visible.sync="ImportDialogVisible" center width="40%" @close="ImportDialogClose">
+                    <el-upload
+                            ref="upload"
+                            class="upload-demo"
+                            action=""
+                            multiple
+                            :limit="1"
+                            :on-change="handleFileChange"
+                            :file-list="fileList"
+                            :auto-upload="false">
+                        <el-button size="small" type="primary" >点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
+                    </el-upload>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button type="success" @click.native="ImportUser" :loading="Uploading" :disabled="UpBtnDisable">导 入</el-button>
+                        <el-button @click="ImportDialogVisible = false">取 消</el-button>
+                    </div>
+                </el-dialog>
+                <el-dialog title="操作结果" :visible.sync="ImportResultVisible" center width="50%" append-to-body>
+                    <el-table
+                        :data="ImportFailData"
+                        height="350px"
+                    >
+                        <el-table-column prop="name" label="姓名" width="150"></el-table-column>
+                        <el-table-column prop="phone" label="账号" width="200"></el-table-column>
+                        <el-table-column prop="text" label="结果" width="200"></el-table-column>
+                    </el-table>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="ImportResultVisible = false">关闭</el-button>
+                    </div>
+                </el-dialog>
 			</div>
 		</div>
 	</div>
@@ -106,12 +146,16 @@ export default {
 		return {
 			tableLoading: true,
 			setRoleVisible: false,
+			ImportDialogVisible: false,
 			roleData: {
 				id: '',
 				rid: []
 			},
 			setRoleLoding: false,
-			syncBtnLoading: false
+			syncBtnLoading: false,
+			fileList: [],
+			Uploading: false,
+			ImportResultVisible: false,
 		}
 	},
 	methods: {
@@ -195,11 +239,44 @@ export default {
 	        	type: 'warning'
         	})
 			.then(() => {
-				this.$store.dispatch('user/disabled',{id:row.id});
+				this.$store.dispatch('UserDisable',{id:row.id}).then(() => {
+					let response = this.$store.state.user.UserDisable;
+
+					if (response.status == 'success') {
+						this.$notify.success('操作成功！');
+						this.initable();
+					}
+					else {
+						this.$notify.error('操作失败！');
+					}
+				});
+
+
 			})
 			.catch(() => {});
 		},
+        /**删除用户**/
+        handleDel(row) {
+			this.$confirm('删除 <'+row.username+'> ?','提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			})
+				.then(() => {
+					this.$store.dispatch('UserDelete',{id:row.id}).then(() => {
+						let response = this.$store.state.user.UserDisable;
 
+						if (response.status == 'success') {
+							this.$notify.success('操作成功！');
+							this.initable();
+						}
+						else {
+							this.$notify.error('操作失败！');
+						}
+					});
+				})
+				.catch(() => {});
+        },
 		/**
 		* dialog关闭回调
 		*/
@@ -257,11 +334,42 @@ export default {
 				}
 			});
 		},
+		ImportDialogClose() {},
 		/**初始化**/
 		initUserList() {
 			this.$store.dispatch('initUserList').then(() => {
 
 			});
+		},
+		handleFileChange(files, fileList) {
+            this.fileList = fileList;
+		},
+		ImportUser() {
+
+		    if (this.fileList.length < 1) {
+                return false;
+		    }
+
+		    this.Uploading = true;
+
+		    let formData = new FormData;
+		    formData.append('userfile',this.fileList[0].raw);
+
+		    this.$store.dispatch('UserImport', formData).then(() => {
+		        let response = this.$store.state.user.UserImport;
+				this.Uploading = false;
+
+				if (response.status == 'success') {
+				    this.$notify.success('操作成功');
+				    this.initable();
+				    this.fileList = [];
+				    this.$refs.upload.clearFiles();
+				    this.ImportResultVisible = true;
+				}
+				else {
+				    this.$notify.error('操作失败'+ response.errmsg);
+				}
+		    });
 		}
 	},
 	computed: {
@@ -270,6 +378,18 @@ export default {
 		},
 		initData: function() {
 			return this.$store.state.user.initUserList;
+		},
+		uploadURL: function() {
+		    return this.$appConst.FILE_UPLOAD_URL+'?token='+this.$store.state.user.token;
+		},
+		UpBtnDisable: function() {
+		    if (this.fileList.length > 0) {
+		        return false;
+		    }
+		    return true;
+		},
+		ImportFailData: function() {
+		    return this.$store.state.user.UserImport.result;
 		}
 	},
 

@@ -14,7 +14,7 @@
         <h4 class="pic-title" :class="{'main-content-list-fade': picLoaded}">{{PicList.title}} <span class="change-pic" v-if="picLoaded" @click="changePhoto">换一个图册</span></h4>
         <div class="hr"></div>
         <h3 class="main-hd-title">
-            热门推荐
+            最新推荐
         </h3>
         <div class="hot-content-list">
             <div class="hot-item" v-for="(item,key) in ArticleList" :key="key" >

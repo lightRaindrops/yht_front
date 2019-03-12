@@ -1,371 +1,479 @@
 @font-face
-	font-family: 'Rubik';
-	src: url('../font/base/Rubik.woff2');
+  font-family: 'Rubik';
+  src: url('../font/base/Rubik.woff2');
 
-a:link 
-	text-decoration: none;
-ul,li
-	list-style: none !important;
+a:link
+  text-decoration: none;
+
+ul, li
+  list-style: none !important;
+
 .el-breadcrumb
-	line-height: normal !important;
+  line-height: normal !important;
+
 .el-submenu__title
-	// &:hover
-	// 	background: rgb(30,40,44) !important;
-// .el-menu-item
-// 	&:hover
-// 		// background: rgb(30,40,44) !important;
+  // &:hover
+  // 	background: rgb(30,40,44) !important;
+  // .el-menu-item
+  // 	&:hover
+  // 		// background: rgb(30,40,44) !important;
 .el-form-item__content
-	text-align: left !important;
-	position: relative;
-	.el-cascader
-		width: 100%;
+  text-align: left !important;
+  position: relative;
+
+  .el-cascader
+    width: 100%;
+
+.login_wrap
+  .mu-input-help
+    justify-content: flex-end;
+    color: #8e9198 !important;
+
 .forum-el-menu
-	height: 40px;
-	border: 0px #ccc  solid !important;
-	.el-submenu
-		height: 40px;
-		width: 100%;
-		.el-submenu__title
-			height: 40px;
-			width: 100%;
-			text-align: center;
-			display: flex;
-			justify-content: center;
-			align-items: center;	
-			// &:hover
-			// 	background: #ebebeb !important;
-	.el-submenu.is-active 
-		.el-submenu__title
-			border: 0px;
+  height: 40px;
+  border: 0px #ccc solid !important;
+
+  .el-submenu
+    height: 40px;
+    width: 100%;
+
+    .el-submenu__title
+      height: 40px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+  // &:hover
+  // 	background: #ebebeb !important;
+
+  .el-submenu.is-active
+    .el-submenu__title
+      border: 0px;
+
 .forum-el-menu-item
-	display: flex;
-	align-items: center;
-	i 
-		flex-basis: 15px;
-		font-size:18px;
-	span 
-		margin-left: 10px;
-		font-size: 15px;
-	&:hover
-		i 
-			color: #303133;
+  display: flex;
+  align-items: center;
+
+  i
+    flex-basis: 15px;
+    font-size: 18px;
+
+  span
+    margin-left: 10px;
+    font-size: 15px;
+
+  &:hover
+    i
+      color: #303133;
+
 //编辑器
-.editor-container 
-	.fr-file
-		color: #0098f7 !important;
+.editor-container
+  .fr-file
+    color: #0098f7 !important;
+
 .artilce-container
-	.fr-file
-		color: #0098f7 !important;
-		&::after
-			font-family:"iconfont";
-			position: relative;
-			content: "\e608";
-			font-weight: 400;
-			padding-left: 5px;
-			color: #808080;
-textarea,input
-	font-family: 'Rubik'  !important;
+  .fr-file
+    color: #0098f7 !important;
+
+    &::after
+      font-family: "iconfont";
+      position: relative;
+      content: "\e608";
+      font-weight: 400;
+      padding-left: 5px;
+      color: #808080;
+
+textarea, input
+  font-family: 'Rubik' !important;
+
 .wapper-response
-	input
-		border: 0px;
-		border-bottom: 1px solid #f0f0f0; 
-		border-radius: 0px;
-		// margin-bottom: 36px;
-	.el-form-item
-		margin-bottom: 8%;
+  input
+    border: 0px;
+    border-bottom: 1px solid #f0f0f0;
+    border-radius: 0px;
+
+  // margin-bottom: 36px;
+
+  .el-form-item
+    margin-bottom: 8%;
+
 .aside
-	width: 250px;
+  width: 250px;
+
 .divider-div
-	width: 100%;
-	padding: 0px 32px;
-	.divider
-		border-top: thin solid #f0f0f0;
-		margin: 24px 0 0px 0;
-		text-align: center;
-		&::after
-			content: attr(data-label);
-			display: inline-block;
-			background: #fff;
-			padding: 0 32px;
-			position: relative;
-			top: -13px;
-			font-size: 12px;
-			color: #9b9b9b;
+  width: 100%;
+  padding: 0px 32px;
+
+  .divider
+    border-top: thin solid #f0f0f0;
+    margin: 24px 0 0px 0;
+    text-align: center;
+
+    &::after
+      content: attr(data-label);
+      display: inline-block;
+      background: #fff;
+      padding: 0 32px;
+      position: relative;
+      top: -13px;
+      font-size: 12px;
+      color: #9b9b9b;
+
 .mu-overlay
-	z-index:900 !important;
+  z-index: 900 !important;
+
 .customer-mu-sub-header
-	p
-		height: 20px;
-		margin: 0;
-		font-size: 14px;
-		line-height: 20px;
-		text-align: left;
+  p
+    height: 20px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: left;
+
 .customer-fllow
-	// -webkit-overflow-scrolling: touch;
-	display: flex;
-	
-	flex-direction: column !important;
-	.mu-dialog-body
-		display: flex;
-		flex-direction: column !important;
-		-webkit-overflow-scrolling: touch;
-		.mu-list
-			position: absolute;
-			height: auto;
-			top: 60px;
-			bottom: 0;
-			-webkit-overflow-scrolling: touch;
-			.mu-item
-				height: auto !important;
-				padding: 8px 16px !important;
-				-webkit-overflow-scrolling: touch;
+  // -webkit-overflow-scrolling: touch;
+  display: flex;
+
+  flex-direction: column !important;
+
+  .mu-dialog-body
+    display: flex;
+    flex-direction: column !important;
+    -webkit-overflow-scrolling: touch;
+
+    .mu-list
+      position: absolute;
+      height: auto;
+      top: 60px;
+      bottom: 0;
+      -webkit-overflow-scrolling: touch;
+
+      .mu-item
+        height: auto !important;
+        padding: 8px 16px !important;
+        -webkit-overflow-scrolling: touch;
+
 .customer-dialog
-	max-height: 75%;
-	overflow-y: hidden;
-	.el-dialog
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		position: absolute;
-		height: 100%;
-		flex-direction: column !important;
-		box-direction: normal;
-		box-orient: vertical;
-		max-height: 80%;
-		.el-dialog__header
-			box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-		.el-dialog__body
-			display: flex;
-			box-direction: normal;
-			box-orient: vertical;
-			.customer-list
-				position: absolute;
-				top: 54px;
-				left: 0;
-				right: 0;
-				bottom: 0;
+  max-height: 75%;
+  overflow-y: hidden;
+
+  .el-dialog
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    height: 100%;
+    flex-direction: column !important;
+    box-direction: normal;
+    box-orient: vertical;
+    max-height: 80%;
+
+    .el-dialog__header
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+
+    .el-dialog__body
+      display: flex;
+      box-direction: normal;
+      box-orient: vertical;
+
+      .customer-list
+        position: absolute;
+        top: 54px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
 /**我的客户**/
 .comment-dialog
-	.el-dialog
-		height: 500px;
-		position: relative;
-		.el-dialog__body
-			overflow-y: auto;
-			height: calc(100% - 54px - 62px);
+  .el-dialog
+    height: 500px;
+    position: relative;
+
+    .el-dialog__body
+      overflow-y: auto;
+      height: calc(100% - 54px - 62px);
+
 /**客户资源添加**/
 .publish-dialog
-	.el-dialog
-		width: 30%;
-		max-width: 380px;
+  .el-dialog
+    width: 30%;
+    max-width: 380px;
 
 .loadmore-content-pc
-	max-width: 100%;
+  max-width: 100%;
+
 /**移动端**/
 //public.vue
 .van-tabs__line
-	background-color: #2196f3;
+  background-color: #2196f3;
+
 .van-tab
-	color: rgb(133,144,166);
+  color: rgb(133, 144, 166);
+
 .van-tab--active
-	color: #000;
+  color: #000;
+
 .van-tabs__content
-	position: relative;
-	width: 100%;
-	height: 100%;
-	.van-tab__pane
-		position: relative;
-		width: 100%;
-		height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .van-tab__pane
+    position: relative;
+    width: 100%;
+    height: 100%;
+
 /**部门管理**/
 .department-dialog
-	.el-dialog
-		width: 300px;
-		height: 400px;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		overflow: hidden;
-		flex-direction: column !important;
-		box-direction: normal;
-		box-orient: vertical;
-		.el-dialog__body
-			width: 100%;
-			height: calc(100% - 54px);
-			// margin-bottom: 20px;
-			position: relative;
-			.department-dialog-content
-				width: 100%;
-				height: calc(100% - 50px);
-				overflow-y: auto;
-				position: relative;
-				padding: 15px 15px 5px 15px;
-				-webkit-overflow-scrolling: touch;
-			.foot
-				display:flex;
-				height: 50px;
-				justify-content: center;
-				align-items: center;
-				// margin-bottom: 20px;
-			// top: 0;
-			// bottom: 0;
-	
+  .el-dialog
+    width: 300px;
+    height: 400px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    flex-direction: column !important;
+    box-direction: normal;
+    box-orient: vertical;
+
+    .el-dialog__body
+      width: 100%;
+      height: calc(100% - 54px);
+      // margin-bottom: 20px;
+      position: relative;
+
+      .department-dialog-content
+        width: 100%;
+        height: calc(100% - 50px);
+        overflow-y: auto;
+        position: relative;
+        padding: 15px 15px 5px 15px;
+        -webkit-overflow-scrolling: touch;
+
+      .foot
+        display: flex;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+
+// margin-bottom: 20px;
+// top: 0;
+// bottom: 0;
+
 .top-1px
-	position:relative;
-	&::before
-		content: '';
-		width: 100%;
-		height: 1px;
-		position: absolute;
-		border: 1px solid #ddd;
-		top: 0;
-		bottom: 0;
-		transform: scaleY(0.5);
-		transform-origin: 0 0;
-		// border-top: 1px solid #e5e5e5;    
+  position: relative;
+
+  &::before
+    content: '';
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    border: 1px solid #ddd;
+    top: 0;
+    bottom: 0;
+    transform: scaleY(0.5);
+    transform-origin: 0 0;
+
+// border-top: 1px solid #e5e5e5;
 .right-1px
-	position:relative;
-	&::before
-		content: '';
-		width: 1px;
-		height: 100%;
-		position: absolute;
-		border: 1px solid #ddd;
-		top: 0;
-		bottom: 0;
-		transform: scaleX(0.5);
-		transform-origin: 0 0;
-		border-right: 1px solid #e5e5e5;
+  position: relative;
+
+  &::before
+    content: '';
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    border: 1px solid #ddd;
+    top: 0;
+    bottom: 0;
+    transform: scaleX(0.5);
+    transform-origin: 0 0;
+    border-right: 1px solid #e5e5e5;
+
 .el-checkbox
-	text-align: -webkit-auto !important;
+  text-align: -webkit-auto !important;
+
 .el-transfer
-	text-align: center;
+  text-align: center;
+
 /*******vue quill editor********/
 .ql-toolbar
-	display: flex;
-	border-left: 0px !important;
-	border-right: 0px !important;
-	border-top: 1px solid #ebebeb;
-	border-bottom: 1px solid #ebebeb;
-	user-select: none;
-	.ql-formats
-		display: block;
+  display: flex;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  user-select: none;
+
+  .ql-formats
+    display: block;
+
 .ql-container
-	border: 0px !important;
-	min-height: 150px;
+  border: 0px !important;
+  min-height: 150px;
+
 .QuestionAnswers-Wrapper
-	.ql-container
-		border: 0px !important;
-		min-height: 118px;
+  .ql-container
+    border: 0px !important;
+    min-height: 118px;
+
 .Write-QuillEditor
-	.ql-container
-		min-height: 350px;
+  .ql-container
+    min-height: 350px;
+
 .content-container
-	p
-		margin: 0;
-		img
-			max-width: 100%;
-			display: inherit;
-			padding: 10px;
-			margin: 0 auto;
+  p
+    margin: 0;
+
+    img
+      max-width: 100%;
+      display: inherit;
+      padding: 10px;
+      margin: 0 auto;
+
 /**ueditor**/
 #editor
-	image
-		max-width: 100% !important;
-	.edui-editor-bottombar
-		display: none;
+  image
+    max-width: 100% !important;
+
+  .edui-editor-bottombar
+    display: none;
 
 .cell
-	text-align: center;
+  text-align: center;
+
 .detail-wapper
-	.cell
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow:ellipsis;
+  .cell
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
 /**现金报价**/
-.cash-form
-	.el-form-item__label
-		font-size: 12px;
-.cash-table-container
-	.el-table
-		box-shadow: none;
+.cash-wappler
+  .el-form-item__label
+    font-size: 12px;
+
+  .cash-table-container
+    .el-table
+      box-shadow: none;
+
+.el-date-editor.el-input, .el-date-editor.el-input__inner
+  width: 185px;
+
+.el-form-item__content
+  .el-select--small
+    width: 185px;
+
 /**面包屑导航**/
 .el-breadcrumb__inner
-	font-weight: 400;
-	font-size: 12px;
+  font-weight: 400;
+  font-size: 12px;
+
 .el-table__expanded-cell
-	padding: 0px 10px !important;
-	transition: all 0.5s;
-	.table-container
-		.el-table
-			box-shadow: none;
+  padding: 0px 10px !important;
+  transition: all 0.5s;
+
+  .table-container
+    .el-table
+      box-shadow: none;
+
 .success-row
-	background: #f0f9eb !important;
-.warning-row 
-	background: oldlace !important;
+  background: #f0f9eb !important;
+
+.warning-row
+  background: oldlace !important;
+
 .arsum-row
-	background: #F8F8FF !important;
+  background: #F8F8FF !important;
+
 table
-	transition: all 0.5s;
+  transition: all 0.5s;
+
 .ar-table
-	font-family: sans-serif,Helvetica Neue,Helvetica,microsoft yahei,arial,STHeiTi,sans-serif;
-	box-shadow: 0 1px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12) !important;
-	.el-table__body-wrapper
-		overflow-y: auto;
-		.cell
-			padding: 0px;
+  font-family: sans-serif, Helvetica Neue, Helvetica, microsoft yahei, arial, STHeiTi, sans-serif;
+  box-shadow: 0 1px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12) !important;
+
+  .el-table__body-wrapper
+    overflow-y: auto;
+
+    .cell
+      padding: 0px;
+
 .enumberate-table, .bindattr-table, .no-table-shadow
-	box-shadow: 0px 0px 0px 0px !important;
-	transition: all 0.5s;
+  box-shadow: 0px 0px 0px 0px !important;
+  transition: all 0.5s;
+
 .create-project-wapper
-	.CreateForm-select
-		width: 100%;
+  .CreateForm-select
+    width: 100%;
+
 .el-tabs__content
-	transition: all 0.5s;
+  transition: all 0.5s;
+
 .text-hidden
-	overflow: hidden;
-	text-overflow:ellipsis;
-	white-space: nowrap;
-	width: 100%;
-	color:#999;
-	cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  color: #999;
+  cursor: pointer;
+
 .filter-wapper
-	.el-select 
-		.el-input
-			width: 100px;
+  .el-select
+    .el-input
+      width: 100px;
+
 .filter-dialog
-	.el-dialog__body
-		padding: 10px 15px;	
-		.el-tabs
-			box-shadow: none;
-			height: calc(100% - 2px);
-			overflow-y: hidden;
-			positon: relative;
-			.el-tabs__header
-				height: 40px;
-				margin-bottom: 5px;
-			.el-tabs__content
-				height: calc(100% - 40px);
-				overflow: hidden;
-				padding: 0 5px 5px 5px;
-				.el-tab-pane
-					height: 100%;
-				section 
-					.section-row
-						input
-							border:0px;	
-							height: 22px !important; 
-							font-size: 12px !important;
+  .el-dialog__body
+    padding: 10px 15px;
+
+    .el-tabs
+      box-shadow: none;
+      height: calc(100% - 2px);
+      overflow-y: hidden;
+      positon: relative;
+
+      .el-tabs__header
+        height: 40px;
+        margin-bottom: 5px;
+
+      .el-tabs__content
+        height: calc(100% - 40px);
+        overflow: hidden;
+        padding: 0 5px 5px 5px;
+
+        .el-tab-pane
+          height: 100%;
+
+        section
+          .section-row
+            input
+              border: 0px;
+              height: 22px !important;
+              font-size: 12px !important;
+
 //论坛编辑器样式
 // .ck-content
 // 	height: 350px;
 .content-body
-	figure.image
-		text-align: center;
-		figcaption
-			text-align:center;
-			font-size: 12px;
-					
-  
+  figure.image
+    text-align: center;
+
+    figcaption
+      text-align: center;
+      font-size: 12px;
+
+
+.shadow
+  box-shadow: 0 1px 1px rgba(26, 26, 26, .3);
+.el-select .el-input
+  width: 100px;
+.history-wappler
+  .filter__program
+    .el-date-editor--date
+      width: 100%;
