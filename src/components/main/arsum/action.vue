@@ -14,7 +14,7 @@
 						<el-dropdown-item @click.native="ShowDialog({CreatePotentialProVisible:true})">新建潜在项目</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-				<el-button type="warning" size="mini" @click.native="Initialization">初始化</el-button>
+				<!--<el-button type="warning" size="mini" @click.native="Initialization">初始化</el-button>-->
 			</div>
 			<div class="fast-query">
 				<el-input placeholder="快速查询你需要的内容"  v-model="form[0].value" class="input-with-select">
@@ -28,8 +28,8 @@
 		</section>
 		<section class="action-tool">
 			<el-radio-group v-model="tabPosition"  @change="tabHandle" style="margin-left: -80px;">
-				<el-radio-button label="cooperate" >合作客户</el-radio-button>
-				<el-radio-button label="target"   >目标客户</el-radio-button>
+				<!--<el-radio-button label="cooperate" >合作客户</el-radio-button>-->
+				<!--<el-radio-button label="target"   >目标客户</el-radio-button>-->
 			</el-radio-group>
 			<div class="checkbox-group" v-if="this.tabPosition == 'cooperate'">
 				<el-checkbox v-model="config.sale" @change="checkBoxHandle">销售额</el-checkbox>

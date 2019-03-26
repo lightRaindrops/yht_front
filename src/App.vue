@@ -190,10 +190,7 @@
                 transition: all 0.5s cubic-bezier(1, .09, .21, 1.09);
                 background-color: rgb(242, 247, 248);
                 color: #333;
-                // height: 70px;
-                // padding: 30px 30px;
-                // padding: 0px;
-                top: 70px;
+                top: 60px;
                 bottom: 0px;
                 height: 100%;
                 // flex: 5;

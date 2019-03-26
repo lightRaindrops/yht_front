@@ -509,7 +509,7 @@ const mutations = {
 	},
 	[types.STATIC_FIELDS] (state, response) {
 		state.FIELDS = response;
-		// console.log(response)
+		console.log(response)
 	},
 	[types.UPDATE_FILTER_QUERY] (state, response) {
 		state.filterQuery = response;

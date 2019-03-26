@@ -1,343 +1,243 @@
 <template>
-    <div class="cash-wappler">
-        <div class="cash-container">
-            <div class="operate" :class="{'operate__shadow': isScroll}">
-                <div class="cash-title">
-                    <h2>操作</h2>
-                </div>
-                <el-button type="success" @click.native="SaveOrder">保存报价单</el-button>
+    <div class="cash-wallpaper">
+        <div class="cash-wallpaper_main">
+            <div class="action-tool">
+                <!--<el-button type="success" size="medium">保存报价</el-button>-->
+
             </div>
-            <div class="data-container" ref="DataContainer">
-                <div class="cash-form-container">
-                    <div class="cash-title">
-                        <h2>基础资料</h2>
-                    </div>
-                    <el-form :model="form" :rules="rules" :inline="true" ref="ruleForm" label-width="100px" class="cash-form">
-                        <el-form-item label="项目名称" prop="name">
-                            <el-input v-model="form.name" placeholder="项目名"></el-input>
-                        </el-form-item>
-                        <el-form-item label="联系人" prop="linkman">
-                            <el-input v-model="form.linkman" placeholder="联系人"></el-input>
-                        </el-form-item>
-                        <el-form-item label="联系方式" prop="phone">
-                            <el-input v-model="form.phone" placeholder="联系方式"></el-input>
-                        </el-form-item>
-                        <el-form-item label="开票税率" prop="tax">
-                            <el-input v-model="form.tax" placeholder="税率"></el-input>
-                        </el-form-item>
-                        <el-form-item label="品牌">
-                            <el-select v-model="form.brand_id">
-                                <el-options v-for="(item, key) in brand" :key="key" :label="item.label" :value="item.value"></el-options>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="配送">
-                            <el-input v-model="form.dispatching"></el-input>
-                        </el-form-item>
-                        <el-form-item label="装卸">
-                            <el-input v-model="form.unloading"></el-input>
-                        </el-form-item>
-                        <el-form-item label="服务人员">
-                            <el-input v-model="form.waiter" placeholder="报价人"></el-input>
-                        </el-form-item>
-                        <el-form-item label="报价日期">
-                            <el-date-picker
-                                    v-model="form.date"
-                                    type="date"
-                                    placeholder="选择日期">
-                            </el-date-picker>
-                        </el-form-item>
-                        <el-form-item label="备注">
-                            <el-input type="textarea" v-model="form.remark" autosize placeholder="备注信息"></el-input>
-                        </el-form-item>
-                    </el-form>
+            <div class="offer-bill">
+                <div class="offer-bill_header">
+                    <h3>报价清单</h3>
                 </div>
-                <div class="atta-container">
-                    <div class="cash-title">
-                        <h2>附件列表</h2>
-                    </div>
-                    <div class="atta-container__file">
-                        <div class="btn-tool">
-                            <el-upload
-                                    class="upload-demo"
-                                    drag
-                                    name="uploadfile"
-                                    :on-success="handleUploadSuccess"
-                                    :on-remove="handleFileRemove"
-                                    :action="ActionURL"
-                                    multiple>
-                                <i class="el-icon-upload"></i>
-                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                <div class="el-upload__tip" slot="tip">文件大小不超过20MB</div>
-                            </el-upload>
+                <div class="offer-bill_content">
+                    <div class="offer-bill_page" :style="{transform: 'translateY('+translateY+'px)'}">
+                        <div class="section">
+                            <div class="section_title">基础信息</div>
+                            <hr>
+                            <div class="base-data">
+                                <el-form :model="baseData" :rules="rules.baseDataForm" ref="baseDataForm" label-width="100px" style="width:50%">
+                                    <el-form-item label="客户名称" prop="customer">
+                                        <el-input v-model="baseData.customer"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="项目名称" prop="project">
+                                        <el-input v-model="baseData.project"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="施工范围" prop="buildRange">
+                                        <el-select v-model="baseData.buildRange" style="width: 100%">
+                                            <el-option v-for="(item, k) in FIELD.F_BUILD_RANGE" :label="item.label" :value="item.value" :key="k" ></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item label="业务员" prop="saleman">
+                                        <el-select v-model="baseData.saleman" style="width: 100%">
+                                            <el-option v-for="(item, k) in SaleMans" :value="item.value" :label="item.label" :key="k"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <div style="display: flex">
+                                        <el-form-item label="联系人" prop="contact" style="flex:1">
+                                            <el-input v-model="baseData.contact"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="联系方式" style="flex:1">
+                                            <el-input v-model="baseData.information"></el-input>
+                                        </el-form-item>
+                                    </div>
+                                    <el-form-item label="开票税率">
+                                        <el-input v-model="baseData.tax"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="配送">
+                                        <el-input v-model="baseData.dispatch"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="装卸">
+                                        <el-input v-model="baseData.unload"></el-input>
+                                    </el-form-item>
+                                </el-form>
+                                <div class="attachment">
+                                    <div class="upload-container">
+                                        <el-upload
+                                            drag
+                                            action="https://jsonplaceholder.typicode.com/posts/"
+                                            multiple>
+                                            <i class="el-icon-upload"></i>
+                                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                                            <div class="el-upload__tip" slot="tip">只能上传20MB以内的附件</div>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <div class="section_title">产品信息</div>
+                            <hr>
+                            <div class="materiel-data">
+                                <el-table
+                                    :data="productList"
+                                    style="width:100%"
+                                    :row-class-name="tableRowClassName"
+                                >
+                                    <el-table-column prop="id" label="序号"></el-table-column>
+                                    <el-table-column prop="materiel" label="物料名称"></el-table-column>
+                                    <el-table-column prop="spec" label="规格型号"></el-table-column>
+                                    <el-table-column prop="units" label="销售单位"></el-table-column>
+                                    <el-table-column prop="unitprice" label="单价"></el-table-column>
+                                    <el-table-column prop="amount" label="金额"></el-table-column>
+                                    <el-table-column prop="brind" label="品牌"></el-table-column>
+                                    <el-table-column prop="description" label="备注"></el-table-column>
+                                </el-table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="cash-product">
-                <div class="cash-title">
-                    <h2>产品名称</h2>
-                </div>
-                <div class="btn-tool">
-                    <el-button type="success" size="mini" @click.native="addRow">添加行</el-button>
-                    <el-button type="danger" size="mini" @click.native="deleteRow">删除行</el-button>
-                </div>
-                <div class="cash-table-container">
-                    <el-table
-                            :data="table"
-                            border
-                            style="width: 100%"
-                            @selection-change="handleSelectionChange"
-                            highlight-current-row
-                    >
-                        <el-table-column
-                                type="selection"
-                                width="55"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="index"
-                                label="序号"
-                                width="50"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="材料名称"
-                        >
-                            <template slot-scope="scope">
-                                <el-input
-                                        size="mini"
-                                        suffix-icon="el-icon-search"
-                                        placeholder="请选择材料名称"
-                                        v-model="tableData[scope.row.index-1].name"
-                                ></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="spec"
-                                label="规格型号"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="units"
-                                label="单位"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="sums"
-                                label="数量"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="price"
-                                label="单价"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="amount"
-                                label="金额"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="brand"
-                                label="品牌"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="remark"
-                                label="备注"
-                        >
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>
             </div>
         </div>
-
+        <div class="page-tool">
+            <div class="change-list">
+                <p v-for="(item,k) in navList" :key="k">
+                    <el-button :type="item.index == currentPage ? 'success' : 'info' " @click.native="PageChange(item.index)">{{item.label}}</el-button>
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 
-<script type="text/javascript">
-	export default {
-		data() {
-			return {
-				form: {
-					name: '',
-					linkman: '',
-					phone: '',
-					tax: '',
-					dispatching: '',
-					unloading: '',
-					waiter: '',
-					date: new Date(),
-					remark: '',
-					files: []
-				},
-				rules: {
-					name: [
-						{required: true, trigger: 'blur', message: "项目名称不能为空"}
-					],
-					linkman: [
-						{required: true, trigger: 'blur', message: "联系人不能为空"}
-					],
-					phone: [
-						{required: true, trigger: 'blur', message: "联系方式不能为空"}
-					],
-					tax: [
-						{required: true, trigger: 'blur', message: "税率不能为空"}
-					]
-				},
-				CurrentIndex: 1,
-				selectRow: [1],
-				table: [],
-				tableData: [],
-				defaultRow: {
-					index: 1,
-					name: '',
-					date: '',
-					spec: '',
-					units: '',
-					sums: '',
-					price: '',
-					amount: '',
-					brand: '',
-					remark: ''
-				},
-				isScroll: false
-			}
-		},
-		methods: {
-			addRow() {
+<script>
+    export default {
+        data() {
+            return {
+                baseData: {
+                    customer: "",
+                    project: "",
+                    buildRange: "",
+                    saleman: "",
+                    contact: "",
+                    information: "",
+                    tax: "",
+                    dispatch: "",
+                    unload: ""
+                },
+                rules: {
+                    baseDataForm: {
+                        customer: [
+                            { required: true, message: '请输入客户名称', trigger: 'blur' },
+                        ],
+                        project: [
+                            { required: true, message: '请输入项目名称', trigger: 'blur' },
+                        ],
+                        buildRange: [
+                            { required: true, message: '请选择施工范围', trigger: 'blur' },
+                        ],
+                        saleman: [
+                            { required: true, message: '请选择业务员', trigger: 'blur' },
+                        ],
+                        contact:[
+                            { required: true, message: '联系人不能为空', trigger: 'blur' },
+                        ],
 
-				let row = JSON.parse(JSON.stringify(this.defaultRow));
-				row.index = this.CurrentIndex;
-				this.tableData.push(row);
-				this.table.push(row);
-				++this.CurrentIndex;
-			},
-			deleteRow() {
-				this.selectRow.forEach(item => {
-					this.table.some((tableItem, index) => {
-						if (tableItem.index == item) {
-							this.table.splice(index, 1);
-							return true;
-						}
-					});
-				});
+                    }
+                },
+                productList: [
 
-				this.table.map((item, index) => {
-					item.index = index + 1;
-				});
-
-				this.CurrentIndex -= this.selectRow.length;
-			},
-			handleSelectionChange(val) {
-				let list = [];
-
-				val.forEach(item => {
-					list.push(item.index);
-				});
-
-				this.selectRow = list;
-
-			},
-			onScroll($e) {
-			    let scroll = this.$refs.DataContainer.scrollTop;
-
-			    if (scroll > 0) {
-			        this.isScroll = true;
-			    }
-			    else {
-			        this.isScroll = false;
-			    }
-			},
-			//文件上传成功
-			handleUploadSuccess(response, file, filelist) {
-			    if (response.status == 'success') {
-			        this.form.files.push({uid:file.uid,path:response.path});
-			    }
-
-			},
-			handleFileRemove(file, fileList) {
-			    this.form.files.some((item,index) => {
-			        if (item.uid == file.uid) {
-			            this.form.files.splice(index, 1);
-			            return true;
-			        }
-			    });
-			},
-			SaveOrder() {
-			    this.$progress.start();
-			}
-		},
-		computed: {
-			ActionURL: function() {
-			    return this.$appConst.FILE_UPLOAD_URL + '?token='+this.$store.state.user.token;
-			},
-			brand: function() {
-			    return [];
-			}
-		},
-		created() {
-			this.addRow();
-		},
-		mounted() {
-		    this.$nextTick(() => {
-				this.$refs.DataContainer.addEventListener('scroll', this.onScroll);
-		    });
-		}
-	}
+                ],
+                currentPage: 0,
+                navList: [
+                    {index: 0, label: "基础信息"},
+                    {index: 1, label: "产品信息"},
+                ],
+                translateY: 0,
+            }
+        },
+        created() {
+            this.$store.dispatch('getBindAttrFromPath', {path:this.$route.path});
+        },
+        methods: {
+            /**page up or page down**/
+            PageChange(index) {
+                this.currentPage = index;
+                this.translateY = index * 450 * -1;
+            },
+            /**table row classname**/
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            }
+        },
+        computed: {
+            FIELD: function() {
+                // this.CreateForm.tid = this.$store.state.user.FIELDS.F_CMK_PROATTR[0].value;
+                // this.CreateForm.tag = this.$store.state.user.FIELDS.F_CMK_CUSTAG[0].value;
+                //console.log(this.$store.state.user.FIELDS)
+                return  this.$store.state.user.FIELDS;
+            },
+            SaleMans: function() {
+                return [{label: "张三",value: 1}];
+            }
+        }
+    }
 </script>
-<style lang="stylus" rel="stylesheet/stylus" scoped="scoped">
-    .cash-wappler
-        width: 100%;
+
+<style lang="stylus" rel="stylesheet/stylus" scoped>
+.cash-wallpaper
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    .cash-wallpaper_main
+        width: 95%;
         height: 100%;
-        position: relative;
-        overflow:hidden;
-
-        .cash-container
-            width: 90%;
+        flex: 1;
+        .action-tool
+            display: flex;
+            //justify-content: flex-end;
+            margin-bottom: 10px;
+        .offer-bill
             height: 100%;
-            position: relative;
-            //overflow-y: auto;
-            overflow:hidden;
-            padding: 15px;
-            border: 1px solid #ebebeb;
-            margin: 0px auto;
-            border-radius: 5px;
-            box-shadow: 0 1px 1px rgba(26, 26, 26, .3);
-            h2
-                color: #1a1a1a;
-                font-size: 14px;
-                margin-bottom: 5px;
-
-            .cash-title
-                margin-bottom: 12px;
-                border-bottom: 1px solid #ebebeb;
-            .operate
-                padding-bottom: 15px;
+            .offer-bill_header
+                background: #009efb;
+                border: 1px solid #009efb;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                h3
+                    font-size: 18px;
+                    color: #fff;
+                    font-weight: 400;
+                    padding: 12px 20px;
+            .offer-bill_content
+                padding: 20px;
+                border: 1px solid #ebebeb;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
                 position: relative;
-                transition: all 0.3s;
-                z-index: 9999;
-            .operate__shadow
-                box-shadow: 0px 2px 2px -2px rgba(26, 26, 26, .3);
-            .data-container
-                overflow-y: auto;
-                height: calc(100% - 100px);
-                padding-right: 15px;
-                .cash-form-container
-                    position: relative;
-                .atta-container__file
-                    position: relative;
-                    width: 50%;
-
-                    .file-container
-                        padding: 15px;
-
-                .cash-product
-
-                    .cash-table-container
-                        padding: 15px;
-            .btn-tool
-                padding-left: 15px;
-
+                width: 100%;
+                height: calc(100% - 60px);
+                overflow: hidden;
+                .offer-bill_page
+                    transition: all 0.5s;
+                    .section
+                        .section_title
+                            font-size: 18px;
+                        hr
+                            border: 0;
+                            border-top: 1px solid rgba(0,0,0,.1);
+                            margin-top: 10px;
+                            margin-bottom: 10px;
+                        .base-data
+                            display: flex;
+                            .attachment
+                                flex: 1;
+                                margin-left: 30px;
+                                padding: 8px;
+                                //border-left: 1px solid #ebebeb;
+                                .upload-container
+                                    text-align: center;
+    .page-tool
+        width: 100px;
+        position: relative;
+        .change-list
+            width: 100%;
+            position: absolute;
+            bottom: 80px;
+            p
+                text-align: center;
 </style>
