@@ -3,7 +3,7 @@ import store from './store.js';
 import router from './router/index.js';
 import Start from './start.vue';
 import 'muse-ui/dist/muse-ui.css';
-import 'vant/lib/vant-css/index.css';
+// import 'vant/lib/vant-css/index.css';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/animate.css';
 import 'swiper/dist/css/swiper.css';
@@ -59,5 +59,3 @@ new Vue({
   store,
   render: h => h(Start),
 });
-
-
