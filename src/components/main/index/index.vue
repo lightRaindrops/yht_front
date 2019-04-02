@@ -1,15 +1,19 @@
 <!--main 首页组件-->
 <template>
 <div class="indexBox">
-    <div class="line">
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="0"></el-progress>
+    <div class="line progress">
+        <el-progress :show-text="false" :stroke-width="30" :percentage="100"></el-progress>
     </div>
-    <div class="line">
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="70"></el-progress>
+    <div class="line progress">
+        <el-progress :show-text="false" :stroke-width="30" color="#74c374" :percentage="70"></el-progress>
+    </div>
+    <div class="line progress">
+        <el-progress :show-text="false" :stroke-width="30" color="#df6d69" :percentage="30"></el-progress>
     </div>
 </div>
 </template>
 <script type="text/javascript">
+
 export default {
     props: {
         mobile: {
@@ -23,7 +27,8 @@ export default {
         }
     },
     created() {
-        console.log(Element)
+
+
     },
     methods: {},
     components: {
@@ -31,6 +36,6 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 @import "./index.less";
 </style>
